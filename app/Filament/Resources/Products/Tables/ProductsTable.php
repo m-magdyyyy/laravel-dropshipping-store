@@ -22,7 +22,19 @@ class ProductsTable
                 ImageColumn::make('image_url')
                     ->label('الصورة')
                     ->size(60)
-                    ->getStateUsing(fn ($record) => $record->image_url)
+                    ->getStateUsing(function ($record) {
+                        $state = $record->image_url;
+                        if (!$state) return 'https://via.placeholder.com/60x60?text=No+Image';
+
+                        // If state is already absolute, return as-is
+                        if (str_starts_with($state, 'http')) {
+                            return $state;
+                        }
+
+                        // Build absolute URL based on current request host (Filament admin origin)
+                        $host = request()->getSchemeAndHttpHost();
+                        return rtrim($host, '\/') . '/' . ltrim($state, '\/');
+                    })
                     ->defaultImageUrl('https://via.placeholder.com/60x60?text=No+Image'),
                 
                 TextColumn::make('name')
