@@ -15,6 +15,7 @@ class Product extends Model
         'price',
         'original_price',
         'image',
+        'image_url',
         'gallery',
         'is_active',
         'sort_order',
@@ -77,16 +78,23 @@ class Product extends Model
     // Get the main product image URL
     public function getImageUrlAttribute()
     {
+        // If we have a stored image_url field, use it
+        if (isset($this->attributes['image_url']) && $this->attributes['image_url']) {
+            return $this->attributes['image_url'];
+        }
+        
         // If we have a local uploaded image, use it
         if ($this->image) {
-            $filePath = public_path('storage/' . $this->image);
-            if (file_exists($filePath)) {
-                // Return a relative path so the browser will request the image from the same origin/port
-                return '/storage/' . ltrim($this->image, '/');
+            // Check if it's already a full URL (http/https)
+            if (str_starts_with($this->image, 'http')) {
+                return $this->image;
             }
+            
+            // If it's a local file path, create storage URL
+            return '/storage/' . ltrim($this->image, '/');
         }
 
-        // Default placeholder if no image or file doesn't exist
+        // Default placeholder if no image
         return 'https://via.placeholder.com/400x400?text=No+Image';
     }
 

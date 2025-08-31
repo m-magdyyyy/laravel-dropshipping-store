@@ -19,31 +19,11 @@ class ProductsTable
     {
         return $table
             ->columns([
-                ImageColumn::make('image_url')
+                ImageColumn::make('image')
                     ->label('الصورة')
+                    ->disk('public')
                     ->size(60)
-                    ->getStateUsing(function ($record) {
-                        $state = $record->image_url;
-                        if (!$state) {
-                            return 'https://via.placeholder.com/60x60?text=No+Image';
-                        }
-
-                        // Prefer APP_URL (deployment dev override) otherwise use current request host
-                        $host = config('app.url') ?: request()->getSchemeAndHttpHost();
-
-                        // If state is absolute (http(s)), normalize to current host but keep path/query
-                        if (str_starts_with($state, 'http')) {
-                            $parts = parse_url($state);
-                            $path = $parts['path'] ?? '/';
-                            if (isset($parts['query'])) {
-                                $path .= '?' . $parts['query'];
-                            }
-                            return rtrim($host, '\/') . $path;
-                        }
-
-                        // Otherwise state is relative; build absolute using current host
-                        return rtrim($host, '\/') . '/' . ltrim($state, '\/');
-                    })
+                    ->square()
                     ->defaultImageUrl('https://via.placeholder.com/60x60?text=No+Image'),
                 
                 TextColumn::make('name')

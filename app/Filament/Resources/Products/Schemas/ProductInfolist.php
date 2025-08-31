@@ -46,6 +46,12 @@ class ProductInfolist
                 
                 ImageEntry::make('image')
                     ->label('الصورة الرئيسية')
+                    ->disk('public')
+                    ->columnSpanFull(),
+                
+                ImageEntry::make('gallery')
+                    ->label('معرض الصور')
+                    ->disk('public')
                     ->columnSpanFull(),
                 
                 IconEntry::make('is_active')
