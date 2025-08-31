@@ -66,7 +66,9 @@ class ProductForm
                     ->removeUploadedFileButtonPosition('right')
                     ->uploadButtonPosition('left')
                     ->uploadProgressIndicatorPosition('left')
-                    ->helperText('اختر صورة المنتج من جهازك')
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
+                    ->maxSize(2048)
+                    ->helperText('اختر صورة المنتج من جهازك (JPG, PNG, WebP - حد أقصى 2MB)')
                     ->columnSpanFull(),
                 
                 FileUpload::make('gallery')
@@ -75,6 +77,10 @@ class ProductForm
                     ->image()
                     ->directory('products/gallery')
                     ->reorderable()
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
+                    ->maxSize(2048)
+                    ->maxFiles(5)
+                    ->helperText('اختر صور إضافية للمنتج (حد أقصى 5 صور، كل صورة 2MB)')
                     ->columnSpanFull(),
 
                 Toggle::make('is_active')

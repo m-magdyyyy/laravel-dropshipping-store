@@ -79,10 +79,13 @@ class Product extends Model
     {
         // If we have a local uploaded image, use it
         if ($this->image) {
-            return asset('storage/' . $this->image);
+            $filePath = public_path('storage/' . $this->image);
+            if (file_exists($filePath)) {
+                return asset('storage/' . $this->image);
+            }
         }
-        
-        // Default placeholder if no image
+
+        // Default placeholder if no image or file doesn't exist
         return 'https://via.placeholder.com/400x400?text=No+Image';
     }
 

@@ -64,13 +64,14 @@
                              alt="{{ $product->name }}" 
                              class="gallery-image w-full h-20 object-cover rounded border-2 border-blue-500"
                              onclick="changeMainImage(this.src)"
-                             onerror="this.src='https://via.placeholder.com/100x100?text=No+Image'">
+                             onerror="this.style.display='none'">
                         
                         @foreach($product->gallery as $image)
                         <img src="{{ str_starts_with($image, 'http') ? $image : asset('storage/' . $image) }}" 
                              alt="{{ $product->name }}" 
                              class="gallery-image w-full h-20 object-cover rounded border-2 border-gray-300 hover:border-blue-500"
-                             onclick="changeMainImage(this.src)">
+                             onclick="changeMainImage(this.src)"
+                             onerror="this.style.display='none'">
                         @endforeach
                     </div>
                     @endif

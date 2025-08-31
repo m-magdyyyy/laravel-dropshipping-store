@@ -19,11 +19,11 @@ class ProductsTable
     {
         return $table
             ->columns([
-                ImageColumn::make('display_image')
+                ImageColumn::make('image_url')
                     ->label('الصورة')
                     ->size(60)
-                    ->getStateUsing(fn ($record) => $record->display_image)
-                    ->defaultImageUrl(asset('images/placeholder.png')),
+                    ->getStateUsing(fn ($record) => $record->image_url)
+                    ->defaultImageUrl('https://via.placeholder.com/60x60?text=No+Image'),
                 
                 TextColumn::make('name')
                     ->label('اسم المنتج')
