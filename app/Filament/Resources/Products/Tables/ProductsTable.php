@@ -24,15 +24,24 @@ class ProductsTable
                     ->size(60)
                     ->getStateUsing(function ($record) {
                         $state = $record->image_url;
-                        if (!$state) return 'https://via.placeholder.com/60x60?text=No+Image';
-
-                        // If state is already absolute, return as-is
-                        if (str_starts_with($state, 'http')) {
-                            return $state;
+                        if (!$state) {
+                            return 'https://via.placeholder.com/60x60?text=No+Image';
                         }
 
-                        // Build absolute URL based on current request host (Filament admin origin)
+                        // Determine current host (scheme + host[:port])
                         $host = request()->getSchemeAndHttpHost();
+
+                        // If state is absolute (http(s)), normalize to current host but keep path/query
+                        if (str_starts_with($state, 'http')) {
+                            $parts = parse_url($state);
+                            $path = $parts['path'] ?? '/';
+                            if (isset($parts['query'])) {
+                                $path .= '?' . $parts['query'];
+                            }
+                            return rtrim($host, '\/') . $path;
+                        }
+
+                        // Otherwise state is relative; build absolute using current host
                         return rtrim($host, '\/') . '/' . ltrim($state, '\/');
                     })
                     ->defaultImageUrl('https://via.placeholder.com/60x60?text=No+Image'),
