@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -21,31 +22,58 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
+        // Validation rules - accept customer_name which the front-end form sends
+        $rules = [
+            'customer_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'address' => 'required|string|max:1000',
-            'governorate' => 'required|string|max:100',
+            'governorate' => 'nullable|string|max:100',
             'product_id' => 'nullable|exists:products,id',
             'notes' => 'nullable|string|max:1000',
             'quantity' => 'integer|min:1|max:10',
-        ], [
-            'name.required' => 'الاسم مطلوب',
+        ];
+
+        $messages = [
+            'customer_name.required' => 'الاسم مطلوب',
             'phone.required' => 'رقم الهاتف مطلوب',
             'address.required' => 'العنوان مطلوب',
-            'governorate.required' => 'المحافظة مطلوبة',
             'product_id.exists' => 'المنتج المحدد غير موجود',
-        ]);
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            // If request expects JSON (AJAX), return JSON validation errors
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors(),
+                    'message' => 'Validation failed',
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $validated = $validator->validated();
 
         // Set default values
         $validated['quantity'] = $validated['quantity'] ?? 1;
-        $validated['customer_name'] = $validated['name'];
-        unset($validated['name']);
 
+        // Ensure database column uses 'customer_name'
         $order = Order::create($validated);
 
         // Store order in session for thanks page
         session(['order' => $order->load('product')]);
+
+        // Return JSON for AJAX clients, otherwise redirect
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'order_id' => $order->id,
+                'message' => 'تم تسجيل الطلب بنجاح',
+            ]);
+        }
 
         return redirect()->route('thanks');
     }

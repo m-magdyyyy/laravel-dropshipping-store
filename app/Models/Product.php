@@ -77,17 +77,85 @@ class Product extends Model
     // Get the main product image URL
     public function getImageUrlAttribute()
     {
-        // If we have a local uploaded image, use it
-        if ($this->image) {
-            $filePath = public_path('storage/' . $this->image);
-            if (file_exists($filePath)) {
-                // Return a relative path so the browser will request the image from the same origin/port
-                return '/storage/' . ltrim($this->image, '/');
-            }
+        $image = $this->image;
+
+        if (! $image) {
+            return 'https://via.placeholder.com/400x400?text=No+Image';
+        }
+
+        // If it's already an absolute URL, return it
+        if (str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
+            return $image;
+        }
+
+        // If it already starts with /storage return as-is
+        if (str_starts_with($image, '/storage/')) {
+            return $image;
+        }
+
+        // If it starts with storage/ (no leading slash), normalize
+        if (str_starts_with($image, 'storage/')) {
+            return '/' . ltrim($image, '/');
+        }
+
+        // If the file exists under storage/app/public/{image}, return the public storage URL
+        $storagePath = storage_path('app/public/' . $image);
+        if (file_exists($storagePath)) {
+            return '/storage/' . ltrim($image, '/');
+        }
+
+        // Fallback: if the file exists in public/ (rare), return that path
+        $publicPath = public_path($image);
+        if (file_exists($publicPath)) {
+            return '/' . ltrim($image, '/');
         }
 
         // Default placeholder if no image or file doesn't exist
         return 'https://via.placeholder.com/400x400?text=No+Image';
+    }
+
+    // Get gallery images as resolved URLs (handles absolute, /storage, storage/ and existing files)
+    public function getGalleryUrlsAttribute()
+    {
+        $gallery = $this->gallery ?? [];
+        $urls = [];
+
+        foreach ($gallery as $image) {
+            if (! $image) {
+                continue;
+            }
+
+            if (str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
+                $urls[] = $image;
+                continue;
+            }
+
+            if (str_starts_with($image, '/storage/')) {
+                $urls[] = $image;
+                continue;
+            }
+
+            if (str_starts_with($image, 'storage/')) {
+                $urls[] = '/' . ltrim($image, '/');
+                continue;
+            }
+
+            $storagePath = storage_path('app/public/' . $image);
+            if (file_exists($storagePath)) {
+                $urls[] = '/storage/' . ltrim($image, '/');
+                continue;
+            }
+
+            $publicPath = public_path($image);
+            if (file_exists($publicPath)) {
+                $urls[] = '/' . ltrim($image, '/');
+                continue;
+            }
+
+            $urls[] = 'https://via.placeholder.com/400x400?text=No+Image';
+        }
+
+        return $urls;
     }
 
     // Relationship with orders

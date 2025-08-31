@@ -284,110 +284,6 @@
         </div>
     </section>
 
-    <!-- Order Form Section -->
-    <section id="order" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="max-w-2xl mx-auto">
-                <div class="text-center mb-12">
-                    <h2 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-6">اطلب الآن</h2>
-                    <p class="text-xl text-gray-600">املأ البيانات أدناه وسنتواصل معك لتأكيد الطلب</p>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-                    <form method="POST" action="{{ route('orders.store') }}" class="space-y-6">
-                        @csrf
-                        
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="name" class="block text-sm font-bold text-gray-700 mb-2">الاسم الكامل *</label>
-                                <input type="text" id="name" name="name" required 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
-                                       placeholder="أدخل اسمك الكامل">
-                            </div>
-                            
-                            <div>
-                                <label for="phone" class="block text-sm font-bold text-gray-700 mb-2">رقم الهاتف *</label>
-                                <input type="tel" id="phone" name="phone" required 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
-                                       placeholder="01xxxxxxxxx">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="address" class="block text-sm font-bold text-gray-700 mb-2">العنوان بالتفصيل *</label>
-                            <textarea id="address" name="address" required rows="3"
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
-                                      placeholder="أدخل عنوانك بالتفصيل (المحافظة، المدينة، الحي، رقم المبنى)"></textarea>
-                        </div>
-
-                        <div>
-                            <label for="governorate" class="block text-sm font-bold text-gray-700 mb-2">المحافظة *</label>
-                            <select id="governorate" name="governorate" required 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300">
-                                <option value="">اختر المحافظة</option>
-                                <option value="القاهرة">القاهرة</option>
-                                <option value="الجيزة">الجيزة</option>
-                                <option value="الإسكندرية">الإسكندرية</option>
-                                <option value="الدقهلية">الدقهلية</option>
-                                <option value="الشرقية">الشرقية</option>
-                                <option value="القليوبية">القليوبية</option>
-                                <option value="كفر الشيخ">كفر الشيخ</option>
-                                <option value="الغربية">الغربية</option>
-                                <option value="المنوفية">المنوفية</option>
-                                <option value="البحيرة">البحيرة</option>
-                                <option value="بني سويف">بني سويف</option>
-                                <option value="الفيوم">الفيوم</option>
-                                <option value="المنيا">المنيا</option>
-                                <option value="أسيوط">أسيوط</option>
-                                <option value="سوهاج">سوهاج</option>
-                                <option value="قنا">قنا</option>
-                                <option value="أسوان">أسوان</option>
-                                <option value="الأقصر">الأقصر</option>
-                                <option value="البحر الأحمر">البحر الأحمر</option>
-                                <option value="الوادي الجديد">الوادي الجديد</option>
-                                <option value="مطروح">مطروح</option>
-                                <option value="شمال سيناء">شمال سيناء</option>
-                                <option value="جنوب سيناء">جنوب سيناء</option>
-                                <option value="بورسعيد">بورسعيد</option>
-                                <option value="دمياط">دمياط</option>
-                                <option value="الإسماعيلية">الإسماعيلية</option>
-                                <option value="السويس">السويس</option>
-                            </select>
-                        </div>
-
-                        @if($products->count() > 0)
-                        <div>
-                            <label for="product_id" class="block text-sm font-bold text-gray-700 mb-2">المنتج المطلوب</label>
-                            <select id="product_id" name="product_id" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300">
-                                <option value="">اختر المنتج (اختياري)</option>
-                                @foreach($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->name }} - {{ $product->formatted_price }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @endif
-
-                        <div>
-                            <label for="notes" class="block text-sm font-bold text-gray-700 mb-2">ملاحظات إضافية</label>
-                            <textarea id="notes" name="notes" rows="3"
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
-                                      placeholder="أي ملاحظات أو طلبات خاصة (اختياري)"></textarea>
-                        </div>
-
-                        <button type="submit" 
-                                class="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl text-lg transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                            🚀 تأكيد الطلب
-                        </button>
-
-                        <p class="text-sm text-gray-500 text-center">
-                            * سيتم التواصل معك خلال 24 ساعة لتأكيد الطلب وتحديد موعد التوصيل
-                        </p>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- CTA Section -->
     <section class="py-20 bg-gradient-to-r from-orange-500 to-red-500 text-white">

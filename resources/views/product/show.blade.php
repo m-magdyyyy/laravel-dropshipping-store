@@ -57,24 +57,24 @@
                              onerror="this.src='https://via.placeholder.com/600x400?text=No+Image'">
                     </div>
                     
-                    @if($product->gallery && count($product->gallery) > 0)
-                    <div class="grid grid-cols-4 gap-2">
-                        <!-- Main image thumbnail -->
-                        <img src="{{ $product->image_url }}" 
-                             alt="{{ $product->name }}" 
-                             class="gallery-image w-full h-20 object-cover rounded border-2 border-blue-500"
-                             onclick="changeMainImage(this.src)"
-                             onerror="this.style.display='none'">
-                        
-                        @foreach($product->gallery as $image)
-                        <img src="{{ str_starts_with($image, 'http') ? $image : asset('storage/' . $image) }}" 
-                             alt="{{ $product->name }}" 
-                             class="gallery-image w-full h-20 object-cover rounded border-2 border-gray-300 hover:border-blue-500"
-                             onclick="changeMainImage(this.src)"
-                             onerror="this.style.display='none'">
-                        @endforeach
-                    </div>
-                    @endif
+                @if($product->gallery_urls && count($product->gallery_urls) > 0)
+                <div class="grid grid-cols-4 gap-2">
+                    <!-- Main image thumbnail -->
+                    <img src="{{ $product->image_url }}" 
+                        alt="{{ $product->name }}" 
+                        class="gallery-image w-full h-20 object-cover rounded border-2 border-blue-500"
+                        onclick="changeMainImage(event, this.src)"
+                        onerror="this.style.display='none'">
+
+                    @foreach($product->gallery_urls as $imageUrl)
+                    <img src="{{ $imageUrl }}" 
+                        alt="{{ $product->name }}" 
+                        class="gallery-image w-full h-20 object-cover rounded border-2 border-gray-300 hover:border-blue-500"
+                        onclick="changeMainImage(event, this.src)"
+                        onerror="this.style.display='none'">
+                    @endforeach
+                </div>
+                @endif
                 </div>
 
                 <!-- Product Info -->
@@ -226,17 +226,20 @@
         });
 
         // Gallery image switching
-        function changeMainImage(src) {
-            document.getElementById('mainImage').src = src;
-            
+        function changeMainImage(event, src) {
+            const main = document.getElementById('mainImage');
+            if (main) main.src = src;
+
             // Update active thumbnail
             document.querySelectorAll('.gallery-image').forEach(img => {
                 img.classList.remove('border-blue-500');
                 img.classList.add('border-gray-300');
             });
-            
-            event.target.classList.remove('border-gray-300');
-            event.target.classList.add('border-blue-500');
+
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.remove('border-gray-300');
+                event.currentTarget.classList.add('border-blue-500');
+            }
         }
 
         // Form submission
@@ -261,7 +264,9 @@
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             })
             .then(response => response.json())
