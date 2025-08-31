@@ -81,7 +81,8 @@ class Product extends Model
         if ($this->image) {
             $filePath = public_path('storage/' . $this->image);
             if (file_exists($filePath)) {
-                return asset('storage/' . $this->image);
+                // Return a relative path so the browser will request the image from the same origin/port
+                return '/storage/' . ltrim($this->image, '/');
             }
         }
 
