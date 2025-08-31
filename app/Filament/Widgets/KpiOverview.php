@@ -9,7 +9,8 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class KpiOverview extends StatsOverviewWidget
 {
-    protected static ?string $heading = 'مؤشرات أداء رئيسية';
+    // Match parent property's non-static declaration to avoid redeclare errors.
+    protected ?string $heading = 'مؤشرات أداء رئيسية';
 
     protected function getStats(): array
     {

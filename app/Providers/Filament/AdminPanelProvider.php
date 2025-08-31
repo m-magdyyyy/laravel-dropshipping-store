@@ -42,7 +42,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\KpiOverview::class,
                 \App\Filament\Widgets\OrdersOverview::class,
                 \App\Filament\Widgets\SalesChart::class,
-                \App\Filament\Widgets\LatestOrders::class,
+                // \App\Filament\Widgets\LatestOrders::class, // temporarily disabled until widget class is fixed
                 AccountWidget::class,
             ])
             ->middleware([

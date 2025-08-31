@@ -7,7 +7,8 @@ use Filament\Widgets\ChartWidget;
 
 class SalesChart extends ChartWidget
 {
-    protected static ?string $heading = 'مخطط مبيعات الأسبوع';
+    // Match parent widget property which is non-static.
+    protected ?string $heading = 'مخطط مبيعات الأسبوع';
 
     protected int | string | array $columnSpan = 'full';
 
