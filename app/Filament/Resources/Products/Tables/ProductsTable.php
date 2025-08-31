@@ -28,8 +28,8 @@ class ProductsTable
                             return 'https://via.placeholder.com/60x60?text=No+Image';
                         }
 
-                        // Determine current host (scheme + host[:port])
-                        $host = request()->getSchemeAndHttpHost();
+                        // Prefer APP_URL (deployment dev override) otherwise use current request host
+                        $host = config('app.url') ?: request()->getSchemeAndHttpHost();
 
                         // If state is absolute (http(s)), normalize to current host but keep path/query
                         if (str_starts_with($state, 'http')) {
