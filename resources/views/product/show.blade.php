@@ -119,65 +119,67 @@
                     @endif
 
                     <!-- Order Form -->
-                    <div class="bg-white rounded-lg shadow-lg p-6 border-2 border-blue-500">
-                        <h3 class="text-xl font-bold mb-4 text-center">اطلب الآن</h3>
+                    <div class="bg-white rounded-lg shadow-lg p-4 border-2 border-blue-500">
+                        <h3 class="text-lg font-bold mb-3 text-center">اطلب الآن</h3>
                         
-                        <form id="productOrderForm" class="space-y-4">
+                        <form id="productOrderForm" class="space-y-3">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             
-                            <div>
-                                <label for="quantity" class="block text-sm font-bold text-gray-700 mb-2">الكمية</label>
-                                <select id="quantity" name="quantity" 
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    @for($i = 1; $i <= 10; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">الكمية</label>
+                                    <select id="quantity" name="quantity" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
+                                        @for($i = 1; $i <= 10; $i++)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">رقم الهاتف</label>
+                                    <input type="tel" id="phone" name="phone" required
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                           placeholder="01xxxxxxxxx">
+                                </div>
                             </div>
 
                             <div>
-                                <label for="customer_name" class="block text-sm font-bold text-gray-700 mb-2">الاسم كاملاً</label>
+                                <label for="customer_name" class="block text-sm font-medium text-gray-700 mb-1">الاسم كاملاً</label>
                                 <input type="text" id="customer_name" name="customer_name" required
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                                        placeholder="أدخل اسمك كاملاً">
                             </div>
 
                             <div>
-                                <label for="phone" class="block text-sm font-bold text-gray-700 mb-2">رقم الهاتف</label>
-                                <input type="tel" id="phone" name="phone" required
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                       placeholder="01xxxxxxxxx">
+                                <label for="address" class="block text-sm font-medium text-gray-700 mb-1">العنوان</label>
+                                <textarea id="address" name="address" required rows="2"
+                                          class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                          placeholder="المحافظة، المدينة، الشارع"></textarea>
                             </div>
 
-                            <div>
-                                <label for="address" class="block text-sm font-bold text-gray-700 mb-2">العنوان بالتفصيل</label>
-                                <textarea id="address" name="address" required rows="3"
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                          placeholder="أدخل عنوانك بالتفصيل (المحافظة، المدينة، الشارع، رقم البناء)"></textarea>
-                            </div>
-
-                            <div class="border-t pt-4">
-                                <div class="flex justify-between items-center mb-4">
-                                    <span class="text-lg font-semibold">الإجمالي:</span>
-                                    <span id="totalPrice" class="text-2xl font-bold text-blue-600">{{ $product->formatted_price }}</span>
+                            <div class="border-t pt-3">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-md font-semibold">الإجمالي:</span>
+                                    <span id="totalPrice" class="text-xl font-bold text-blue-600">{{ $product->formatted_price }}</span>
                                 </div>
                             </div>
 
                             <button type="submit" id="productSubmitBtn"
-                                    class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-lg text-xl transition duration-300">
+                                    class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-300">
                                 تأكيد الطلب
                             </button>
                         </form>
 
                         <!-- Success Message -->
-                        <div id="productSuccessMessage" class="hidden mt-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                        <div id="productSuccessMessage" class="hidden mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-sm">
                             <h3 class="font-bold">تم تسجيل طلبك بنجاح!</h3>
                             <p>سيتم التواصل معك خلال 24 ساعة لتأكيد الطلب.</p>
                         </div>
 
                         <!-- Error Message -->
-                        <div id="productErrorMessage" class="hidden mt-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                        <div id="productErrorMessage" class="hidden mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
                             <h3 class="font-bold">حدث خطأ!</h3>
                             <p id="productErrorText">يرجى المحاولة مرة أخرى.</p>
                         </div>
@@ -264,21 +266,34 @@
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        try {
+                            const data = JSON.parse(text);
+                            throw new Error(data.message || 'حدث خطأ في الخادم');
+                        } catch (e) {
+                            throw new Error('حدث خطأ في الخادم: ' + response.status);
+                        }
+                    });
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
-                    successMessage.classList.remove('hidden');
-                    document.getElementById('productOrderForm').reset();
-                    document.getElementById('quantity').value = '1';
-                    document.getElementById('totalPrice').textContent = '{{ $product->formatted_price }}';
+                    // Redirect to thanks page instead of showing success message
+                    window.location.href = '{{ route("thanks") }}';
                 } else {
                     throw new Error(data.message || 'حدث خطأ غير متوقع');
                 }
             })
             .catch(error => {
+                console.error('Error:', error);
                 errorMessage.classList.remove('hidden');
                 document.getElementById('productErrorText').textContent = error.message;
             })
