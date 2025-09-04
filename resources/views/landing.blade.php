@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>متجرك للدروب شيبنج - أفضل المنتجات بأسعار لا تُقاوم</title>
+        <title>فكره استور - أفضل المنتجات بأسعار لا تُقاوم</title>
     <meta name="description" content="اكتشف مجموعة مميزة من المنتجات عالية الجودة مع توصيل سريع وآمن لباب منزلك">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -179,7 +179,7 @@
                 <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 hover-scale">
                     <div class="text-6xl mb-6 animate-float">⚡</div>
                     <h3 class="text-2xl font-bold mb-4 text-blue-800">توصيل سريع</h3>
-                    <p class="text-gray-600 text-lg leading-relaxed">توصيل خلال 2-3 أيام عمل لجميع المحافظات مع إمكانية التتبع المباشر للشحنة</p>
+                    <p class="text-gray-600 text-lg leading-relaxed">توصيل خلال 1-3 أيام عمل لجميع المحافظات مع إمكانية التتبع المباشر للشحنة</p>
                 </div>
                 
                 <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 hover-scale">
@@ -188,11 +188,11 @@
                     <p class="text-gray-600 text-lg leading-relaxed">منتجات أصلية 100% بأعلى معايير الجودة مع ضمان الاستبدال والإرجاع</p>
                 </div>
                 
-                <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 hover-scale">
+                {{-- <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 hover-scale">
                     <div class="text-6xl mb-6 animate-float" style="animation-delay: 1s;">🔒</div>
                     <h3 class="text-2xl font-bold mb-4 text-purple-800">دفع آمن</h3>
                     <p class="text-gray-600 text-lg leading-relaxed">الدفع عند الاستلام أو بالطرق الآمنة مع حماية كاملة لبياناتك</p>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
@@ -286,7 +286,7 @@
 
 
     <!-- CTA Section -->
-    <section class="py-20 bg-gradient-to-r from-orange-500 to-red-500 text-white">
+    {{-- <section class="py-20 bg-gradient-to-r from-orange-500 to-red-500 text-white">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl lg:text-5xl font-bold mb-6 text-shadow">جاهز للطلب؟</h2>
             <p class="text-xl lg:text-2xl mb-8 max-w-3xl mx-auto">اختر منتجك المفضل واحصل على أفضل العروض مع توصيل مجاني لباب منزلك</p>
@@ -301,14 +301,15 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-2xl font-bold mb-4">متجرك للدروب شيبنج</h3>
+                    {{-- <h3 class="text-2xl font-bold mb-4">متجرك للدروب شيبنج</h3> --}}
+                        <h3 class="text-2xl font-bold mb-4">فكره استور</h3>
                     <p class="text-gray-400 leading-relaxed">نحن نقدم أفضل المنتجات بأسعار تنافسية مع خدمة عملاء متميزة.</p>
                 </div>
                 
@@ -316,13 +317,13 @@
                     <h4 class="text-lg font-bold mb-4">روابط سريعة</h4>
                     <ul class="space-y-2 text-gray-400">
                         <li><a href="#" class="hover:text-white transition duration-300">عن المتجر</a></li>
-                        <li><a href="#" class="hover:text-white transition duration-300">سياسة الإرجاع</a></li>
-                        <li><a href="#" class="hover:text-white transition duration-300">الشحن والتوصيل</a></li>
-                        <li><a href="#" class="hover:text-white transition duration-300">تتبع الطلب</a></li>
+                        {{-- <li><a href="#" class="hover:text-white transition duration-300">سياسة الإرجاع</a></li> --}}
+                        {{-- <li><a href="#" class="hover:text-white transition duration-300">الشحن والتوصيل</a></li> --}}
+                        {{-- <li><a href="#" class="hover:text-white transition duration-300">تتبع الطلب</a></li> --}}
                     </ul>
                 </div>
                 
-                <div>
+                {{-- <div>
                     <h4 class="text-lg font-bold mb-4">خدمة العملاء</h4>
                     <ul class="space-y-2 text-gray-400">
                         <li>📞 01000000000</li>
@@ -330,20 +331,20 @@
                         <li>🕒 من 9 ص إلى 6 م</li>
                         <li>📍 القاهرة، مصر</li>
                     </ul>
-                </div>
+                </div> --}}
                 
                 <div>
                     <h4 class="text-lg font-bold mb-4">تابعنا</h4>
                     <div class="flex space-x-4 space-x-reverse">
-                        <a href="#" class="bg-blue-600 hover:bg-blue-700 p-3 rounded-full transition duration-300">📘</a>
-                        <a href="#" class="bg-pink-600 hover:bg-pink-700 p-3 rounded-full transition duration-300">📷</a>
+                        {{-- <a href="#" class="bg-blue-600 hover:bg-blue-700 p-3 rounded-full transition duration-300">📘</a>
+                        <a href="#" class="bg-pink-600 hover:bg-pink-700 p-3 rounded-full transition duration-300">📷</a> --}}
                         <a href="#" class="bg-green-600 hover:bg-green-700 p-3 rounded-full transition duration-300">📱</a>
                     </div>
                 </div>
             </div>
             
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2025 متجرك للدروب شيبنج. جميع الحقوق محفوظة.</p>
+                <p>&copy; 2025 فكره استور. جميع الحقوق محفوظة.</p>
             </div>
         </div>
     </footer>

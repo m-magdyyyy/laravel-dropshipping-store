@@ -82,13 +82,7 @@
             </div>
             
             <!-- Contact Info -->
-            <div class="bg-blue-50 rounded-xl p-4 mb-6 text-sm">
-                <h4 class="font-bold text-gray-800 mb-2">للاستفسار أو المتابعة:</h4>
-                <div class="space-y-1 text-gray-700">
-                    <div>📞 الهاتف: 01000000000</div>
-                    <div>📧 البريد الإلكتروني: info@shop.com</div>
-                </div>
-            </div>
+           ٭
             
             <!-- Action Buttons -->
             <div class="flex flex-col gap-3 justify-center">
