@@ -320,20 +320,19 @@
                     <p class="text-gray-400 leading-relaxed">نحن نقدم أفضل المنتجات بأسعار تنافسية مع خدمة عملاء متميزة.</p>
                 <div>
                     @if(file_exists(public_path('images/fekra-logo.png')))
-                        <div class="flex items-center gap-3">
+                        {{-- <div class="flex items-center gap-3">
                             <img src="{{ asset('images/fekra-logo.png') }}" alt="فكره استور" class="h-16 w-auto">
                             <div>
                                 <h3 class="text-2xl font-bold mb-4">فكره استور</h3>
                                 <p class="text-gray-400 leading-relaxed">نحن نقدم أفضل المنتجات بأسعار تنافسية مع خدمة عملاء متميزة.</p>
                             </div>
-                        </div>
+                        </div> --}}
                     @else
-                        <h3 class="text-2xl font-bold mb-4">فكره استور</h3>
-                        <p class="text-gray-400 leading-relaxed">نحن نقدم أفضل المنتجات بأسعار تنافسية مع خدمة عملاء متميزة.</p>
+                        {{-- <p class="text-gray-400 leading-relaxed">نحن نقدم أفضل المنتجات بأسعار تنافسية مع خدمة عملاء متميزة.</p> --}}
                     @endif
                 </div>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white transition duration-300">عن المتجر</a></li>
+                        {{-- <li><a href="#" class="hover:text-white transition duration-300">عن المتجر</a></li> --}}
                         {{-- <li><a href="#" class="hover:text-white transition duration-300">سياسة الإرجاع</a></li> --}}
                         {{-- <li><a href="#" class="hover:text-white transition duration-300">الشحن والتوصيل</a></li> --}}
                         {{-- <li><a href="#" class="hover:text-white transition duration-300">تتبع الطلب</a></li> --}}
@@ -341,7 +340,8 @@
                 </div>
                 
                 {{-- <div>
-                    <h4 class="text-lg font-bold mb-4">خدمة العملاء</h4>
+                    <h4 class="<h3 class="text-2xl font-bold mb-4">فكره استور</h3>
+                        text-lg font-bold mb-4">خدمة العملاء</h4>
                     <ul class="space-y-2 text-gray-400">
                         <li>📞 01000000000</li>
                         <li>📧 info@shop.com</li>

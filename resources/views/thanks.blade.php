@@ -52,8 +52,8 @@
                             <span class="font-bold text-gray-700">رقم الهاتف:</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">{{ $order->governorate }}</span>
-                            <span class="font-bold text-gray-700">المحافظة:</span>
+                            {{-- <span class="text-gray-600">{{ $order->governorate }}</span> --}}
+                            {{-- <span class="font-bold text-gray-700">المحافظة:</span> --}}
                         </div>
                         @if($order->product)
                         <div class="flex justify-between">
@@ -82,13 +82,13 @@
             </div>
             
             <!-- Contact Info -->
-            <div class="bg-blue-50 rounded-xl p-4 mb-6 text-sm">
+            {{-- <div class="bg-blue-50 rounded-xl p-4 mb-6 text-sm">
                 <h4 class="font-bold text-gray-800 mb-2">للاستفسار أو المتابعة:</h4>
                 <div class="space-y-1 text-gray-700">
                     <div>📞 الهاتف: 01000000000</div>
                     <div>📧 البريد الإلكتروني: info@shop.com</div>
                 </div>
-            </div>
+            </div> --}}
             
             <!-- Action Buttons -->
             <div class="flex flex-col gap-3 justify-center">

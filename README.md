@@ -1,6 +1,6 @@
-# Laravel Dropshipping Store
+# فكره استور
 
-متجر دروب شيبنج احترافي مبني بـ Laravel و Filament Admin Panel
+متجر احترافي مبني بـ Laravel و Filament Admin Panel
 
 ## المميزات
 

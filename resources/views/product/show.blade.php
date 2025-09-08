@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <title>{{ $product->meta_title ?: $product->name }} - متجرك للدروب شيبنج</title>
+  <title>{{ $product->meta_title ?: $product->name }} - فكره استور</title>
 
   @if($product->meta_description)
   <meta name="description" content="{{ $product->meta_description }}" />
@@ -196,7 +196,7 @@
   <nav class="bg-white shadow-md">
     <div class="container mx-auto px-4 py-4">
       <div class="flex justify-between items-center">
-        <a href="{{ route('landing') }}" class="text-xl md:text-2xl font-bold text-blue-600">متجرك للدروب شيبنج</a>
+  <a href="{{ route('landing') }}" class="text-xl md:text-2xl font-bold text-blue-600">فكره استور</a>
         <a href="{{ route('landing') }}" class="text-blue-600 hover:text-blue-800 text-sm md:text-base">العودة للصفحة الرئيسية</a>
       </div>
     </div>
@@ -276,7 +276,7 @@
             </button>
             <div class="mt-3 md:mt-4 text-center">
               <p class="text-gray-600 text-sm md:text-base">✅ توصيل مجاني لجميع المحافظات</p>
-              <p class="text-gray-600 text-sm md:text-base">🚚 شحن خلال 2-3 أيام عمل</p>
+              <p class="text-gray-600 text-sm md:text-base">🚚 شحن خلال1-3 أيام عمل</p>
             </div>
           </div>
         </div>
@@ -311,7 +311,7 @@
   <footer class="bg-gray-800 text-white py-8">
     <div class="container mx-auto px-4 text-center">
       <p>&copy; 2025 متجرك للدروب شيبنج. جميع الحقوق محفوظة.</p>
-      <p class="mt-2">للاستفسارات: 01000000000</p>
+      {{-- <p class="mt-2">للاستفسارات: 01000000000</p> --}}
     </div>
   </footer>
 
