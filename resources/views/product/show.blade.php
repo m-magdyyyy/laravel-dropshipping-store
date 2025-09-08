@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <title>{{ $product->meta_title ?: $product->name }} - فكره استور</title>
+  <title>{{ $product->meta_title ?: $product->name }} - متجرك للدروب شيبنج</title>
 
   @if($product->meta_description)
   <meta name="description" content="{{ $product->meta_description }}" />
@@ -15,9 +15,8 @@
 
   <style>
     * { box-sizing: border-box; }
-  html, body { overflow-x: hidden; }
-  body { font-family: 'Cairo', sans-serif; background:#f9fafb; }
-  img { max-width: 100%; height: auto; display:block; }
+    body { font-family: 'Cairo', sans-serif; background:#f9fafb; }
+    img { max-width: 100%; height: auto; }
 
     .gallery-image { cursor: pointer; transition: transform .2s ease; }
     .gallery-image:hover { transform: scale(1.03); }
@@ -32,7 +31,7 @@
     .order-btn:hover::before{ left:100%; }
 
     /* ===== Modal Overlay ===== */
-  #orderModal { transition: opacity .2s ease; overscroll-behavior: contain; }
+    #orderModal { transition: opacity .2s ease; }
 
     /* ===== Modal Panel (fix height + internal scroll) ===== */
     #modalPanel{
@@ -197,7 +196,7 @@
   <nav class="bg-white shadow-md">
     <div class="container mx-auto px-4 py-4">
       <div class="flex justify-between items-center">
-  <a href="{{ route('landing') }}" class="text-xl md:text-2xl font-bold text-blue-600">فكره استور</a>
+        <a href="{{ route('landing') }}" class="text-xl md:text-2xl font-bold text-blue-600">متجرك للدروب شيبنج</a>
         <a href="{{ route('landing') }}" class="text-blue-600 hover:text-blue-800 text-sm md:text-base">العودة للصفحة الرئيسية</a>
       </div>
     </div>
@@ -288,11 +287,11 @@
   <!-- Trust Badges -->
   <section class="py-8 bg-blue-50">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-center">
+      <div class="grid md:grid-cols-3 gap-6 text-center">
         <div class="flex flex-col items-center">
           <div class="text-4xl mb-2">🚚</div>
           <h3 class="font-bold">توصيل سريع</h3>
-          <p class="text-gray-600">خلال 2-3 أيام عمل</p>
+          <p class="text-gray-600">خلال1-3 أيام عمل</p>
         </div>
         <div class="flex flex-col items-center">
           <div class="text-4xl mb-2">💯</div>
@@ -311,7 +310,7 @@
   <!-- Footer -->
   <footer class="bg-gray-800 text-white py-8">
     <div class="container mx-auto px-4 text-center">
-  <p>&copy; 2025 فكره استور. جميع الحقوق محفوظة.</p>
+      <p>&copy; 2025 متجرك للدروب شيبنج. جميع الحقوق محفوظة.</p>
       <p class="mt-2">للاستفسارات: 01000000000</p>
     </div>
   </footer>
@@ -320,7 +319,7 @@
   <div id="orderModal"
        class="fixed inset-0 bg-black/40 backdrop-blur-[1px] z-50
               flex items-end md:items-center justify-center px-3 sm:px-4 py-3"
-       style="display:none;" role="dialog" aria-modal="true" tabindex="-1">
+       style="display:none;">
     <div id="modalPanel"
          class="bg-white shadow-lg w-full max-w-[96vw] sm:max-w-md md:max-w-2xl lg:max-w-4xl p-0 md:p-0">
       <!-- Header (sticky) -->
@@ -334,9 +333,9 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <!-- Summary -->
           <div class="space-y-4 md:sticky md:top-4">
-      <div class="bg-blue-50 rounded-md p-3 text-sm">
+            <div class="bg-blue-50 rounded-md p-3 text-sm">
               <div class="flex items-center gap-4">
-        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-16 h-16 object-cover rounded-lg" loading="lazy" decoding="async">
+                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-16 h-16 object-cover rounded-lg" loading="lazy">
                 <div>
                   <h4 class="font-bold text-gray-800">{{ $product->name }}</h4>
                   <p class="text-blue-600 font-bold">{{ $product->formatted_price }}</p>
@@ -357,7 +356,7 @@
               @csrf
               <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label for="quantity" class="block text-xs font-medium text-gray-700 mb-1">الكمية</label>
                   <select id="quantity" name="quantity"
@@ -382,7 +381,7 @@
                        placeholder="أدخل اسمك كاملاً">
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label for="governorate" class="block text-xs font-medium text-gray-700 mb-1">المحافظة</label>
                   <select id="governorate" name="governorate" required

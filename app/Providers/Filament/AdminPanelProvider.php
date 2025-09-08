@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('لوحة تحكم الدروب شيبنج')
+            ->brandName('فكره استور')
             ->colors([
                 'primary' => Color::Blue,
             ])

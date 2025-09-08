@@ -76,8 +76,7 @@ class OrderForm
                         'الإسماعيلية' => 'الإسماعيلية',
                         'السويس' => 'السويس',
                     ])
-                    ->searchable()
-                    ->required(),
+                    ->searchable(),
                 Select::make('status')
                     ->label('حالة الطلب')
                     ->options(Order::getStatuses())

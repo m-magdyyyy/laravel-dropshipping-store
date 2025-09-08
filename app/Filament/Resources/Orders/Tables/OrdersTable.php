@@ -6,7 +6,9 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Table;
 
 class OrdersTable
@@ -82,6 +84,15 @@ class OrdersTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                Action::make('toggleStatus')
+                    ->label(fn ($record) => $record->status === 'pending' ? 'تأكيد' : 'إلغاء التأكيد')
+                    ->color(fn ($record) => $record->status === 'pending' ? 'success' : 'warning')
+                    ->icon(fn ($record) => $record->status === 'pending' ? 'heroicon-o-check' : 'heroicon-o-arrow-left')
+                    ->action(function ($record) {
+                        $record->status = $record->status === 'pending' ? 'confirmed' : 'pending';
+                        $record->save();
+                    })
+                    ->tooltip(fn ($record) => $record->status === 'pending' ? 'اضغط لتأكيد الطلب' : 'اضغط لإعادته إلى قيد الانتظار'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

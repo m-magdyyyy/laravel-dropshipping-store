@@ -309,12 +309,29 @@
             <div class="grid md:grid-cols-4 gap-8">
                 <div>
                     {{-- <h3 class="text-2xl font-bold mb-4">متجرك للدروب شيبنج</h3> --}}
-                        <h3 class="text-2xl font-bold mb-4">فكره استور</h3>
+                        @if(file_exists(public_path('images/fekra-logo.png')))
+                            <div class="flex items-center gap-3 justify-center lg:justify-start">
+                                <img src="{{ asset('images/fekra-logo.png') }}" alt="فكره استور" class="h-20 w-auto">
+                                <h3 class="text-2xl font-bold mb-4">فكره استور</h3>
+                            </div>
+                        @else
+                            <h3 class="text-2xl font-bold mb-4">فكره استور</h3>
+                        @endif
                     <p class="text-gray-400 leading-relaxed">نحن نقدم أفضل المنتجات بأسعار تنافسية مع خدمة عملاء متميزة.</p>
-                </div>
-                
                 <div>
-                    <h4 class="text-lg font-bold mb-4">روابط سريعة</h4>
+                    @if(file_exists(public_path('images/fekra-logo.png')))
+                        <div class="flex items-center gap-3">
+                            <img src="{{ asset('images/fekra-logo.png') }}" alt="فكره استور" class="h-16 w-auto">
+                            <div>
+                                <h3 class="text-2xl font-bold mb-4">فكره استور</h3>
+                                <p class="text-gray-400 leading-relaxed">نحن نقدم أفضل المنتجات بأسعار تنافسية مع خدمة عملاء متميزة.</p>
+                            </div>
+                        </div>
+                    @else
+                        <h3 class="text-2xl font-bold mb-4">فكره استور</h3>
+                        <p class="text-gray-400 leading-relaxed">نحن نقدم أفضل المنتجات بأسعار تنافسية مع خدمة عملاء متميزة.</p>
+                    @endif
+                </div>
                     <ul class="space-y-2 text-gray-400">
                         <li><a href="#" class="hover:text-white transition duration-300">عن المتجر</a></li>
                         {{-- <li><a href="#" class="hover:text-white transition duration-300">سياسة الإرجاع</a></li> --}}
@@ -343,8 +360,15 @@
                 </div>
             </div>
             
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2025 فكره استور. جميع الحقوق محفوظة.</p>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                    @if(file_exists(public_path('images/fekra-logo.png')))
+                        <div class="flex items-center justify-center gap-3">
+                            <img src="{{ asset('images/fekra-logo.png') }}" alt="فكره استور" class="h-16 w-auto">
+                            <p>&copy; 2025 فكره استور. جميع الحقوق محفوظة.</p>
+                        </div>
+                    @else
+                        <p>&copy; 2025 فكره استور. جميع الحقوق محفوظة.</p>
+                    @endif
             </div>
         </div>
     </footer>

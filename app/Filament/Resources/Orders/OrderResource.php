@@ -45,6 +45,15 @@ class OrderResource extends Resource
         return OrdersTable::configure($table);
     }
 
+    // Ensure confirmed orders appear after other orders by applying ordering
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()
+            ->orderByRaw("(status = ?) ASC", ['confirmed'])
+            // show older orders first so you can confirm them before newer ones
+            ->orderBy('created_at', 'asc');
+    }
+
     public static function getRelations(): array
     {
         return [
