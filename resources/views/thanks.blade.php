@@ -37,7 +37,52 @@
             <!-- Order Details -->
             <div class="bg-gray-50 rounded-xl p-4 mb-6 text-sm">
                 <div class="space-y-2 text-right">
-                    @if(session('order'))
+                    @if($isCartOrder && !empty($orders))
+                        <!-- Cart Orders -->
+                        <div class="flex justify-between border-b pb-2 mb-3">
+                            <span class="text-blue-600 font-bold">طلب متعدد المنتجات</span>
+                            <span class="font-bold text-gray-700">نوع الطلب:</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">{{ $orders[0]->customer_name }}</span>
+                            <span class="font-bold text-gray-700">اسم العميل:</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">{{ $orders[0]->phone }}</span>
+                            <span class="font-bold text-gray-700">رقم الهاتف:</span>
+                        </div>
+                        
+                        <!-- Products Summary -->
+                        <div class="mt-4 pt-3 border-t">
+                            <h4 class="font-bold text-gray-800 mb-3 text-center">المنتجات المطلوبة:</h4>
+                            <div class="space-y-2">
+                                @foreach($orders as $order)
+                                <div class="flex justify-between items-center bg-white p-2 rounded">
+                                    <span class="text-gray-600 text-xs">
+                                        {{ $order->quantity }} × {{ number_format($order->product->price, 0) }} ج.م
+                                    </span>
+                                    <span class="font-medium text-gray-800">{{ $order->product->name }}</span>
+                                </div>
+                                @endforeach
+                            </div>
+                            @php
+                                $cartTotal = 0;
+                                foreach ($orders as $o) {
+                                    if (isset($o->product)) {
+                                        $cartTotal += ($o->product->price * $o->quantity);
+                                    }
+                                }
+                            @endphp
+                            <div class="flex justify-between items-center mt-3 pt-2 border-t font-bold">
+                                <span class="text-green-600">
+                                    {{ number_format($cartTotal, 0) }} ج.م
+                                </span>
+                                <span class="text-gray-700">الإجمالي:</span>
+                            </div>
+                        </div>
+                        
+                    @elseif(session('order'))
+                        <!-- Single Product Order -->
                         @php $order = session('order'); @endphp
                         <div class="flex justify-between">
                             <span class="text-blue-600 font-bold">#{{ $order->id }}</span>
@@ -51,14 +96,14 @@
                             <span class="text-gray-600">{{ $order->phone }}</span>
                             <span class="font-bold text-gray-700">رقم الهاتف:</span>
                         </div>
-                        <div class="flex justify-between">
-                            {{-- <span class="text-gray-600">{{ $order->governorate }}</span> --}}
-                            {{-- <span class="font-bold text-gray-700">المحافظة:</span> --}}
-                        </div>
                         @if($order->product)
                         <div class="flex justify-between">
                             <span class="text-gray-600">{{ $order->product->name }}</span>
                             <span class="font-bold text-gray-700">المنتج:</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-green-600 font-bold">{{ $order->formatted_total_price }}</span>
+                            <span class="font-bold text-gray-700">السعر:</span>
                         </div>
                         @endif
                     @endif

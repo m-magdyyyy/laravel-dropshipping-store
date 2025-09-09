@@ -90,8 +90,37 @@
         </div>
     </div>
     @endif
+    
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-lg transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{{ route('landing') }}" class="text-2xl font-bold text-purple-600">فكره استور</a>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8 space-x-reverse">
+                    <a href="#products" class="text-gray-700 hover:text-purple-600 font-bold transition-colors">المنتجات</a>
+                    <a href="#features" class="text-gray-700 hover:text-purple-600 font-bold transition-colors">المميزات</a>
+                </div>
+                
+                <!-- Cart Icon -->
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <a href="{{ route('cart.show') }}" class="relative bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-full transition-colors shadow-lg hover:shadow-xl">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                        </svg>
+                        <span id="cart-badge" class="absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[1.5rem] text-center" style="display: none;">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <!-- Hero Section -->
-    <section class="gradient-bg text-white relative overflow-hidden min-h-screen flex items-center">
+    <section class="gradient-bg text-white relative overflow-hidden min-h-screen flex items-center pt-20">
         <!-- Background Animation Elements -->
         <div class="absolute inset-0">
             <div class="absolute top-10 left-10 w-20 h-20 bg-white opacity-10 rounded-full animate-bounce-slow"></div>
@@ -262,10 +291,19 @@
                         </div>
                         @endif
                         
-                        <a href="{{ route('product.show', $product->slug) }}" 
-                           class="block w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-300 shadow-lg hover:shadow-xl">
-                            🛒 اطلب الآن
-                        </a>
+                        <div class="flex gap-2">
+                            <!-- Add to Cart Button -->
+                            <button onclick="addToCart({{ $product->id }})" 
+                                    class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition duration-300 shadow-lg hover:shadow-xl">
+                                🛒 أضف للسلة
+                            </button>
+                            
+                            <!-- Buy Now Button -->
+                            <a href="{{ route('product.show', $product->slug) }}" 
+                               class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-300 shadow-lg hover:shadow-xl">
+                                اطلب الآن
+                            </a>
+                        </div>
                     </div>
                 </div>
                 @endforeach
@@ -463,6 +501,111 @@
                 setTimeout(() => {
                     closeErrorMessage();
                 }, 7000);
+            }
+        });
+        
+        // Cart functionality
+        // Load cart count on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+        });
+        
+        // Add to cart function
+        function addToCart(productId, quantity = 1) {
+        fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: quantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartCount();
+                    showCartMessage(data.message, 'success');
+                    
+                    // Add animation to cart button
+                    const cartIcon = document.querySelector('#cart-badge').parentElement;
+                    cartIcon.classList.add('animate-bounce');
+                    setTimeout(() => {
+                        cartIcon.classList.remove('animate-bounce');
+                    }, 600);
+                } else {
+                    showCartMessage('حدث خطأ في إضافة المنتج للسلة', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showCartMessage('حدث خطأ في إضافة المنتج للسلة', 'error');
+            });
+        }
+        
+        // Update cart count
+        function updateCartCount() {
+            fetch('/cart/count')
+            .then(response => response.json())
+            .then(data => {
+                const cartBadge = document.getElementById('cart-badge');
+                if (data.cart_count > 0) {
+                    cartBadge.textContent = data.cart_count;
+                    cartBadge.style.display = 'block';
+                } else {
+                    cartBadge.style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Error updating cart count:', error));
+        }
+        
+        // Show cart message
+        function showCartMessage(message, type) {
+            const container = document.createElement('div');
+            container.className = 'fixed top-24 right-4 z-50';
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `p-4 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white transform translate-x-full transition-transform duration-300`;
+            messageDiv.innerHTML = `
+                <div class="flex items-center">
+                    <span class="text-xl ml-2">${type === 'success' ? '✅' : '❌'}</span>
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-white hover:text-gray-200 mr-4">×</button>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            document.body.appendChild(container);
+            
+            // Slide in
+            setTimeout(() => {
+                messageDiv.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                messageDiv.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (container.parentNode) {
+                        container.remove();
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-white/95');
+                navbar.classList.remove('bg-white/90');
+            } else {
+                navbar.classList.add('bg-white/90');
+                navbar.classList.remove('bg-white/95');
             }
         });
     </script>
