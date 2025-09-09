@@ -26,6 +26,36 @@
    cd laravel-dropshipping-store
    ```
 
+   ## Deploy on Render (Docker)
+
+   To deploy this Laravel app on Render using Docker, follow these brief steps.
+
+   1. On Render create a new Web Service and choose Docker as the environment.
+
+   2. Set the service to build from this repository (Render will use the repository root Dockerfile).
+
+   3. Add the following environment variables in the Render dashboard:
+
+   - APP_ENV=production
+   - APP_DEBUG=false
+   - APP_URL=<replace-with-your-render-url>
+   - PHP_VERSION=8.2
+   - APP_KEY=base64:<place-key-if-not-generated-automatically>
+
+   Databases
+
+   - If you use Render Postgres (managed): set the DATABASE_URL provided by Render. Also set `DB_CONNECTION=pgsql` if you prefer explicit DB config. Laravel will parse `DATABASE_URL` automatically.
+   - If you use an external MySQL: set `DB_CONNECTION=mysql`, and configure `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` accordingly.
+
+   Notes & first-run
+
+   - This Dockerfile uses `php:8.2-cli`, installs required PHP extensions (pdo_mysql, mbstring, bcmath, exif, gd with freetype & jpeg) and copies Composer from `composer:2.7` to install dependencies inside the image.
+   - We intentionally do NOT commit `vendor/` — Composer runs during image build.
+   - The container exposes port 8000 and serves the app from `public/` using PHP built-in server. Render will route HTTP traffic to that port.
+   - After the first deploy you may need to run database migrations. The image attempts `php artisan migrate --force` at container start; if migrations need manual attention you can re-deploy or run the migration via Shell/Manual Deploy on Render.
+
+   Don't change application logic; the container serves the app using `public/index.php` so all requests are routed correctly.
+
 2. **تثبيت المكتبات**
    ```bash
    composer install
