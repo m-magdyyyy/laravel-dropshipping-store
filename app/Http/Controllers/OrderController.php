@@ -39,7 +39,7 @@ class OrderController extends Controller
             'customer_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'address' => 'required|string|max:1000',
-            'governorate' => 'nullable|string|max:100',
+            'governorate' => 'required|string|max:100', // made required
             'product_id' => 'nullable|exists:products,id',
             'notes' => 'nullable|string|max:1000',
             'quantity' => 'integer|min:1|max:10',
@@ -49,6 +49,7 @@ class OrderController extends Controller
             'customer_name.required' => 'الاسم مطلوب',
             'phone.required' => 'رقم الهاتف مطلوب',
             'address.required' => 'العنوان مطلوب',
+            'governorate.required' => 'المحافظة مطلوبة',
             'product_id.exists' => 'المنتج المحدد غير موجود',
         ];
 
@@ -97,7 +98,7 @@ class OrderController extends Controller
             'customer_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'address' => 'required|string|max:1000',
-            'governorate' => 'nullable|string|max:100',
+            'governorate' => 'required|string|max:100', // made required
             'notes' => 'nullable|string|max:1000',
             'cart_data' => 'required|string',
         ];
@@ -106,6 +107,7 @@ class OrderController extends Controller
             'customer_name.required' => 'الاسم مطلوب',
             'phone.required' => 'رقم الهاتف مطلوب',
             'address.required' => 'العنوان مطلوب',
+            'governorate.required' => 'المحافظة مطلوبة',
             'cart_data.required' => 'بيانات السلة مطلوبة',
         ];
 
