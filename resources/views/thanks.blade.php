@@ -172,30 +172,33 @@
         // Two flows in this view: multi-order cart vs single order in session
         @if(isset($isCartOrder) && $isCartOrder && !empty($orders))
             @php
-                $cartTotalForPixel = 0;
+                $cartTotalForPixel = 0.0;
                 $ids = [];
                 foreach ((array) $orders as $o) {
-                    if (isset($o->product)) {
-                        $cartTotalForPixel += ((float) $o->product->price) * ((int) $o->quantity);
-                    }
-                    if (isset($o->id)) { $ids[] = $o->id; }
+                    $price = isset($o->product) ? (float) $o->product->price : 0.0;
+                    $qty = (int) ($o->quantity ?? 1);
+                    $cartTotalForPixel += $price * $qty;
+                    if (isset($o->id)) { $ids[] = (int) $o->id; }
                 }
                 $idsStr = implode(',', $ids);
             @endphp
             tiktokTrack('CompletePayment', {
-                value: {{ $cartTotalForPixel ?: 0 }},
+                value: {{ $cartTotalForPixel }},
                 currency: 'EGP',
                 content_id: @json($idsStr ?: 'cart')
             });
         @elseif(session('order'))
-            @php $order = session('order'); @endphp
+            @php 
+                $order = session('order');
+                // Ensure a numeric value even if relation not loaded
+                $purchaseValue = (float)($order->total_price ?? ((($order->product->price ?? 0) * ($order->quantity ?? 1))));
+            @endphp
             tiktokTrack('CompletePayment', {
-                value: {{ (float) ($order->total_price ?? ($order->product->price ?? 0) * ($order->quantity ?? 1)) }},
+                value: {{ $purchaseValue }},
                 currency: 'EGP',
                 content_id: String({{ (int) $order->id }})
             });
         @endif
     })();
     </script>
-</html>
 </html>
