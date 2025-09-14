@@ -103,6 +103,9 @@ class ProductForm
                 TextInput::make('sort_order')
                     ->label('ترتيب العرض')
                     ->numeric()
+                    ->default(0)
+                    ->dehydrateStateUsing(fn ($state) => ($state === null || $state === '') ? 0 : (int) $state)
+                    ->minValue(0)
                     ->columnSpan(1),
                 
                 TextInput::make('meta_title')
