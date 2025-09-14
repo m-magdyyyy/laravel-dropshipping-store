@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Products\Schemas;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\ViewEntry;
 use Filament\Schemas\Schema;
 
 class ProductInfolist
@@ -44,14 +45,9 @@ class ProductInfolist
                     ->suffix('%')
                     ->getStateUsing(fn ($record) => $record->discount_percentage ?: 'لا يوجد خصم'),
                 
-                ImageEntry::make('image')
-                    ->label('الصورة الرئيسية')
-                    ->disk('public')
-                    ->columnSpanFull(),
-                
-                ImageEntry::make('gallery')
-                    ->label('معرض الصور')
-                    ->disk('public')
+                ViewEntry::make('product_images')
+                    ->label('صور المنتج')
+                    ->view('filament.infolists.product-images')
                     ->columnSpanFull(),
                 
                 IconEntry::make('is_active')

@@ -41,7 +41,9 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            // Use a relative URL to avoid CORS issues between 127.0.0.1 and localhost during development
+            // In production, you can set APP_URL and switch back to absolute if desired
+            'url' => '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

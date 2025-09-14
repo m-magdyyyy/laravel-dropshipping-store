@@ -9,6 +9,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Storage;
 
 class ProductForm
 {
@@ -70,9 +71,12 @@ class ProductForm
                     ->uploadProgressIndicatorPosition('left')
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
                     ->maxSize(2048)
-                    ->helperText('اختر صورة المنتج من جهازك (JPG, PNG, WebP - حد أقصى 2MB)')
+                    ->preserveFilenames()
+                    ->openable()
+                    ->downloadable()
+                    ->deleteUploadedFileUsing(fn (string $file) => Storage::disk('public')->delete($file))
                     ->columnSpanFull(),
-                
+
                 FileUpload::make('gallery')
                     ->label('معرض الصور')
                     ->multiple()
@@ -81,10 +85,14 @@ class ProductForm
                     ->disk('public')
                     ->visibility('public')
                     ->reorderable()
+                    ->appendFiles()
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
                     ->maxSize(2048)
                     ->maxFiles(5)
-                    ->helperText('اختر صور إضافية للمنتج (حد أقصى 5 صور، كل صورة 2MB)')
+                    ->preserveFilenames()
+                    ->openable()
+                    ->downloadable()
+                    ->deleteUploadedFileUsing(fn (string $file) => Storage::disk('public')->delete($file))
                     ->columnSpanFull(),
 
                 Toggle::make('is_active')
@@ -95,7 +103,6 @@ class ProductForm
                 TextInput::make('sort_order')
                     ->label('ترتيب العرض')
                     ->numeric()
-                    ->default(0)
                     ->columnSpan(1),
                 
                 TextInput::make('meta_title')
