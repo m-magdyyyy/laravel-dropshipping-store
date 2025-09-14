@@ -149,4 +149,42 @@
         </div>
     </div>
 </body>
+<!-- TikTok Pixel: CompletePayment (Purchase) -->
+<script>
+    (function(){
+        function tiktokTrack(eventName, payload){
+            if (window.ttq && typeof window.ttq.track === 'function') {
+                window.ttq.track(eventName, payload);
+            }
+        }
+
+        // Two flows in this view: multi-order cart vs single order in session
+        @if(isset($isCartOrder) && $isCartOrder && !empty($orders))
+            @php
+                $cartTotalForPixel = 0;
+                $ids = [];
+                foreach ((array) $orders as $o) {
+                    if (isset($o->product)) {
+                        $cartTotalForPixel += ((float) $o->product->price) * ((int) $o->quantity);
+                    }
+                    if (isset($o->id)) { $ids[] = $o->id; }
+                }
+                $idsStr = implode(',', $ids);
+            @endphp
+            tiktokTrack('CompletePayment', {
+                value: {{ $cartTotalForPixel ?: 0 }},
+                currency: 'EGP',
+                content_id: @json($idsStr ?: 'cart')
+            });
+        @elseif(session('order'))
+            @php $order = session('order'); @endphp
+            tiktokTrack('CompletePayment', {
+                value: {{ (float) ($order->total_price ?? ($order->product->price ?? 0) * ($order->quantity ?? 1)) }},
+                currency: 'EGP',
+                content_id: String({{ (int) $order->id }})
+            });
+        @endif
+    })();
+    </script>
+</html>
 </html>

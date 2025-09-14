@@ -247,7 +247,7 @@
             </div>
             <!-- Action Buttons -->
             <div class="space-y-3">
-              <button onclick="addToCart({{ $product->id }})" class="btn w-full btn-success hover:brightness-105 text-white font-bold py-3 md:py-4 px-4 md:px-6 rounded-lg text-lg md:text-xl shadow-soft group">
+              <button onclick="handleAddToCart(); addToCart({{ $product->id }})" class="btn w-full btn-success hover:brightness-105 text-white font-bold py-3 md:py-4 px-4 md:px-6 rounded-lg text-lg md:text-xl shadow-soft group">
                 <span class="relative z-10">🛒 أضف للسلة</span>
                 <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-lg"></span>
               </button>
@@ -695,6 +695,46 @@
   // Use debounced listeners only
   window.addEventListener('resize', schedulePanelResize, { passive:true });
   window.addEventListener('orientationchange', ()=>setTimeout(setPanelMaxHeight, 140), { passive:true });
+  </script>
+  
+  <!-- TikTok Pixel Events: ViewContent + AddToCart -->
+  <script>
+    (function(){
+      // Guard against missing TTQ
+      function tiktokTrack(eventName, payload){
+        if (window.ttq && typeof window.ttq.track === 'function') {
+          window.ttq.track(eventName, payload);
+        }
+      }
+
+      // Product data from Blade (safe JSON for strings)
+      const productData = {
+        id: {{ $product->id }},
+        name: @json($product->name),
+        price: {{ (float) $product->price }}
+      };
+
+      // Fire ViewContent on page load
+      tiktokTrack('ViewContent', {
+        content_id: String(productData.id),
+        content_type: 'product',
+        content_name: productData.name,
+        price: productData.price,
+        currency: 'EGP'
+      });
+
+      // Expose AddToCart handler (quantity fixed to 1 per requirements)
+      window.handleAddToCart = function(){
+        tiktokTrack('AddToCart', {
+          content_id: String(productData.id),
+          content_type: 'product',
+          content_name: productData.name,
+          price: productData.price,
+          currency: 'EGP',
+          quantity: 1
+        });
+      };
+    })();
   </script>
 </body>
 </html>
