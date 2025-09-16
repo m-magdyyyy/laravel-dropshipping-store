@@ -211,7 +211,16 @@
 
         <!-- Product Info -->
         <div class="animate-fadeInUp">
-          <h1 class="text-2xl md:text-3xl font-extrabold text-charcoalText mb-4">{{ $product->name }}</h1>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-charcoalText mb-2">{{ $product->name }}</h1>
+          <!-- 5-star rating + review count -->
+          <div class="flex items-center gap-2 mb-4">
+            <span class="flex text-yellow-400 text-xl">
+              @for($i=0; $i<5; $i++)
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" class="w-5 h-5 inline"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.174 9.397c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.97z"/></svg>
+              @endfor
+            </span>
+            <span class="text-sm text-gray-600">5.0 (2 مراجعات)</span>
+          </div>
 
           <div class="mb-6">
             <div class="flex flex-wrap items-center gap-2 md:gap-4 mb-2">
@@ -221,6 +230,10 @@
                 <span class="bg-brandOrange text-white px-2 py-1 rounded text-xs md:text-sm font-bold">خصم {{ $product->discount_percentage }}%</span>
               @endif
             </div>
+            <!-- Urgency message -->
+            <p class="text-red-600 font-bold text-sm md:text-base mb-1">🚚 عرض الشحن المجاني ينتهي اليوم!</p>
+            <!-- Stock counter -->
+            <p class="text-orange-500 font-semibold text-xs md:text-sm mb-2">باقي {{ $product->stock ?? 7 }} قطع فقط بسعر العرض!</p>
             <p class="text-brandGreen font-semibold text-sm md:text-base">✅ متوفر - توصيل مجاني</p>
           </div>
 
@@ -245,6 +258,20 @@
           </div>
           @endif
 
+          <!-- Customer Reviews -->
+          <div class="mb-6">
+            <h3 class="text-lg font-bold mb-2">مراجعات العملاء:</h3>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="text-yellow-400">★★★★★</span>
+                <span class="text-gray-700 text-sm">منتج رائع وبيحافظ على الأكل سخن طول اليوم في الشغل - <span class="font-bold">محمد أحمد</span></span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-yellow-400">★★★★★</span>
+                <span class="text-gray-700 text-sm">الخامة ممتازة والتوصيل سريع جداً - <span class="font-bold">سارة علي</span></span>
+              </div>
+            </div>
+          </div>
           <!-- Order Card -->
           <div class="bg-white rounded-xl shadow-soft p-4 md:p-6 ring-1 ring-lightgray2 animate-scaleIn card-hover">
             <!-- Quantity Selector (smaller) -->
@@ -258,12 +285,12 @@
             </div>
             <!-- Action Buttons -->
             <div class="space-y-3">
-              <button onclick="handleAddToCart(); addToCart({{ $product->id }})" class="btn w-full btn-success hover:brightness-105 text-white font-bold py-3 md:py-4 px-4 md:px-6 rounded-lg text-lg md:text-xl shadow-soft group">
-                <span class="relative z-10">🛒 أضف للسلة</span>
-                <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-lg"></span>
-              </button>
               <button onclick="openOrderModal()" class="btn w-full btn-primary text-white font-bold py-3 md:py-4 px-4 md:px-6 rounded-lg text-lg md:text-xl shadow-soft group">
                 <span class="relative z-10">اطلب الآن</span>
+                <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-lg"></span>
+              </button>
+              <button onclick="handleAddToCart(); addToCart({{ $product->id }})" class="btn w-full btn-success hover:brightness-105 text-white font-bold py-3 md:py-4 px-4 md:px-6 rounded-lg text-lg md:text-xl shadow-soft group">
+                <span class="relative z-10">🛒 أضف للسلة</span>
                 <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-lg"></span>
               </button>
             </div>
