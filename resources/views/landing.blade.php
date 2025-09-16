@@ -288,6 +288,27 @@
 
             <div class="p-6">
               <h3 class="text-xl font-extrabold mb-2 text-brand-darker leading-tight">{{ $product->name }}</h3>
+              <!-- Consistent star rating based on product ID (4.0-5.0) -->
+              @php
+                $seed = $product->id * 37; // Use product ID for consistency
+                $randomRating = (($seed % 11) + 40) / 10; // Generates 4.0-5.0
+                $fullStars = floor($randomRating);
+                $hasHalfStar = ($randomRating - $fullStars) >= 0.5;
+              @endphp
+              <div class="flex items-center gap-2 mb-3">
+                <span class="flex text-yellow-400 text-lg">
+                  @for($i=0; $i<$fullStars; $i++)
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" class="w-4 h-4 inline"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.174 9.397c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.97z"/></svg>
+                  @endfor
+                  @if($hasHalfStar)
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" class="w-4 h-4 inline"><defs><linearGradient id="half-{{ $product->id }}"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="#e5e7eb"/></linearGradient></defs><path fill="url(#half-{{ $product->id }})" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.174 9.397c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.97z"/></svg>
+                  @endif
+                  @for($i=0; $i<(5-$fullStars-($hasHalfStar?1:0)); $i++)
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#e5e7eb" viewBox="0 0 20 20" class="w-4 h-4 inline"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.174 9.397c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.97z"/></svg>
+                  @endfor
+                </span>
+                <span class="text-xs text-gray-600">{{ $randomRating }}</span>
+              </div>
               <p class="text-brand-darker/70 mb-4 leading-relaxed">{{ Str::limit($product->description, 100) }}</p>
 
               <div class="flex justify-between items-center mb-4">
