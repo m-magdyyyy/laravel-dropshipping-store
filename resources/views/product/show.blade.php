@@ -258,20 +258,6 @@
           </div>
           @endif
 
-          <!-- Customer Reviews -->
-          <div class="mb-6">
-            <h3 class="text-lg font-bold mb-2">مراجعات العملاء:</h3>
-            <div class="space-y-2">
-              <div class="flex items-center gap-2">
-                <span class="text-yellow-400">★★★★★</span>
-                <span class="text-gray-700 text-sm">منتج رائع وبيحافظ على الأكل سخن طول اليوم في الشغل - <span class="font-bold">محمد أحمد</span></span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-yellow-400">★★★★★</span>
-                <span class="text-gray-700 text-sm">الخامة ممتازة والتوصيل سريع جداً - <span class="font-bold">سارة علي</span></span>
-              </div>
-            </div>
-          </div>
           <!-- Order Card -->
           <div class="bg-white rounded-xl shadow-soft p-4 md:p-6 ring-1 ring-lightgray2 animate-scaleIn card-hover">
             <!-- Quantity Selector (smaller) -->
