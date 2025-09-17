@@ -238,7 +238,7 @@
       <div class="grid md:grid-cols-3 gap-6">
         <div class="text-center p-8 rounded-2xl bg-white hover-scale shadow-soft animate-fade-in-up">
           <div class="text-6xl mb-4 animate-float">⚡</div>
-          <h3 class="text-2xl font-bold mb-2 text-brand-navy">توصيل سريع</h3>
+          <h3 class="text-2xl font-bold mb-2 text-brand-navy">توصيل مجاني </h3>
           <p class="text-brand-darker/80 leading-relaxed">توصيل خلال 1-3 أيام عمل لجميع المحافظات مع إمكانية التتبع المباشر للشحنة</p>
         </div>
         <div class="text-center p-8 rounded-2xl bg-white hover-scale shadow-soft animate-fade-in-up" style="animation-delay:120ms">
@@ -248,7 +248,9 @@
         </div>
         <div class="text-center p-8 rounded-2xl bg-white hover-scale shadow-soft animate-fade-in-up" style="animation-delay:240ms">
           <div class="text-6xl mb-4 animate-float">🔒</div>
-          <h3 class="text-2xl font-bold mb-2 text-brand-navy">دفع آمن</h3>
+          <h3 class="text-2xl font-bold mb-2 text-brand-navy">الدفع عند الاستلام
+            
+          </h3>
           <p class="text-brand-darker/80 leading-relaxed">الدفع عند الاستلام أو بالطرق الآمنة مع حماية كاملة لبياناتك</p>
         </div>
       </div>

@@ -305,6 +305,48 @@
   </section>
 
   <!-- Trust Badges -->
+  <section class="py-8 md:py-12 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <!-- دفع آمن -->
+        <div class="text-center animate-fadeInUp">
+          <div class="mb-4 flex justify-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-brandBlue to-brandIndigo rounded-full flex items-center justify-center shadow-soft">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+          </div>
+          <h3 class="text-xl font-bold text-charcoalText mb-2">دفع آمن</h3>
+          <p class="text-gray-600 leading-relaxed">الدفع عند الاستلام أو بالطرق الآمنة مع حماية كاملة لبياناتك</p>
+        </div>
+
+        <!-- جودة مضمونة -->
+        <div class="text-center animate-fadeInUp" style="animation-delay: 0.1s">
+          <div class="mb-4 flex justify-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-brandOrange to-red-500 rounded-full flex items-center justify-center shadow-soft">
+              <span class="text-white font-extrabold text-2xl">100</span>
+            </div>
+          </div>
+          <h3 class="text-xl font-bold text-charcoalText mb-2">جودة مضمونة</h3>
+          <p class="text-gray-600 leading-relaxed">منتجات أصلية 100% بأعلى معايير الجودة مع ضمان الاستبدال والإرجاع</p>
+        </div>
+
+        <!-- توصيل سريع -->
+        <div class="text-center animate-fadeInUp" style="animation-delay: 0.2s">
+          <div class="mb-4 flex justify-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-brandGreen to-green-600 rounded-full flex items-center justify-center shadow-soft">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+          </div>
+          <h3 class="text-xl font-bold text-charcoalText mb-2">توصيل مجاني </h3>
+          <p class="text-gray-600 leading-relaxed">توصيل خلال 1-3 أيام عمل لجميع المحافظات مع إمكانية التتبع المباشر للشحنة</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="bg-charcoal text-white py-8">
