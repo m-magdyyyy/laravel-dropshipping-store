@@ -4,8 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ProductFeedController;
 
 Route::get('/', [OrderController::class, 'index'])->name('landing');
+Route::get('/google-feed.xml', [ProductFeedController::class, 'generate'])->name('google.feed');
 Route::post('/order', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/thanks', [OrderController::class, 'thanks'])->name('thanks');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
