@@ -84,6 +84,8 @@
       ttq.page();
     }(window, document, 'ttq');
     </script>
+  <!-- Google Site Verification -->
+  <meta name="google-site-verification" content="JdThZmvAVdqI96t_f_RCCCPa7V8QgYQhSG2-FdmkHWg" />
 </head>
 <body class="bg-brand-light font-cairo text-brand-darker opacity-0 transition-opacity duration-700">
 
@@ -212,7 +214,7 @@
               خصم 50%
             </div>
             <div class="absolute -bottom-4 -left-4 bg-brand-green text-white px-4 py-2 rounded-full font-bold text-sm animate-pulse shadow-soft">
-              توصيل سريع
+            توصيل مجاني 
             </div>
           </div>
         </div>
@@ -249,7 +251,7 @@
         <div class="text-center p-8 rounded-2xl bg-white hover-scale shadow-soft animate-fade-in-up" style="animation-delay:240ms">
           <div class="text-6xl mb-4 animate-float">🔒</div>
           <h3 class="text-2xl font-bold mb-2 text-brand-navy">الدفع عند الاستلام
-            
+
           </h3>
           <p class="text-brand-darker/80 leading-relaxed">الدفع عند الاستلام أو بالطرق الآمنة مع حماية كاملة لبياناتك</p>
         </div>

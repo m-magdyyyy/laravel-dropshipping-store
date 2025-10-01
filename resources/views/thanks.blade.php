@@ -29,6 +29,8 @@
             ttq.page();
         }(window, document, 'ttq');
         </script>
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification" content="JdThZmvAVdqI96t_f_RCCCPa7V8QgYQhSG2-FdmkHWg" />
 </head>
 <body class="bg-gray-50 min-h-screen flex items-center justify-center py-8">
     <div class="container mx-auto px-4 text-center">

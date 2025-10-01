@@ -122,6 +122,8 @@
     ttq.page();
   }(window, document, 'ttq');
   </script>
+  <!-- Google Site Verification -->
+  <meta name="google-site-verification" content="JdThZmvAVdqI96t_f_RCCCPa7V8QgYQhSG2-FdmkHWg" />
 </head>
 <body class="bg-lightgray font-cairo text-charcoalText">
   <!-- Navigation -->
