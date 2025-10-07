@@ -1,35 +1,101 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <title>{{ $product->meta_title ?: $product->name }} - فكره استور</title>
-
-  @if($product->meta_description)
-  <meta name="description" content="{{ $product->meta_description }}" />
-  @endif
+  
+  <!-- Primary Meta Tags -->
+  <title>{{ $product->meta_title ?: $product->name }} | فكرة ستور</title>
+  <meta name="title" content="{{ $product->meta_title ?: $product->name }} | فكرة ستور">
+  <meta name="description" content="{{ $product->meta_description ?: Str::limit($product->description, 155) }}" />
+  <meta name="keywords" content="{{ $product->name }}, ملابس نسائية, أزياء محتشمة, فكرة ستور, شحن مجاني مصر">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="product">
+  <meta property="og:url" content="{{ route('product.show', $product->slug) }}">
+  <meta property="og:title" content="{{ $product->name }} | فكرة ستور">
+  <meta property="og:description" content="{{ Str::limit($product->description, 200) }}">
+  <meta property="og:image" content="{{ $product->image_url }}">
+  <meta property="og:locale" content="ar_EG">
+  <meta property="product:price:amount" content="{{ $product->price }}">
+  <meta property="product:price:currency" content="EGP">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="{{ route('product.show', $product->slug) }}">
+  <meta name="twitter:title" content="{{ $product->name }} | فكرة ستور">
+  <meta name="twitter:description" content="{{ Str::limit($product->description, 200) }}">
+  <meta name="twitter:image" content="{{ $product->image_url }}">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="{{ route('product.show', $product->slug) }}">
+  
+  <!-- Schema.org Product Structured Data (no Blade directives inside JSON) -->
+  @php
+    $imagesArray = [];
+    $imagesArray[] = $product->image_url;
+    if(!empty($product->gallery)){
+      foreach($product->gallery as $img){
+        $imagesArray[] = str_starts_with($img, 'http') ? $img : asset('storage/' . ltrim($img, '/'));
+      }
+    }
+    $schemaData = [
+      '@context' => 'https://schema.org/',
+      '@type' => 'Product',
+      'name' => $product->name,
+      'image' => $imagesArray,
+      'description' => $product->description,
+      'sku' => (string)$product->id,
+      'brand' => [
+        '@type' => 'Brand',
+        'name' => 'Fekra Store'
+      ],
+      'offers' => [
+        '@type' => 'Offer',
+        'url' => route('product.show', $product->slug),
+        'priceCurrency' => 'EGP',
+        'price' => (string)$product->price,
+        'priceValidUntil' => now()->addMonths(3)->format('Y-m-d'),
+        'availability' => 'https://schema.org/InStock',
+        'itemCondition' => 'https://schema.org/NewCondition'
+      ],
+      'aggregateRating' => [
+        '@type' => 'AggregateRating',
+        'ratingValue' => number_format((($product->id * 37) % 11 + 40) / 10, 1),
+        'reviewCount' => (($product->id * 37) % 14) + 2,
+      ],
+    ];
+  @endphp
+  <script type="application/ld+json">{!! json_encode($schemaData, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}</script>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { cairo: ["Cairo", "sans-serif"] },
+          fontFamily: {
+            'sans': ['Inter', 'system-ui', 'sans-serif'],
+            'display': ['Playfair Display', 'serif'],
+          },
           colors: {
-            white: "#FFFFFF",
-            lightgray: "#F5F5F5",
-            lightgray2: "#E5E5E5",
-            charcoal: "#2D2D2D",
-            charcoalText: "#333333",
-            brandBlue: "#2563EB",
-            brandIndigo: "#4F46E5",
-            brandGreen: "#10B981",
-            brandOrange: "#F97316",
-            softBeige: "#FAFAF5",
-            mutedNavy: "#1E3A8A",
+            brand: {
+              rose: '#FF6B9D',
+              'rose-light': '#FFB8D2',
+              'rose-dark': '#C9184A',
+              cream: '#FFF8F3',
+              beige: '#F5E6D3',
+              charcoal: '#2D3142',
+              slate: '#4F5D75',
+              gold: '#D4AF37',
+              'gold-light': '#F4E4C1',
+              mint: '#A8DADC',
+            },
           },
           boxShadow: {
             soft: "0 8px 25px rgba(0,0,0,0.06)",
@@ -62,20 +128,37 @@
 
   <style>
   * { box-sizing: border-box; }
-    body { font-family: 'Cairo', sans-serif; background:#f9fafb; color:#333333; }
-  .font-brand-kufi { font-family: 'Reem Kufi', 'Cairo', sans-serif; font-weight:700; letter-spacing:.5px; }
-  .text-logo-shadow { text-shadow: 0 0 0 currentColor, 0 .5px 0 currentColor; }
+    body { 
+      font-family: 'Inter', system-ui, sans-serif; 
+      background: #FFF8F3;
+      color: #2D3142;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
     img { max-width: 100%; height: auto; }
 
-    /* ===== Navbar (with logo) states ===== */
-    .navbar { position: fixed; top: 0; inset-inline: 0; z-index: 50; transition: background-color .25s ease, box-shadow .25s ease, color .25s ease; }
-    .nav-solid { background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%); color: #fff; box-shadow: 0 6px 18px rgba(0,0,0,.08); }
-    .nav-transparent { background: transparent; color: #333; box-shadow: none; }
+    /* ===== Modern Navbar ===== */
+    .navbar { 
+      position: fixed; 
+      top: 0; 
+      inset-inline: 0; 
+      z-index: 50; 
+      transition: all .3s ease;
+      backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(255,255,255,0.75);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+    }
+    .nav-solid { 
+      background: linear-gradient(135deg, #FF6B9D 0%, #C9184A 100%); 
+      color: #fff; 
+      box-shadow: 0 4px 20px rgba(255,107,157,0.3);
+    }
+    .nav-transparent { background: rgba(255,255,255,0.75); color: #2D3142; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
     .navbar a { color: inherit; }
-    .nav-solid .cart-btn { background: rgba(255,255,255,.12); color: #fff; }
-    .nav-solid .cart-btn:hover { background: rgba(255,255,255,.22); }
-    .nav-transparent .cart-btn { background:#fff; color:#333; border:1px solid #E5E5E5; }
-    .nav-transparent .cart-btn:hover { background:#F5F5F5; }
+    .nav-solid .cart-btn { background: rgba(255,255,255,.15); color: #fff; }
+    .nav-solid .cart-btn:hover { background: rgba(255,255,255,.25); box-shadow: 0 0 30px rgba(255,255,255,0.3); }
+    .nav-transparent .cart-btn { background: linear-gradient(135deg, #FF6B9D 0%, #C9184A 100%); color:#fff; border: none; }
+    .nav-transparent .cart-btn:hover { box-shadow: 0 4px 20px rgba(255,107,157,0.4); transform: translateY(-2px); }
 
     .gallery-image { cursor: pointer; transition: transform .2s ease; }
     .gallery-image:hover { transform: scale(1.03); }
@@ -165,25 +248,27 @@
   <!-- Google Site Verification -->
   <meta name="google-site-verification" content="JdThZmvAVdqI96t_f_RCCCPa7V8QgYQhSG2-FdmkHWg" />
 </head>
-<body class="bg-lightgray pt-16 md:pt-20">
-  <!-- Navigation -->
+<body class="bg-brand-cream pt-16 md:pt-20">
+  <!-- Modern Navigation -->
   <nav id="siteNav" class="navbar nav-solid">
-    <div class="container mx-auto px-4 py-3 md:py-4">
+    <div class="container mx-auto px-6 lg:px-12 py-3 md:py-4">
       <div class="flex justify-between items-center">
         <!-- Logo + Brand -->
-        <a href="{{ route('landing') }}" class="flex items-center gap-2 md:gap-3 font-extrabold tracking-tight hover:opacity-95">
-      <img src="{{ asset('images/fekra-logo.png') }}" alt="فكره استور" class="h-12 w-auto drop-shadow-sm group-hover:scale-105 transition"/>
-              <span class="text-2xl md:text-3xl font-extrabold font-brand-kufi text-logo-shadow leading-none text-brand-navy group-hover:text-brand-blue transition">فكره استور</span>
+        <a href="{{ route('landing') }}" class="flex items-center gap-3 group hover:opacity-95 transition-all">
+          <img src="{{ asset('images/fekra-logo.png') }}" alt="Fekra Store" class="h-10 w-auto drop-shadow-sm group-hover:scale-105 transition"/>
+          <span class="text-2xl lg:text-3xl font-bold font-display bg-gradient-to-r from-white to-brand-gold-light bg-clip-text text-transparent group-hover:scale-105 transition">
+            Fekra Store
+          </span>
         </a>
 
         <!-- Links -->
         <div class="flex items-center gap-3 md:gap-4">
-          <a href="{{ route('landing') }}" class="hover:opacity-80 text-sm md:text-base">الرئيسية</a>
-          <a href="{{ route('cart.show') }}" class="cart-btn relative p-2 md:p-3 rounded-full transition">
+          <a href="{{ route('landing') }}" class="hover:opacity-80 text-sm md:text-base font-medium transition-all">Home</a>
+          <a href="{{ route('cart.show') }}" class="cart-btn relative p-2 md:p-3 rounded-full transition-all">
             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
             </svg>
-            <span id="cart-badge" class="absolute -top-0.5 -right-0.5 bg-brandOrange text-white text-[10px] font-bold px-1 py-[1px] rounded-full min-w-[1rem] text-center hidden">0</span>
+            <span id="cart-badge" class="absolute -top-0.5 -left-0.5 bg-brand-gold text-white text-[10px] font-bold px-1 py-[1px] rounded-full min-w-[1rem] text-center hidden shadow-md">0</span>
           </a>
         </div>
       </div>
@@ -213,7 +298,7 @@
 
         <!-- Product Info -->
         <div class="animate-fadeInUp">
-          <h1 class="text-2xl md:text-3xl font-extrabold text-charcoalText mb-2">{{ $product->name }}</h1>
+          <h1 class="text-3xl md:text-4xl font-display font-bold text-brand-charcoal mb-4">{{ $product->name }}</h1>
           <!-- Consistent star rating based on product ID (4.0-5.0) -->
           @php
             // Use product ID to generate consistent rating for each product
@@ -238,35 +323,47 @@
             <span class="text-sm text-gray-600">{{ $randomRating }} ({{ $reviewCount }} مراجعات)</span>
           </div>
 
-          <div class="mb-6">
-            <div class="flex flex-wrap items-center gap-2 md:gap-4 mb-2">
-              <span class="text-2xl md:text-3xl font-extrabold text-brandBlue">{{ $product->formatted_price }}</span>
+          <div class="mb-8">
+            <div class="flex flex-wrap items-center gap-3 md:gap-4 mb-4">
+              <span class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-brand-rose to-brand-rose-dark bg-clip-text text-transparent">{{ $product->formatted_price }}</span>
               @if($product->original_price && $product->original_price > $product->price)
-                <span class="text-lg md:text-xl text-gray-500 line-through">{{ $product->formatted_original_price }}</span>
-                <span class="bg-brandOrange text-white px-2 py-1 rounded text-xs md:text-sm font-bold">خصم {{ $product->discount_percentage }}%</span>
+                <span class="text-xl md:text-2xl text-brand-slate/60 line-through">{{ $product->formatted_original_price }}</span>
+                <span class="bg-gradient-to-r from-brand-rose to-brand-rose-dark text-white px-3 py-1.5 rounded-full text-sm md:text-base font-bold shadow-lg">-{{ $product->discount_percentage }}%</span>
               @endif
             </div>
             <!-- Urgency message -->
-            <p class="text-red-600 font-bold text-sm md:text-base mb-1">🚚 عرض الشحن المجاني ينتهي اليوم!</p>
-            <!-- Stock counter -->
-            <p class="text-orange-500 font-semibold text-xs md:text-sm mb-2">باقي {{ $product->stock ?? 7 }} قطع فقط بسعر العرض!</p>
-            <p class="text-brandGreen font-semibold text-sm md:text-base">✅ متوفر - توصيل مجاني</p>
+            <div class="space-y-2 bg-gradient-to-r from-brand-cream to-brand-beige p-4 rounded-2xl border border-brand-beige mb-4">
+              <p class="text-brand-rose-dark font-bold text-sm md:text-base flex items-center gap-2">
+                <span class="text-xl">🚚</span> Free Shipping - Limited Time Offer!
+              </p>
+              <!-- Stock counter -->
+              <p class="text-orange-600 font-semibold text-sm md:text-base flex items-center gap-2">
+                <span class="text-lg">⚡</span> Only {{ $product->stock ?? 7 }} left at this price!
+              </p>
+              <p class="text-brand-mint font-semibold text-sm md:text-base flex items-center gap-2">
+                <span class="text-lg">✓</span> In Stock - Fast Delivery
+              </p>
+            </div>
           </div>
 
-          <div class="mb-6">
-            <h3 class="text-lg font-bold mb-2">الوصف:</h3>
-            <p class="text-gray-700 leading-relaxed">{{ $product->description }}</p>
+          <div class="mb-8 bg-white p-6 rounded-3xl shadow-soft">
+            <h3 class="text-xl font-bold mb-4 text-brand-charcoal flex items-center gap-2">
+              <span class="text-2xl">📝</span> Description
+            </h3>
+            <p class="text-brand-slate leading-relaxed">{{ $product->description }}</p>
           </div>
 
           @if($product->features)
-          <div class="mb-6">
-            <h3 class="text-lg font-bold mb-2">المميزات:</h3>
-            <div class="space-y-2">
+          <div class="mb-8 bg-gradient-to-br from-white to-brand-cream p-6 rounded-3xl border border-brand-beige">
+            <h3 class="text-xl font-bold mb-4 text-brand-charcoal flex items-center gap-2">
+              <span class="text-2xl">✨</span> Key Features
+            </h3>
+            <div class="space-y-3">
               @foreach(explode("\n", $product->features) as $feature)
                 @if(trim($feature))
-                <div class="flex items-center">
-                  <span class="text-brandGreen mr-2">✓</span>
-                  <span class="text-gray-700">{{ trim($feature) }}</span>
+                <div class="flex items-start gap-3">
+                  <span class="text-brand-rose text-xl mt-0.5">✓</span>
+                  <span class="text-brand-slate flex-1">{{ trim($feature) }}</span>
                 </div>
                 @endif
               @endforeach
@@ -274,31 +371,45 @@
           </div>
           @endif
 
-          <!-- Order Card -->
-          <div class="bg-white rounded-xl shadow-soft p-4 md:p-6 ring-1 ring-lightgray2 animate-scaleIn card-hover">
-            <!-- Quantity Selector (smaller) -->
-            <div class="mb-4">
-              <label class="block text-gray-700 font-bold mb-2">الكمية:</label>
-              <div class="flex items-center justify-center gap-2">
-                <button onclick="decreaseQuantity()" class="btn-ghost bg-lightgray2 hover:bg-lightgray text-charcoal font-bold py-1.5 px-3 rounded-md text-sm">−</button>
-                <span id="qtyBadge" class="bg-white ring-1 ring-lightgray2 px-3 py-1.5 rounded font-bold text-base min-w-[2.5rem] text-center">1</span>
-                <button onclick="increaseQuantity()" class="btn-primary text-white font-bold py-1.5 px-3 rounded-md text-sm">+</button>
+          <!-- Modern Order Card -->
+          <div class="bg-gradient-to-br from-white to-brand-cream rounded-3xl shadow-card p-6 md:p-8 border border-brand-beige animate-scaleIn">
+            <!-- Quantity Selector -->
+            <div class="mb-6">
+              <label class="block text-brand-charcoal font-bold mb-3 text-lg">Quantity:</label>
+              <div class="flex items-center justify-center gap-4">
+                <button onclick="decreaseQuantity()" class="bg-brand-beige hover:bg-brand-rose hover:text-white text-brand-charcoal font-bold py-3 px-5 rounded-full text-lg transition-all shadow-soft">−</button>
+                <span id="qtyBadge" class="bg-white border-2 border-brand-rose px-6 py-3 rounded-2xl font-bold text-xl min-w-[3.5rem] text-center text-brand-charcoal shadow-soft">1</span>
+                <button onclick="increaseQuantity()" class="bg-gradient-to-r from-brand-rose to-brand-rose-dark text-white font-bold py-3 px-5 rounded-full text-lg shadow-soft hover:shadow-glow transition-all">+</button>
               </div>
             </div>
             <!-- Action Buttons -->
-            <div class="space-y-3">
-              <button onclick="openOrderModal()" class="btn w-full btn-primary text-white font-bold py-3 md:py-4 px-4 md:px-6 rounded-lg text-lg md:text-xl shadow-soft group">
-                <span class="relative z-10">اطلب الآن</span>
-                <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-lg"></span>
+            <div class="space-y-4">
+              <button onclick="openOrderModal()" class="btn w-full bg-gradient-to-r from-brand-rose to-brand-rose-dark text-white font-bold py-4 md:py-5 px-6 rounded-2xl text-lg md:text-xl shadow-lg hover:shadow-glow transition-all group">
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                  <span>Order Now</span>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                  </svg>
+                </span>
+                <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-2xl"></span>
               </button>
-              <button onclick="handleAddToCart(); addToCart({{ $product->id }})" class="btn w-full btn-success hover:brightness-105 text-white font-bold py-3 md:py-4 px-4 md:px-6 rounded-lg text-lg md:text-xl shadow-soft group">
-                <span class="relative z-10">🛒 أضف للسلة</span>
-                <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-lg"></span>
+              <button onclick="handleAddToCart(); addToCart({{ $product->id }})" class="btn w-full bg-gradient-to-r from-brand-mint to-emerald-400 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold py-4 md:py-5 px-6 rounded-2xl text-lg md:text-xl shadow-lg transition-all group">
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                  <span>Add to Cart</span>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                  </svg>
+                </span>
+                <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-2xl"></span>
               </button>
             </div>
-            <div class="mt-3 md:mt-4 text-center">
-              <p class="text-gray-600 text-sm md:text-base">✅ توصيل مجاني لجميع المحافظات</p>
-              <p class="text-gray-600 text-sm md:text-base">🚚 شحن خلال 1-3 أيام عمل</p>
+            <div class="mt-6 space-y-2 text-center bg-white/50 p-4 rounded-2xl">
+              <p class="text-brand-slate text-sm md:text-base flex items-center justify-center gap-2">
+                <span class="text-brand-mint text-lg">✓</span> Free Shipping Nationwide
+              </p>
+              <p class="text-brand-slate text-sm md:text-base flex items-center justify-center gap-2">
+                <span class="text-brand-rose text-lg">🚚</span> Delivery in 1-3 Business Days
+              </p>
             </div>
           </div>
         </div>
@@ -306,175 +417,204 @@
     </div>
   </section>
 
-  <!-- Trust Badges -->
-  <section class="py-8 md:py-12 bg-white">
-    <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-        <!-- دفع آمن -->
-        <div class="text-center animate-fadeInUp">
-          <div class="mb-4 flex justify-center">
-            <div class="w-16 h-16 bg-gradient-to-br from-brandBlue to-brandIndigo rounded-full flex items-center justify-center shadow-soft">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <!-- Modern Trust Badges -->
+  <section class="py-12 md:py-16 bg-gradient-to-b from-white to-brand-cream">
+    <div class="container mx-auto px-6 lg:px-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Secure Payment -->
+        <div class="text-center p-8 rounded-3xl bg-white border border-brand-beige hover:shadow-card transition-all duration-500 animate-fadeInUp">
+          <div class="mb-6 flex justify-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-brand-rose to-brand-rose-dark rounded-2xl flex items-center justify-center shadow-soft">
+              <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
               </svg>
             </div>
           </div>
-          <h3 class="text-xl font-bold text-charcoalText mb-2">دفع آمن</h3>
-          <p class="text-gray-600 leading-relaxed">الدفع عند الاستلام أو بالطرق الآمنة مع حماية كاملة لبياناتك</p>
+          <h3 class="text-2xl font-bold text-brand-charcoal mb-3">Secure Payment</h3>
+          <p class="text-brand-slate leading-relaxed">Cash on delivery or secure online payment with complete data protection</p>
         </div>
 
-        <!-- جودة مضمونة -->
-        <div class="text-center animate-fadeInUp" style="animation-delay: 0.1s">
-          <div class="mb-4 flex justify-center">
-            <div class="w-16 h-16 bg-gradient-to-br from-brandOrange to-red-500 rounded-full flex items-center justify-center shadow-soft">
-              <span class="text-white font-extrabold text-2xl">100</span>
+        <!-- Premium Quality -->
+        <div class="text-center p-8 rounded-3xl bg-white border border-brand-beige hover:shadow-card transition-all duration-500 animate-fadeInUp" style="animation-delay: 0.1s">
+          <div class="mb-6 flex justify-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-brand-gold to-brand-gold-light rounded-2xl flex items-center justify-center shadow-soft">
+              <span class="text-white font-extrabold text-3xl">100%</span>
             </div>
           </div>
-          <h3 class="text-xl font-bold text-charcoalText mb-2">جودة مضمونة</h3>
-          <p class="text-gray-600 leading-relaxed">منتجات أصلية 100% بأعلى معايير الجودة مع ضمان الاستبدال والإرجاع</p>
+          <h3 class="text-2xl font-bold text-brand-charcoal mb-3">Premium Quality</h3>
+          <p class="text-brand-slate leading-relaxed">100% authentic products with highest quality standards and return guarantee</p>
         </div>
 
-        <!-- توصيل سريع -->
-        <div class="text-center animate-fadeInUp" style="animation-delay: 0.2s">
-          <div class="mb-4 flex justify-center">
-            <div class="w-16 h-16 bg-gradient-to-br from-brandGreen to-green-600 rounded-full flex items-center justify-center shadow-soft">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Fast Delivery -->
+        <div class="text-center p-8 rounded-3xl bg-white border border-brand-beige hover:shadow-card transition-all duration-500 animate-fadeInUp" style="animation-delay: 0.2s">
+          <div class="mb-6 flex justify-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-brand-mint to-emerald-500 rounded-2xl flex items-center justify-center shadow-soft">
+              <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
               </svg>
             </div>
           </div>
-          <h3 class="text-xl font-bold text-charcoalText mb-2">توصيل مجاني </h3>
-          <p class="text-gray-600 leading-relaxed">توصيل خلال 1-3 أيام عمل لجميع المحافظات مع إمكانية التتبع المباشر للشحنة</p>
+          <h3 class="text-2xl font-bold text-brand-charcoal mb-3">Free Shipping</h3>
+          <p class="text-brand-slate leading-relaxed">Delivery within 1-3 business days with real-time package tracking</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-charcoal text-white py-8">
-    <div class="container mx-auto px-4 text-center">
-      <p>&copy; 2025 فكرة. جميع الحقوق محفوظة.</p>
+  <!-- Modern Footer -->
+  <footer class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-charcoal via-brand-slate to-brand-charcoal"></div>
+    <div class="relative z-10 container mx-auto px-6 lg:px-12 py-12 text-center">
+      <div class="mb-6">
+        <h3 class="font-display text-3xl font-bold bg-gradient-to-r from-brand-rose-light to-brand-gold bg-clip-text text-transparent mb-2">Fekra Store</h3>
+        <p class="text-gray-300 text-sm">Modern Women's Fashion</p>
+      </div>
+      
+      <div class="flex justify-center gap-6 mb-8">
+        <a href="#" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-rose hover:scale-110 transition-all duration-300">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="#" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-rose hover:scale-110 transition-all duration-300">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+      </div>
+      
+      <p class="text-gray-400 text-sm">&copy; 2025 Fekra Store. All rights reserved.</p>
     </div>
   </footer>
 
-  <!-- Order Modal -->
-  <div id="orderModal" class="fixed inset-0 bg-black/40 backdrop-blur-[1px] z-50 flex items-end md:items-center justify-center px-3 sm:px-4 py-3 hidden">
-  <div id="modalPanel" class="bg-white shadow-lift w-full max-w-[96vw] sm:max-w-md md:max-w-2xl lg:max-w-4xl p-0 md:p-0">
-      <!-- Header (sticky) -->
-      <div class="panel-header px-4 py-3 md:px-6 md:py-4 flex items-center justify-between">
-        <h3 class="text-base md:text-lg font-bold text-charcoalText">تفاصيل الطلب</h3>
-        <button onclick="closeOrderModal()" class="text-gray-500 hover:text-charcoalText text-2xl leading-none">&times;</button>
+  <!-- Modern Order Modal -->
+  <div id="orderModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center px-4 py-6">
+    <div id="modalPanel" class="bg-white rounded-3xl shadow-card w-full max-w-4xl max-h-[90vh] overflow-hidden">
+      <!-- Header -->
+      <div class="px-8 py-6 border-b border-brand-beige bg-gradient-to-r from-brand-cream to-white">
+        <div class="flex items-center justify-between">
+          <h3 class="font-display text-2xl font-bold text-brand-charcoal">Complete Your Order</h3>
+          <button onclick="closeOrderModal()" class="w-10 h-10 rounded-full bg-brand-beige hover:bg-brand-rose hover:text-white transition-all duration-300 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <!-- Body (scrollable) -->
-      <div class="panel-body px-4 pb-4 md:px-6 md:pb-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          <!-- Summary -->
-          <div class="space-y-4 md:sticky md:top-4">
-            <div class="bg-blue-50 rounded-md p-3 text-sm ring-1 ring-lightgray2">
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)] px-8 py-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Order Summary -->
+          <div class="space-y-4">
+            <div class="p-6 rounded-2xl bg-gradient-to-br from-brand-rose/10 to-brand-gold/10 border border-brand-beige">
               <div class="flex items-center gap-4">
-                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-16 h-16 object-cover rounded-lg ring-1 ring-lightgray2" loading="lazy">
-                <div>
-                  <h4 class="font-bold text-charcoalText">{{ $product->name }}</h4>
-                  <p class="text-brandBlue font-extrabold">{{ $product->formatted_price }}</p>
+                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-20 h-20 object-cover rounded-xl shadow-soft" loading="lazy">
+                <div class="flex-1">
+                  <h4 class="font-bold text-brand-charcoal text-lg mb-1">{{ $product->name }}</h4>
+                  <p class="text-xl font-extrabold bg-gradient-to-r from-brand-rose to-brand-rose-dark bg-clip-text text-transparent">{{ $product->formatted_price }}</p>
                 </div>
               </div>
             </div>
 
-            <div class="bg-gray-50 rounded-md p-3 text-sm ring-1 ring-lightgray2">
-              <div class="flex justify-between items-center mb-2"><span class="text-gray-600">السعر:</span><span class="font-bold">{{ $product->formatted_price }}</span></div>
-              <div class="flex justify-between items-center mb-2"><span class="text-gray-600">الكمية:</span><span id="modalQuantityDisplay" class="font-bold">1</span></div>
-              <div class="flex justify-between items-center border-t pt-2"><span class="text-lg font-extrabold">الإجمالي:</span><span id="totalPrice" class="text-xl font-extrabold text-brandBlue">{{ $product->formatted_price }}</span></div>
+            <div class="p-6 rounded-2xl bg-white border border-brand-beige space-y-3">
+              <div class="flex justify-between items-center text-brand-slate"><span>Price:</span><span class="font-bold text-brand-charcoal">{{ $product->formatted_price }}</span></div>
+              <div class="flex justify-between items-center text-brand-slate"><span>Quantity:</span><span id="modalQuantityDisplay" class="font-bold text-brand-charcoal">1</span></div>
+              <div class="flex justify-between items-center pt-3 border-t border-brand-beige">
+                <span class="text-xl font-bold text-brand-charcoal">Total:</span>
+                <span id="totalPrice" class="text-2xl font-extrabold bg-gradient-to-r from-brand-rose to-brand-gold bg-clip-text text-transparent">{{ $product->formatted_price }}</span>
+              </div>
             </div>
           </div>
 
-          <!-- Form -->
+          <!-- Order Form -->
           <div>
-            <form id="productOrderForm" class="space-y-3" novalidate>
+            <form id="productOrderForm" class="space-y-4" novalidate>
               @csrf
               <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-              <div class="grid grid-cols-2 gap-3">
+              <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label for="modalQuantity" class="block text-xs font-medium text-gray-700 mb-1">الكمية</label>
-                  <select id="modalQuantity" name="quantity" class="w-full px-3 py-2 border border-lightgray2 rounded-md focus:ring-2 focus:ring-brandBlue focus:border-brandBlue">
+                  <label for="modalQuantity" class="block text-sm font-medium text-brand-charcoal mb-2">Quantity</label>
+                  <select id="modalQuantity" name="quantity" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all">
                     @for($i = 1; $i <= 10; $i++)
                       <option value="{{ $i }}">{{ $i }}</option>
                     @endfor
                   </select>
                 </div>
                 <div>
-                  <label for="phone" class="block text-xs font-medium text-gray-700 mb-1">رقم الهاتف</label>
-                  <input type="tel" id="phone" name="phone" required autocomplete="tel" class="w-full px-3 py-2 border border-lightgray2 rounded-md focus:ring-2 focus:ring-brandBlue focus:border-brandBlue" placeholder="01xxxxxxxxx" inputmode="numeric" pattern="01[0-9]{9}">
+                  <label for="phone" class="block text-sm font-medium text-brand-charcoal mb-2">Phone Number</label>
+                  <input type="tel" id="phone" name="customer_phone" required autocomplete="tel" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="01xxxxxxxxx" inputmode="numeric" pattern="01[0-9]{9}">
                 </div>
               </div>
 
               <div>
-                <label for="customer_name" class="block text-xs font-medium text-gray-700 mb-1">الاسم كاملاً</label>
-                <input type="text" id="customer_name" name="customer_name" required autocomplete="name" class="w-full px-3 py-2 border border-lightgray2 rounded-md focus:ring-2 focus:ring-brandBlue focus:border-brandBlue" placeholder="أدخل اسمك كاملاً">
+                <label for="customer_name" class="block text-sm font-medium text-brand-charcoal mb-2">Full Name</label>
+                <input type="text" id="customer_name" name="customer_name" required autocomplete="name" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="Enter your full name">
               </div>
 
-              <div class="grid grid-cols-2 gap-3">
+              <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label for="governorate" class="block text-xs font-medium text-gray-700 mb-1">المحافظة</label>
-                  <select id="governorate" name="governorate" required class="w-full px-3 py-2 border border-lightgray2 rounded-md focus:ring-2 focus:ring-brandBlue focus:border-brandBlue">
-                    <option value="">اختر المحافظة</option>
-                    <option value="القاهرة">القاهرة</option>
-                    <option value="الجيزة">الجيزة</option>
-                    <option value="الإسكندرية">الإسكندرية</option>
-                    <option value="الدقهلية">الدقهلية</option>
-                    <option value="البحيرة">البحيرة</option>
-                    <option value="المنوفية">المنوفية</option>
-                    <option value="الغربية">الغربية</option>
-                    <option value="كفر الشيخ">كفر الشيخ</option>
-                    <option value="الشرقية">الشرقية</option>
-                    <option value="القليوبية">القليوبية</option>
-                    <option value="بنى سويف">بنى سويف</option>
-                    <option value="الفيوم">الفيوم</option>
-                    <option value="المنيا">المنيا</option>
-                    <option value="أسيوط">أسيوط</option>
-                    <option value="سوهاج">سوهاج</option>
-                    <option value="قنا">قنا</option>
-                    <option value="الأقصر">الأقصر</option>
-                    <option value="أسوان">أسوان</option>
-                    <option value="البحر الأحمر">البحر الأحمر</option>
-                    <option value="الوادى الجديد">الوادى الجديد</option>
-                    <option value="مطروح">مطروح</option>
-                    <option value="شمال سيناء">شمال سيناء</option>
-                    <option value="جنوب سيناء">جنوب سيناء</option>
-                    <option value="بورسعيد">بورسعيد</option>
-                    <option value="دمياط">دمياط</option>
-                    <option value="الإسماعيلية">الإسماعيلية</option>
-                    <option value="السويس">السويس</option>
+                  <label for="governorate" class="block text-sm font-medium text-brand-charcoal mb-2">Governorate</label>
+                  <select id="governorate" name="governorate" required class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all">
+                    <option value="">Select Governorate</option>
+                    <option value="Cairo">Cairo</option>
+                    <option value="Giza">Giza</option>
+                    <option value="Alexandria">Alexandria</option>
+                    <option value="Dakahlia">Dakahlia</option>
+                    <option value="Beheira">Beheira</option>
+                    <option value="Monufia">Monufia</option>
+                    <option value="Gharbia">Gharbia</option>
+                    <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                    <option value="Sharqia">Sharqia</option>
+                    <option value="Qalyubia">Qalyubia</option>
+                    <option value="Beni Suef">Beni Suef</option>
+                    <option value="Fayoum">Fayoum</option>
+                    <option value="Minya">Minya</option>
+                    <option value="Asyut">Asyut</option>
+                    <option value="Sohag">Sohag</option>
+                    <option value="Qena">Qena</option>
+                    <option value="Luxor">Luxor</option>
+                    <option value="Aswan">Aswan</option>
+                    <option value="Red Sea">Red Sea</option>
+                    <option value="New Valley">New Valley</option>
+                    <option value="Matrouh">Matrouh</option>
+                    <option value="North Sinai">North Sinai</option>
+                    <option value="South Sinai">South Sinai</option>
+                    <option value="Port Said">Port Said</option>
+                    <option value="Damietta">Damietta</option>
+                    <option value="Ismailia">Ismailia</option>
+                    <option value="Suez">Suez</option>
                   </select>
                 </div>
                 <div>
-                  <label for="apartment" class="block text-xs font-medium text-gray-700 mb-1">الدور/الشقة (اختياري)</label>
-                  <input id="apartment" name="apartment" type="text" autocomplete="address-line2" class="w-full px-3 py-2 border border-lightgray2 rounded-md focus:ring-2 focus:ring-brandBlue focus:border-brandBlue" placeholder="مثال: الدور 3، شقة 8">
+                  <label for="apartment" class="block text-sm font-medium text-brand-charcoal mb-2">Apartment (Optional)</label>
+                  <input id="apartment" name="apartment" type="text" autocomplete="address-line2" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="Floor 3, Apt 8">
                 </div>
               </div>
 
               <div>
-                <label for="address" class="block text-xs font-medium text-gray-700 mb-1">العنوان التفصيلي</label>
-                <textarea id="address" name="address" required rows="2" autocomplete="street-address" class="w-full px-3 py-2 border border-lightgray2 rounded-md focus:ring-2 focus:ring-brandBlue focus:border-brandBlue" placeholder="المدينة، الحي، الشارع، رقم العقار"></textarea>
+                <label for="address" class="block text-sm font-medium text-brand-charcoal mb-2">Detailed Address</label>
+                <textarea id="address" name="address" required rows="3" autocomplete="street-address" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="City, District, Street, Building No."></textarea>
               </div>
 
-              <div class="flex gap-2 pt-1">
-                <button type="button" onclick="closeOrderModal()" class="flex-1 bg-lightgray2 hover:bg-lightgray text-charcoal font-semibold py-2 px-3 rounded-md transition duration-200 text-sm">إلغاء</button>
-                <button type="submit" id="productSubmitBtn" class="flex-1 btn-primary text-white font-semibold py-2 px-3 rounded-md transition duration-200 text-sm group">
-                  <span class="relative z-10">تأكيد الطلب</span>
-                  <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-md"></span>
+              <div class="flex gap-4 pt-2">
+                <button type="button" onclick="closeOrderModal()" class="flex-1 bg-brand-beige hover:bg-gray-300 text-brand-charcoal font-semibold py-3 px-6 rounded-xl transition-all duration-300">Cancel</button>
+                <button type="submit" id="productSubmitBtn" class="flex-1 bg-gradient-to-r from-brand-rose to-brand-rose-dark hover:shadow-card text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105">
+                  <span>Confirm Order</span>
                 </button>
               </div>
 
-              <div id="productSuccessMessage" class="hidden mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-                <h3 class="font-bold mb-2">✅ تم تسجيل طلبك بنجاح!</h3>
-                <p>سيتم التواصل معك خلال 24 ساعة لتأكيد الطلب.</p>
+              <div id="productSuccessMessage" class="hidden mt-4 p-5 bg-emerald-50 border-2 border-emerald-400 text-emerald-700 rounded-2xl">
+                <h3 class="font-bold mb-2 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                  Order Placed Successfully!
+                </h3>
+                <p>We'll contact you within 24 hours to confirm your order.</p>
               </div>
 
-              <div id="productErrorMessage" class="hidden mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                <h3 class="font-bold mb-2">❌ حدث خطأ!</h3>
-                <p id="productErrorText">يرجى المحاولة مرة أخرى.</p>
+              <div id="productErrorMessage" class="hidden mt-4 p-5 bg-red-50 border-2 border-red-400 text-red-700 rounded-2xl">
+                <h3 class="font-bold mb-2 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                  Error Occurred!
+                </h3>
+                <p id="productErrorText">Please try again.</p>
               </div>
             </form>
           </div>
@@ -533,9 +673,9 @@
           const cartIcon = document.querySelector('#cart-badge').parentElement;
           cartIcon.classList.add('animate-pulseSoft');
           setTimeout(() => cartIcon.classList.remove('animate-pulseSoft'), 700);
-        } else { toast('حدث خطأ في إضافة المنتج للسلة', 'error'); }
+        } else { toast('Error adding product to cart', 'error'); }
       })
-      .catch(() => toast('حدث خطأ في إضافة المنتج للسلة', 'error'));
+      .catch(() => toast('Error adding product to cart', 'error'));
     }
 
     function updateCartCount() {
@@ -585,6 +725,7 @@
     function openOrderModal(){
       const modal = document.getElementById('orderModal');
       modal.classList.remove('hidden');
+      modal.classList.add('flex');
       document.body.style.overflow='hidden';
       // Fully stop auto-rotate to avoid DOM class toggles influencing cursor hit-testing
       stopAutoRotate();
@@ -596,6 +737,7 @@
     function closeOrderModal(){
       const modal = document.getElementById('orderModal');
       modal.classList.add('hidden');
+      modal.classList.remove('flex');
       document.body.style.overflow='auto';
       const form=document.getElementById('productOrderForm'); form.reset();
       document.getElementById('modalQuantity').value='1';
@@ -728,12 +870,17 @@
   const productOrderFormEl = document.getElementById('productOrderForm');
   if(productOrderFormEl) productOrderFormEl.addEventListener('submit', function(e){
       e.preventDefault();
+      console.log('Form submitted');
       const btn=document.getElementById('productSubmitBtn');
       const ok=document.getElementById('productSuccessMessage');
       const err=document.getElementById('productErrorMessage');
       ok.classList.add('hidden'); err.classList.add('hidden');
-      btn.disabled=true; btn.querySelector('span').textContent='جاري الإرسال...';
+      btn.disabled=true; 
+      const btnText = btn.querySelector('span') || btn;
+      btnText.textContent='Processing...';
       const formData=new FormData(this);
+      console.log('Form data:', Object.fromEntries(formData));
+      console.log('Sending request to:', '{{ route("orders.store") }}');
       fetch('{{ route("orders.store") }}', {
         method: 'POST',
         body: formData,
@@ -743,34 +890,45 @@
           'X-Requested-With': 'XMLHttpRequest'
         }
       })
+      .then(r => {
+        console.log('Response received:', r.status, r.statusText);
+        return r;
+      })
       .then(async r => {
+        console.log('Response status:', r.status);
         let data = null;
-        try { data = await r.clone().json(); } catch(_) {}
+        try { data = await r.clone().json(); console.log('Response data:', data); } catch(e) { console.error('JSON parse error:', e); }
         if (!r.ok) {
           if (data && data.errors) {
             const flat = Object.values(data.errors).flat().join(' | ');
-            throw new Error(flat || data.message || 'فشل التحقق');
+            console.error('Validation errors:', data.errors);
+            throw new Error(flat || data.message || 'Validation failed');
           }
-            const text = data?.message || 'حدث خطأ في الخادم ('+r.status+')';
+            const text = data?.message || 'Server error ('+r.status+')';
             throw new Error(text);
         }
         return data;
       })
       .then(d => {
+        console.log('Success data:', d);
         if (d && d.success) {
           ok.classList.remove('hidden');
+          console.log('Redirecting to thanks page...');
           setTimeout(() => { window.location.href='{{ route("thanks") }}'; }, 1400);
         } else {
-          throw new Error(d?.message || 'حدث خطأ غير متوقع');
+          throw new Error(d?.message || 'An unexpected error occurred');
         }
       })
       .catch(e => {
+        console.error('Error:', e);
         err.classList.remove('hidden');
-        document.getElementById('productErrorText').textContent = e.message;
+        const errorTextEl = document.getElementById('productErrorText');
+        if(errorTextEl) errorTextEl.textContent = e.message;
       })
       .finally(()=>{
         btn.disabled=false;
-        btn.querySelector('span').textContent='تأكيد الطلب';
+        const btnText = btn.querySelector('span') || btn;
+        btnText.textContent='Confirm Order';
       });
   });
 

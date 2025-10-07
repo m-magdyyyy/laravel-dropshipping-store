@@ -1,50 +1,48 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <title>سلة التسوق - فكره استور</title>
-  <meta name="description" content="سلة التسوق - راجع منتجاتك المختارة وأتمم عملية الشراء" />
+  <title>Shopping Cart - Fekra Store</title>
+  <meta name="description" content="Review your selected products and complete your purchase" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            cairo: ["Cairo", "sans-serif"],
+            sans: ["Inter", "sans-serif"],
+            display: ["Playfair Display", "serif"],
           },
           colors: {
-            // Primary Palette (Trust & Neutrality)
-            white: "#FFFFFF",
-            lightgray: "#F5F5F5",
-            lightgray2: "#E5E5E5",
-            charcoal: "#2D2D2D",
-            charcoalText: "#333333",
-            // Accents
-            brandBlue: "#2563EB", // Tailwind blue-600
-            brandIndigo: "#4F46E5", // indigo-600 alternative
-            brandGreen: "#10B981",
-            brandOrange: "#F97316",
-            // Supporting
-            softBeige: "#FAFAF5",
-            mutedNavy: "#1E3A8A",
+            // Modern Women's Fashion Palette
+            'brand-rose': '#FF6B9D',
+            'brand-rose-light': '#FFB8D2',
+            'brand-rose-dark': '#C9184A',
+            'brand-gold': '#D4AF37',
+            'brand-gold-light': '#F4E4C1',
+            'brand-charcoal': '#2D3142',
+            'brand-slate': '#4F5D75',
+            'brand-cream': '#FFF8F3',
+            'brand-beige': '#F5E6D3',
+            'brand-mint': '#A8DADC',
+            'brand-lavender': '#E5D9F2',
+            'brand-peach': '#FFD6BA',
           },
           boxShadow: {
-            soft: "0 8px 25px rgba(0,0,0,0.06)",
-            lift: "0 12px 30px rgba(37,99,235,0.15)",
+            soft: "0 10px 30px rgba(201, 24, 74, 0.08)",
+            card: "0 20px 60px rgba(201, 24, 74, 0.12)",
           },
           animation: {
-            fadeIn: "fadeIn .5s ease-out both",
-            fadeInUp: "fadeInUp .5s ease-out both",
-            slideDown: "slideDown .3s ease-out both",
-            scaleIn: "scaleIn .35s ease-out both",
-            pulseSoft: "pulseSoft 1.8s ease-in-out infinite",
-            shimmer: "shimmer 2s linear infinite",
-            modalIn: "modalIn .35s ease-out both",
-            ripple: "ripple 0.6s ease-out",
+            fadeIn: "fadeIn .6s ease-out both",
+            fadeInUp: "fadeInUp .6s ease-out both",
+            slideDown: "slideDown .4s ease-out both",
+            scaleIn: "scaleIn .4s ease-out both",
+            pulseSoft: "pulseSoft 2s ease-in-out infinite",
+            shimmer: "shimmer 2.5s linear infinite",
           },
           keyframes: {
             fadeIn: {
@@ -52,32 +50,24 @@
               "100%": { opacity: 1 },
             },
             fadeInUp: {
-              "0%": { opacity: 0, transform: "translateY(16px)" },
+              "0%": { opacity: 0, transform: "translateY(20px)" },
               "100%": { opacity: 1, transform: "translateY(0)" },
             },
             slideDown: {
-              "0%": { opacity: 0, transform: "translateY(-8px)" },
+              "0%": { opacity: 0, transform: "translateY(-10px)" },
               "100%": { opacity: 1, transform: "translateY(0)" },
             },
             scaleIn: {
-              "0%": { opacity: 0, transform: "scale(.96)" },
+              "0%": { opacity: 0, transform: "scale(.95)" },
               "100%": { opacity: 1, transform: "scale(1)" },
             },
             pulseSoft: {
-              "0%,100%": { transform: "translateY(0)" },
-              "50%": { transform: "translateY(-2px)" },
+              "0%,100%": { transform: "scale(1)" },
+              "50%": { transform: "scale(1.02)" },
             },
             shimmer: {
               "0%": { backgroundPosition: "-100% 0" },
               "100%": { backgroundPosition: "200% 0" },
-            },
-            modalIn: {
-              "0%": { opacity: 0, transform: "translateY(12px) scale(.98)" },
-              "100%": { opacity: 1, transform: "translateY(0) scale(1)" },
-            },
-            ripple: {
-              "0%": { boxShadow: "0 0 0 0 rgba(37,99,235,0.45)" },
-              "100%": { boxShadow: "0 0 0 16px rgba(37,99,235,0)" },
             },
           },
         },
@@ -86,18 +76,26 @@
   </script>
 
   <style>
-  body { font-family: "Cairo", sans-serif; }
-  .font-brand-kufi { font-family: 'Reem Kufi', 'Cairo', sans-serif; font-weight:700; letter-spacing:.5px; }
-  .text-logo-shadow { text-shadow: 0 0 0 currentColor, 0 .5px 0 currentColor; }
-    .gradient-bg { /* Header background using muted navy -> blue gradient */
-      background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
+    body { 
+      font-family: "Inter", sans-serif; 
+      background: linear-gradient(to bottom, #FFF8F3, #FFFFFF);
+    }
+    .font-display { font-family: 'Playfair Display', serif; }
+    .gradient-bg {
+      background: linear-gradient(135deg, #FF6B9D 0%, #C9184A 100%);
     }
     .btn-primary {
-      background: linear-gradient(135deg, #2563EB 0%, #4F46E5 100%);
-      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+      background: linear-gradient(135deg, #FF6B9D 0%, #C9184A 100%);
+      transition: transform .3s ease, box-shadow .3s ease;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(37,99,235,.25); filter: brightness(1.02); }
-    .btn-success { background: #10B981; transition: transform .2s ease, box-shadow .2s ease; }
+    .btn-primary:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 15px 40px rgba(201, 24, 74, 0.3); 
+    }
+    .btn-success { 
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%); 
+      transition: transform .3s ease, box-shadow .3s ease; 
+    }
     .btn-success:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(16,185,129,.25); }
     .btn-ghost { transition: background-color .2s ease, transform .2s ease; }
     .btn-ghost:hover { background-color: #E5E5E5; transform: translateY(-1px); }
@@ -125,33 +123,25 @@
   <!-- Google Site Verification -->
   <meta name="google-site-verification" content="JdThZmvAVdqI96t_f_RCCCPa7V8QgYQhSG2-FdmkHWg" />
 </head>
-<body class="bg-lightgray font-cairo text-charcoalText">
-  <!-- Navigation -->
-  <nav class="gradient-bg text-white shadow-lg">
-    <div class="container mx-auto px-4 py-4 relative">
+<body class="min-h-screen">
+  <!-- Modern Navigation -->
+  <nav class="gradient-bg text-white shadow-card sticky top-0 z-40 backdrop-blur-md">
+    <div class="container mx-auto px-6 lg:px-12 py-5">
       <div class="flex justify-between items-center">
-        <!-- Logo & Toggle -->
-        <div class="flex items-center gap-4">
-<div class="flex items-center gap-3">
+        <!-- Logo -->
+        <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
           @if(file_exists(public_path('images/fekra-logo.png')))
-            <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
-              <img src="{{ asset('images/fekra-logo.png') }}" alt="فكره استور" class="h-12 w-auto drop-shadow-sm group-hover:scale-105 transition"/>
-              <span class="text-2xl md:text-3xl font-extrabold font-brand-kufi text-logo-shadow leading-none text-brand-navy group-hover:text-brand-blue transition">فكره استور</span>
-            </a>
-          @else
-            <a href="{{ route('landing') }}" class="text-xl font-extrabold text-brand-navy">فكره استور</a>
+            <img src="{{ asset('images/fekra-logo.png') }}" alt="Fekra Store" class="h-10 w-auto drop-shadow-md group-hover:scale-105 transition-transform duration-300"/>
           @endif
-        </div>
-          <button id="navToggle" class="sm:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 hover:bg-white/15 transition absolute left-4 top-1/2 -translate-y-1/2 sm:static z-50" aria-label="فتح/إغلاق القائمة">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
-          </button>
-        </div>
+          <span class="font-display text-2xl md:text-3xl font-bold tracking-tight">Fekra Store</span>
+        </a>
+
         <!-- Nav Links -->
-        <div id="navMenu" class="hidden sm:flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 w-full sm:w-auto mt-4 sm:mt-0 text-sm sm:text-base">
-          <a href="{{ route('landing') }}" class="hover:text-blue-200 transition-colors">الرئيسية</a>
+        <div class="flex items-center gap-6">
+          <a href="{{ route('landing') }}" class="hover:text-brand-rose-light transition-colors duration-300 font-medium">Home</a>
           <div class="relative">
-            <span class="badge-pill px-3 py-1 rounded-full text-sm font-bold shadow-soft animate-fadeInUp block text-center">
-              {{ $cartCount }} منتج
+            <span class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-bold shadow-soft">
+              {{ $cartCount }} {{ $cartCount === 1 ? 'Item' : 'Items' }}
             </span>
           </div>
         </div>
@@ -160,72 +150,77 @@
   </nav>
 
   <!-- Cart Content -->
-  <div class="container mx-auto px-4 py-8">
+  <div class="container mx-auto px-6 lg:px-12 py-12">
     <!-- Page Header -->
-    <div class="text-center mb-8 animate-fadeInUp">
-  <h1 class="text-3xl sm:text-4xl font-extrabold text-charcoalText mb-3">🛒 سلة التسوق</h1>
-      <p class="text-gray-600 text-lg">راجع منتجاتك المختارة وأتمم عملية الشراء</p>
+    <div class="text-center mb-12 animate-fadeInUp">
+      <h1 class="font-display text-5xl md:text-6xl font-bold text-brand-charcoal mb-4">
+        Shopping Cart
+      </h1>
+      <p class="text-brand-slate text-lg">Review your selected items and complete your purchase</p>
     </div>
 
     @if(empty($cart))
       <!-- Empty Cart -->
-      <div class="text-center py-16 animate-fadeInUp">
-        <div class="text-8xl mb-6 animate-pulseSoft">🛒</div>
-        <h2 class="text-3xl font-bold text-gray-700 mb-4">سلة التسوق فارغة</h2>
-        <p class="text-gray-500 mb-8 text-lg">ابدأ بإضافة منتجات رائعة لسلة التسوق</p>
-        <a href="{{ route('landing') }}" class="btn-primary inline-flex items-center gap-2 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-soft">
-          <span class="relative inline-block">تصفح المنتجات</span>
+      <div class="text-center py-20 animate-fadeInUp">
+        <div class="text-9xl mb-8 animate-pulseSoft">🛒</div>
+        <h2 class="font-display text-4xl font-bold text-brand-charcoal mb-4">Your Cart is Empty</h2>
+        <p class="text-brand-slate mb-10 text-xl">Start adding amazing products to your cart</p>
+        <a href="{{ route('landing') }}" class="btn-primary inline-flex items-center gap-3 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-card hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          <span>Browse Products</span>
         </a>
       </div>
     @else
-  <div class="grid lg:grid-cols-3 gap-6 lg:gap-8">
+      <div class="grid lg:grid-cols-3 gap-8">
         <!-- Cart Items -->
         <div class="lg:col-span-2">
-          <div class="bg-white rounded-2xl shadow-soft p-4 sm:p-6 animate-scaleIn">
-            <h2 class="text-2xl font-bold text-charcoalText mb-6 flex items-center">
-              <span class="text-brandBlue ml-3">📦</span>
-              المنتجات المختارة ({{ $cartCount }})
+          <div class="bg-white rounded-3xl shadow-card p-6 md:p-8 animate-scaleIn border border-brand-beige">
+            <h2 class="font-display text-3xl font-bold text-brand-charcoal mb-8 flex items-center gap-3">
+              <span class="text-brand-rose">📦</span>
+              Your Items ({{ $cartCount }})
             </h2>
 
-            <div class="space-y-4">
+            <div class="space-y-6">
               @foreach($cart as $productId => $item)
-                <div class="cart-item border border-lightgray2 bg-softBeige/40 rounded-xl p-4" data-product-id="{{ $productId }}">
-                  <div class="flex flex-wrap items-start sm:items-center gap-4">
+                <div class="cart-item border border-brand-beige bg-gradient-to-br from-white to-brand-cream/30 rounded-2xl p-6 hover:shadow-card transition-all duration-300" data-product-id="{{ $productId }}">
+                  <div class="flex flex-wrap items-center gap-6">
                     <!-- Product Image -->
                     <div class="relative">
-                      <img src="{{ $item['image_url'] }}" alt="{{ $item['name'] }}" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg ring-1 ring-lightgray2" />
-                      <span class="absolute -top-2 -right-2 text-[10px] bg-brandBlue text-white px-2 py-0.5 rounded-full shadow-soft animate-fadeInUp">{{ $item['quantity'] }}</span>
+                      <img src="{{ $item['image_url'] }}" alt="{{ $item['name'] }}" class="w-24 h-24 object-cover rounded-xl shadow-soft" />
+                      <span class="absolute -top-2 -right-2 text-xs bg-gradient-to-r from-brand-rose to-brand-rose-dark text-white px-3 py-1 rounded-full shadow-soft font-bold">{{ $item['quantity'] }}</span>
                     </div>
 
                     <!-- Product Info -->
-                    <div class="min-w-[150px] flex-1">
-                      <h3 class="text-base sm:text-lg font-bold text-charcoalText leading-tight overflow-hidden max-h-[3.2rem]">{{ $item['name'] }}</h3>
+                    <div class="flex-1 min-w-[200px]">
+                      <h3 class="text-xl font-bold text-brand-charcoal leading-tight mb-2">{{ $item['name'] }}</h3>
                       <p class="text-brandBlue font-extrabold text-base sm:text-lg mt-1">{{ number_format($item['price'], 0) }} ج.م</p>
                     </div>
 
-                    <!-- Item Total (mobile first) -->
-                    <div class="text-right sm:text-center order-4 sm:order-none w-auto sm:w-20">
-                      <p class="text-xs sm:text-sm text-gray-500">الإجمالي</p>
-                      <p class="item-total-{{ $productId }} text-base sm:text-lg font-extrabold text-brandGreen">{{ number_format($item['price'] * $item['quantity'], 0) }} ج.م</p>
+                    <!-- Item Total -->
+                    <div class="text-right">
+                      <p class="text-sm text-brand-slate mb-1">Total</p>
+                      <p class="item-total-{{ $productId }} text-2xl font-bold bg-gradient-to-r from-brand-rose to-brand-gold bg-clip-text text-transparent">{{ number_format($item['price'] * $item['quantity'], 0) }} EGP</p>
                     </div>
 
                     <!-- Quantity Controls -->
-                    <div class="flex items-center gap-2 w-full sm:w-auto sm:justify-center">
+                    <div class="flex items-center gap-3">
                       <button onclick="changeQuantity({{ $productId }}, -1)"
-                        class="quantity-btn btn-minus bg-lightgray2 hover:bg-lightgray text-charcoal w-9 h-9 rounded-full flex items-center justify-center font-bold disabled:opacity-40 disabled:cursor-not-allowed"
+                        class="quantity-btn btn-minus bg-brand-beige hover:bg-brand-gold hover:text-white text-brand-charcoal w-10 h-10 rounded-full flex items-center justify-center font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-300"
                         {{ $item['quantity'] <= 1 ? 'disabled' : '' }}>-
                       </button>
-                      <span class="quantity-display-{{ $productId }} bg-white ring-1 ring-lightgray2 text-charcoalText px-3 py-1 rounded-lg font-bold min-w-[3rem] text-center">{{ $item['quantity'] }}</span>
+                      <span class="quantity-display-{{ $productId }} bg-white border-2 border-brand-beige text-brand-charcoal px-4 py-2 rounded-xl font-bold min-w-[4rem] text-center text-lg">{{ $item['quantity'] }}</span>
                       <button onclick="changeQuantity({{ $productId }}, 1)"
-                        class="quantity-btn btn-plus bg-brandBlue hover:brightness-110 text-white w-9 h-9 rounded-full flex items-center justify-center font-bold disabled:opacity-40 disabled:cursor-not-allowed"
+                        class="quantity-btn btn-plus bg-gradient-to-r from-brand-rose to-brand-rose-dark hover:shadow-soft text-white w-10 h-10 rounded-full flex items-center justify-center font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-300"
                         {{ $item['quantity'] >= 10 ? 'disabled' : '' }}>+
                       </button>
                     </div>
 
                     <!-- Remove Button -->
-                    <div class="ml-auto">
-                      <button onclick="removeFromCart({{ $productId }})" class="text-brandOrange/90 hover:text-brandOrange hover:bg-brandOrange/10 p-2 rounded-lg transition-colors" aria-label="حذف المنتج">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <div>
+                      <button onclick="removeFromCart({{ $productId }})" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-3 rounded-xl transition-all duration-300" aria-label="Remove item">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                           <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
                       </button>
@@ -236,9 +231,12 @@
             </div>
 
             <!-- Clear Cart Button -->
-            <div class="mt-6 pt-4 border-t border-lightgray2">
-              <button onclick="clearCart()" class="btn-ghost text-brandOrange font-bold px-4 py-2 rounded-lg">
-                🗑️ حذف جميع المنتجات
+            <div class="mt-8 pt-6 border-t border-brand-beige">
+              <button onclick="clearCart()" class="text-red-500 hover:text-red-700 hover:bg-red-50 font-bold px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                Clear All Items
               </button>
             </div>
           </div>
@@ -246,43 +244,47 @@
 
         <!-- Order Summary -->
         <div class="lg:col-span-1">
-          <div class="bg-white rounded-2xl shadow-soft p-6 lg:sticky top-8 animate-scaleIn">
-            <h2 class="text-2xl font-bold text-charcoalText mb-6 flex items-center">
-              <span class="text-brandGreen ml-3">💰</span>
-              ملخص الطلب
+          <div class="bg-white rounded-3xl shadow-card p-8 lg:sticky top-24 animate-scaleIn border border-brand-beige">
+            <h2 class="font-display text-3xl font-bold text-brand-charcoal mb-8 flex items-center gap-3">
+              <span class="text-brand-gold">💰</span>
+              Order Summary
             </h2>
 
-            <div class="space-y-4 mb-6">
-              <div class="flex justify-between items-center">
-                <span class="text-gray-600">عدد المنتجات:</span>
-                <span class="cart-count font-bold text-lg">{{ $cartCount }}</span>
+            <div class="space-y-5 mb-8">
+              <div class="flex justify-between items-center text-brand-slate">
+                <span class="font-medium">Items:</span>
+                <span class="cart-count font-bold text-xl text-brand-charcoal">{{ $cartCount }}</span>
               </div>
-              <div class="flex justify-between items-center">
-                <span class="text-gray-600">المجموع الفرعي:</span>
-                <span class="cart-total font-extrabold text-lg text-brandGreen">{{ number_format($cartTotal, 0) }} ج.م</span>
+              <div class="flex justify-between items-center text-brand-slate">
+                <span class="font-medium">Subtotal:</span>
+                <span class="cart-total font-bold text-xl text-brand-charcoal">{{ number_format($cartTotal, 0) }} EGP</span>
               </div>
-              <div class="flex justify-between items-center">
-                <span class="text-gray-600">رسوم التوصيل:</span>
-                <span class="font-bold text-brandGreen">مجاناً 🚚</span>
+              <div class="flex justify-between items-center text-brand-slate">
+                <span class="font-medium">Shipping:</span>
+                <span class="font-bold text-emerald-600 flex items-center gap-1">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  FREE
+                </span>
               </div>
-              <hr class="border-lightgray2" />
-              <div class="flex justify-between items-center text-xl">
-                <span class="font-extrabold text-charcoalText">الإجمالي:</span>
-                <span class="cart-total font-extrabold text-brandGreen">{{ number_format($cartTotal, 0) }} ج.م</span>
+              <hr class="border-brand-beige" />
+              <div class="flex justify-between items-center pt-2">
+                <span class="font-display text-2xl font-bold text-brand-charcoal">Total:</span>
+                <span class="cart-total font-display text-3xl font-bold bg-gradient-to-r from-brand-rose to-brand-gold bg-clip-text text-transparent">{{ number_format($cartTotal, 0) }} EGP</span>
               </div>
             </div>
 
             <!-- Checkout Button -->
             <button onclick="showCheckoutModal()"
-              class="group w-full btn-primary text-white py-4 rounded-xl font-bold text-lg shadow-soft relative overflow-hidden">
-              <span class="relative z-10">إتمام الطلب 🛍️</span>
-              <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-xl"></span>
+              class="w-full btn-primary text-white py-5 rounded-2xl font-bold text-lg shadow-card hover:shadow-soft transition-all duration-300 transform hover:scale-105 mb-4">
+              Complete Order 🛍️
             </button>
 
             <!-- Continue Shopping -->
             <a href="{{ route('landing') }}"
-              class="block w-full text-center bg-lightgray2 hover:bg-lightgray text-charcoal py-3 rounded-xl font-bold mt-4 transition-colors">
-              متابعة التسوق
+              class="block w-full text-center bg-brand-beige hover:bg-brand-gold hover:text-white text-brand-charcoal py-4 rounded-2xl font-bold transition-all duration-300">
+              Continue Shopping
             </a>
           </div>
         </div>
@@ -290,99 +292,112 @@
     @endif
   </div>
 
-  <!-- Unified Order Modal -->
-  <div id="checkoutModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-end md:items-center justify-center px-3 sm:px-4 py-3 hidden">
-    <div id="cartModalPanel" class="bg-white shadow-soft w-full max-w-[96vw] sm:max-w-md md:max-w-3xl lg:max-w-4xl rounded-t-2xl md:rounded-2xl overflow-hidden flex flex-col animate-modalIn">
+  <!-- Modern Checkout Modal -->
+  <div id="checkoutModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center px-4 hidden" style="display: none;">
+    <div id="cartModalPanel" class="bg-white rounded-3xl shadow-card w-full max-w-4xl max-h-[90vh] overflow-hidden animate-scaleIn">
       <!-- Header -->
-      <div class="px-4 py-3 md:px-6 md:py-4 flex items-center justify-between border-b">
-        <h3 class="text-lg font-bold text-charcoalText">إتمام الطلب - السلة</h3>
-        <button onclick="hideCheckoutModal()" class="text-gray-500 hover:text-charcoalText text-2xl leading-none">&times;</button>
+      <div class="px-8 py-6 border-b border-brand-beige bg-gradient-to-r from-brand-cream to-white">
+        <div class="flex items-center justify-between">
+          <h3 class="font-display text-3xl font-bold text-brand-charcoal">Complete Your Order</h3>
+          <button onclick="hideCheckoutModal()" class="w-10 h-10 rounded-full bg-brand-beige hover:bg-brand-rose hover:text-white transition-all duration-300 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
       </div>
+
       <!-- Body -->
-      <div class="p-4 md:p-6 overflow-y-auto space-y-6 max-h-[80vh]">
-        <!-- Cart Summary inside modal -->
-        <div class="bg-softBeige rounded-xl p-4 ring-1 ring-lightgray2">
-          <h4 class="font-bold mb-3 text-charcoalText flex items-center"><span class="ml-2">🛒</span> ملخص المنتجات</h4>
-          <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+      <div class="p-8 overflow-y-auto max-h-[calc(90vh-140px)] space-y-6">
+        <!-- Cart Summary -->
+        <div class="bg-gradient-to-br from-brand-rose/10 to-brand-gold/10 rounded-2xl p-6 border border-brand-beige">
+          <h4 class="font-bold mb-4 text-brand-charcoal text-xl flex items-center gap-2">
+            <span>🛒</span> Order Summary
+          </h4>
+          <div class="space-y-3 max-h-64 overflow-y-auto">
             @foreach($cart as $pid => $item)
-              <div class="flex justify-between items-center text-sm bg-white rounded p-2 border border-lightgray2">
-                <div class="flex items-center gap-2">
-                  <img src="{{ $item['image_url'] }}" class="w-10 h-10 rounded object-cover ring-1 ring-lightgray2" alt="{{ $item['name'] }}" />
-                  <span class="font-medium text-charcoalText">{{ $item['name'] }}</span>
+              <div class="flex justify-between items-center bg-white rounded-xl p-4 border border-brand-beige shadow-soft">
+                <div class="flex items-center gap-3">
+                  <img src="{{ $item['image_url'] }}" class="w-14 h-14 rounded-lg object-cover shadow-soft" alt="{{ $item['name'] }}" />
+                  <span class="font-medium text-brand-charcoal">{{ $item['name'] }}</span>
                 </div>
-                <div class="text-left">
-                  <div class="text-brandIndigo font-bold">{{ $item['quantity'] }} × {{ number_format($item['price'],0) }}</div>
-                  <div class="text-brandGreen font-extrabold">= {{ number_format($item['price'] * $item['quantity'],0) }} ج.م</div>
+                <div class="text-right">
+                  <div class="text-brand-slate font-semibold">{{ $item['quantity'] }} × {{ number_format($item['price'],0) }} EGP</div>
+                  <div class="font-bold bg-gradient-to-r from-brand-rose to-brand-gold bg-clip-text text-transparent">{{ number_format($item['price'] * $item['quantity'],0) }} EGP</div>
                 </div>
               </div>
             @endforeach
           </div>
-          <div class="flex justify-between items-center mt-4 pt-3 border-t border-lightgray2 font-bold text-lg">
-            <span class="text-charcoalText">الإجمالي</span>
-            <span class="text-brandGreen">{{ number_format($cartTotal,0) }} ج.م</span>
+          <div class="flex justify-between items-center mt-6 pt-4 border-t border-brand-beige">
+            <span class="font-display text-2xl font-bold text-brand-charcoal">Total</span>
+            <span class="font-display text-3xl font-bold bg-gradient-to-r from-brand-rose to-brand-gold bg-clip-text text-transparent">{{ number_format($cartTotal,0) }} EGP</span>
           </div>
         </div>
 
-        <form id="checkoutForm" method="POST" action="{{ route('orders.store') }}" class="space-y-4">
+        <!-- Order Form -->
+        <form id="checkoutForm" method="POST" action="{{ route('orders.store') }}" class="space-y-5">
           @csrf
           <input type="hidden" name="cart_data" value='@json($cart)' />
-          <div class="grid md:grid-cols-2 gap-4">
+          
+          <div class="grid md:grid-cols-2 gap-5">
             <div>
-              <label class="block text-charcoalText font-bold mb-1 text-sm">الاسم الكامل *</label>
-              <input name="customer_name" required class="w-full border border-lightgray2 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brandBlue focus:border-transparent text-sm" />
+              <label class="block text-brand-charcoal font-semibold mb-2">Full Name *</label>
+              <input name="customer_name" required class="w-full border-2 border-brand-beige rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="Enter your full name" />
             </div>
             <div>
-              <label class="block text-charcoalText font-bold mb-1 text-sm">رقم الهاتف *</label>
-              <input name="phone" required class="w-full border border-lightgray2 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brandBlue focus:border-transparent text-sm" />
+              <label class="block text-brand-charcoal font-semibold mb-2">Phone Number *</label>
+              <input name="phone" required class="w-full border-2 border-brand-beige rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="01xxxxxxxxx" />
             </div>
           </div>
+
           <div>
-            <label class="block text-charcoalText font-bold mb-1 text-sm">العنوان التفصيلي *</label>
-            <textarea name="address" required rows="2" class="w-full border border-lightgray2 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brandBlue focus:border-transparent text-sm" placeholder="اكتب عنوانك بالكامل"></textarea>
+            <label class="block text-brand-charcoal font-semibold mb-2">Detailed Address *</label>
+            <textarea name="address" required rows="3" class="w-full border-2 border-brand-beige rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="City, District, Street, Building No."></textarea>
           </div>
-          <div class="grid md:grid-cols-2 gap-4">
+
+          <div class="grid md:grid-cols-2 gap-5">
             <div>
-              <label class="block text-charcoalText font-bold mb-1 text-sm">المحافظة *</label>
-              <select name="governorate" required class="w-full border border-lightgray2 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brandBlue focus:border-transparent text-sm">
-                <option value="">اختر المحافظة</option>
-                <option value="القاهرة">القاهرة</option>
-                <option value="الجيزة">الجيزة</option>
-                <option value="الإسكندرية">الإسكندرية</option>
-                <option value="الدقهلية">الدقهلية</option>
-                <option value="الشرقية">الشرقية</option>
-                <option value="القليوبية">القليوبية</option>
-                <option value="كفر الشيخ">كفر الشيخ</option>
-                <option value="الغربية">الغربية</option>
-                <option value="المنوفية">المنوفية</option>
-                <option value="البحيرة">البحيرة</option>
-                <option value="الإسماعيلية">الإسماعيلية</option>
-                <option value="بني سويف">بني سويف</option>
-                <option value="الفيوم">الفيوم</option>
-                <option value="المنيا">المنيا</option>
-                <option value="أسيوط">أسيوط</option>
-                <option value="سوهاج">سوهاج</option>
-                <option value="قنا">قنا</option>
-                <option value="الأقصر">الأقصر</option>
-                <option value="أسوان">أسوان</option>
-                <option value="البحر الأحمر">البحر الأحمر</option>
-                <option value="الوادي الجديد">الوادي الجديد</option>
-                <option value="مطروح">مطروح</option>
-                <option value="شمال سيناء">شمال سيناء</option>
-                <option value="جنوب سيناء">جنوب سيناء</option>
+              <label class="block text-brand-charcoal font-semibold mb-2">Governorate *</label>
+              <select name="governorate" required class="w-full border-2 border-brand-beige rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all">
+                <option value="">Select Governorate</option>
+                <option value="Cairo">Cairo</option>
+                <option value="Giza">Giza</option>
+                <option value="Alexandria">Alexandria</option>
+                <option value="Dakahlia">Dakahlia</option>
+                <option value="Sharqia">Sharqia</option>
+                <option value="Qalyubia">Qalyubia</option>
+                <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                <option value="Gharbia">Gharbia</option>
+                <option value="Monufia">Monufia</option>
+                <option value="Beheira">Beheira</option>
+                <option value="Ismailia">Ismailia</option>
+                <option value="Beni Suef">Beni Suef</option>
+                <option value="Fayoum">Fayoum</option>
+                <option value="Minya">Minya</option>
+                <option value="Asyut">Asyut</option>
+                <option value="Sohag">Sohag</option>
+                <option value="Qena">Qena</option>
+                <option value="Luxor">Luxor</option>
+                <option value="Aswan">Aswan</option>
+                <option value="Red Sea">Red Sea</option>
+                <option value="New Valley">New Valley</option>
+                <option value="Matrouh">Matrouh</option>
+                <option value="North Sinai">North Sinai</option>
+                <option value="South Sinai">South Sinai</option>
               </select>
             </div>
             <div>
-              <label class="block text-charcoalText font-bold mb-1 text-sm">ملاحظات</label>
-              <textarea name="notes" rows="2" class="w-full border border-lightgray2 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brandBlue focus:border-transparent text-sm" placeholder="أي ملاحظات إضافية (اختياري)"></textarea>
+              <label class="block text-brand-charcoal font-semibold mb-2">Notes (Optional)</label>
+              <textarea name="notes" rows="3" class="w-full border-2 border-brand-beige rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="Any additional notes"></textarea>
             </div>
           </div>
-          <div class="flex flex-col md:flex-row gap-3 pt-2">
-            <button class="flex-1 btn-success hover:brightness-105 text-white font-bold py-3 rounded-lg shadow-soft text-sm md:text-base relative overflow-hidden group">
-              <span class="relative z-10">تأكيد الطلب ({{ number_format($cartTotal,0) }} ج.م)</span>
-              <span class="absolute inset-0 shimmer-bg opacity-0 group-hover:opacity-100 animate-shimmer rounded-lg"></span>
+
+          <div class="flex flex-col md:flex-row gap-4 pt-4">
+            <button type="submit" class="flex-1 btn-success text-white font-bold py-4 rounded-2xl shadow-card hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+              Confirm Order ({{ number_format($cartTotal,0) }} EGP)
             </button>
-            <button type="button" onclick="hideCheckoutModal()" class="flex-1 bg-lightgray2 hover:bg-lightgray text-charcoal font-bold py-3 rounded-lg text-sm md:text-base">
-              إلغاء
+            <button type="button" onclick="hideCheckoutModal()" class="flex-1 bg-brand-beige hover:bg-gray-300 text-brand-charcoal font-bold py-4 rounded-2xl transition-all duration-300">
+              Cancel
             </button>
           </div>
         </form>
@@ -483,7 +498,7 @@
 
     // Remove from cart
     function removeFromCart(productId) {
-      if (!confirm('هل أنت متأكد من حذف هذا المنتج من السلة؟')) return;
+      if (!confirm('Are you sure you want to remove this item from your cart?')) return;
       fetch('/cart/remove', {
         method: 'POST',
         headers: {
@@ -503,15 +518,15 @@
           if (data.cart_count === 0) location.reload();
           showMessage(data.message, 'success');
         } else {
-          showMessage('حدث خطأ في حذف المنتج', 'error');
+          showMessage('Error removing item', 'error');
         }
       })
-      .catch(() => showMessage('حدث خطأ في حذف المنتج', 'error'));
+      .catch(() => showMessage('Error removing item', 'error'));
     }
 
     // Clear cart
     function clearCart() {
-      if (!confirm('هل أنت متأكد من حذف جميع المنتجات من السلة؟')) return;
+      if (!confirm('Are you sure you want to clear all items from your cart?')) return;
       fetch('/cart/clear', {
         method: 'POST',
         headers: {
@@ -522,8 +537,8 @@
         }
       })
       .then(r => r.json())
-      .then(data => { if (data.success) location.reload(); else showMessage('حدث خطأ في حذف المنتجات', 'error'); })
-      .catch(() => showMessage('حدث خطأ في حذف المنتجات', 'error'));
+      .then(data => { if (data.success) location.reload(); else showMessage('Error clearing cart', 'error'); })
+      .catch(() => showMessage('Error clearing cart', 'error'));
     }
 
     // Update cart totals in UI
@@ -536,11 +551,13 @@
     function showCheckoutModal() {
       const m = document.getElementById('checkoutModal');
       m.classList.remove('hidden');
+      m.style.display = 'flex';
       document.body.style.overflow = 'hidden';
     }
     function hideCheckoutModal() {
       const m = document.getElementById('checkoutModal');
       m.classList.add('hidden');
+      m.style.display = 'none';
       document.body.style.overflow = 'auto';
     }
 
@@ -548,11 +565,11 @@
     function showMessage(message, type) {
       const container = document.getElementById('messageContainer');
       const wrapper = document.createElement('div');
-      wrapper.className = `p-4 rounded-lg shadow-soft mb-3 text-white animate-slideDown ${type === 'success' ? 'bg-brandGreen' : 'bg-brandOrange'}`;
+      wrapper.className = `p-4 rounded-2xl shadow-card mb-3 text-white animate-slideDown ${type === 'success' ? 'bg-emerald-500' : 'bg-red-500'}`;
       wrapper.innerHTML = `
         <div class="flex items-center justify-between gap-4">
-          <span>${message}</span>
-          <button class="text-white/90 hover:text-white" aria-label="إغلاق" onclick="this.closest('div').remove()">×</button>
+          <span class="font-medium">${message}</span>
+          <button class="text-white/90 hover:text-white font-bold text-xl" aria-label="Close" onclick="this.closest('div').remove()">×</button>
         </div>`;
       container.appendChild(wrapper);
       setTimeout(() => wrapper && wrapper.remove(), 5000);
@@ -562,5 +579,27 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideCheckoutModal(); });
     document.getElementById('checkoutModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) hideCheckoutModal(); });
   </script>
+
+  <!-- Modern Footer -->
+  <footer class="relative overflow-hidden mt-20">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-charcoal via-brand-slate to-brand-charcoal"></div>
+    <div class="relative z-10 container mx-auto px-6 lg:px-12 py-12 text-center">
+      <div class="mb-6">
+        <h3 class="font-display text-3xl font-bold bg-gradient-to-r from-brand-rose-light to-brand-gold bg-clip-text text-transparent mb-2">Fekra Store</h3>
+        <p class="text-gray-300 text-sm">Modern Women's Fashion</p>
+      </div>
+      
+      <div class="flex justify-center gap-6 mb-8">
+        <a href="#" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-rose hover:scale-110 transition-all duration-300">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="#" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-rose hover:scale-110 transition-all duration-300">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+      </div>
+      
+      <p class="text-gray-400 text-sm">&copy; 2025 Fekra Store. All rights reserved.</p>
+    </div>
+  </footer>
 </body>
 </html>

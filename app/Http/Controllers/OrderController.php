@@ -37,7 +37,7 @@ class OrderController extends Controller
         // Validation rules - accept customer_name which the front-end form sends
         $rules = [
             'customer_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'customer_phone' => 'required|string|max:20',
             'address' => 'required|string|max:1000',
             'governorate' => 'required|string|max:100', // made required
             'product_id' => 'nullable|exists:products,id',
@@ -47,7 +47,7 @@ class OrderController extends Controller
 
         $messages = [
             'customer_name.required' => 'الاسم مطلوب',
-            'phone.required' => 'رقم الهاتف مطلوب',
+            'customer_phone.required' => 'رقم الهاتف مطلوب',
             'address.required' => 'العنوان مطلوب',
             'governorate.required' => 'المحافظة مطلوبة',
             'product_id.exists' => 'المنتج المحدد غير موجود',
@@ -72,6 +72,12 @@ class OrderController extends Controller
 
         // Set default values
         $validated['quantity'] = $validated['quantity'] ?? 1;
+        
+        // Convert customer_phone to phone for database
+        if (isset($validated['customer_phone'])) {
+            $validated['phone'] = $validated['customer_phone'];
+            unset($validated['customer_phone']);
+        }
 
         // Ensure database column uses 'customer_name'
         $order = Order::create($validated);

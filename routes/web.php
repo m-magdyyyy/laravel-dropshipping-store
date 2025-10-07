@@ -5,8 +5,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductFeedController;
+use App\Http\Controllers\SitemapController;
 
 Route::get('/', [OrderController::class, 'index'])->name('landing');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/google-feed.xml', [ProductFeedController::class, 'generate'])->name('google.feed');
 Route::post('/order', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/thanks', [OrderController::class, 'thanks'])->name('thanks');
