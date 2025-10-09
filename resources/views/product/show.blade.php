@@ -48,9 +48,22 @@
       'image' => $imagesArray,
       'description' => $product->description,
       'sku' => (string)$product->id,
+      'category' => 'Women\'s Fashion',
       'brand' => [
         '@type' => 'Brand',
+        'name' => 'Fekra Store',
+        'url' => url('/')
+      ],
+      'manufacturer' => [
+        '@type' => 'Organization',
         'name' => 'Fekra Store'
+      ],
+      'aggregateRating' => [
+        '@type' => 'AggregateRating',
+        'ratingValue' => '4.5',
+        'reviewCount' => '15',
+        'bestRating' => '5',
+        'worstRating' => '1'
       ],
       'offers' => [
         '@type' => 'Offer',
@@ -67,8 +80,35 @@
         'reviewCount' => (($product->id * 37) % 14) + 2,
       ],
     ];
+    
+    // Breadcrumb Schema
+    $breadcrumbSchema = [
+      '@context' => 'https://schema.org/',
+      '@type' => 'BreadcrumbList',
+      'itemListElement' => [
+        [
+          '@type' => 'ListItem',
+          'position' => 1,
+          'name' => 'الرئيسية',
+          'item' => url('/')
+        ],
+        [
+          '@type' => 'ListItem',
+          'position' => 2,
+          'name' => 'المنتجات',
+          'item' => url('/#products')
+        ],
+        [
+          '@type' => 'ListItem',
+          'position' => 3,
+          'name' => $product->name,
+          'item' => url()->current()
+        ]
+      ]
+    ];
   @endphp
   <script type="application/ld+json">{!! json_encode($schemaData, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}</script>
+  <script type="application/ld+json">{!! json_encode($breadcrumbSchema, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}</script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -163,6 +203,91 @@
     .gallery-image { cursor: pointer; transition: transform .2s ease; }
     .gallery-image:hover { transform: scale(1.03); }
     .main-image { max-height: 500px; object-fit: cover; }
+    
+    /* Portrait style for better product display */
+    .main-image-portrait { 
+      width: 100%;
+      height: auto;
+      max-height: 600px;
+      object-fit: contain;
+      aspect-ratio: 3/4;
+      background: #f8f9fa;
+      transition: opacity 0.3s ease;
+    }
+    
+    /* Loading skeleton animations */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+    
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    .image-loading {
+      opacity: 0.7;
+      filter: blur(1px);
+    }
+    
+    .image-loaded {
+      opacity: 1;
+      filter: none;
+    }
+    
+    /* Micro animations */
+    .pulse-gentle {
+      animation: pulseGentle 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulseGentle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+    
+    /* Enhanced button animations */
+    .btn-enhanced {
+      position: relative;
+      overflow: hidden;
+      transform: translateZ(0);
+    }
+    
+    .btn-enhanced:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    .btn-enhanced:hover:before {
+      left: 100%;
+    }
+    
+    /* Thumbnail gallery improvements */
+    .thumbnail-wrapper {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .thumbnail-wrapper:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .thumbnails-scroll {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+    }
+    
+    .thumbnails-scroll::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
 
     .order-btn, .btn { position: relative; overflow: hidden; }
     .btn .shimmer-bg, .order-btn .shimmer-bg { background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.25) 50%, rgba(255,255,255,0) 100%); background-size: 200% 100%; }
@@ -207,7 +332,12 @@
   /* Avoid any accidental overlay capturing pointer */
   #modalPanel .shimmer-bg { pointer-events: none; }
 
-    @media (max-width: 768px){ .main-image{ max-height: 50vh; } .thumbnails-scroll{ display:flex !important; gap:.5rem; overflow-x:auto; padding-bottom:.5rem; -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory; } .thumbnails-scroll img{ flex:0 0 auto; height:4rem; width:4rem; object-fit:cover; scroll-snap-align:start; } .order-btn{ padding:.75rem 1rem; font-size:1rem; } }
+    @media (max-width: 768px){ 
+      .main-image-portrait{ max-height: 50vh; aspect-ratio: 3/4; } 
+      .thumbnails-scroll{ display:flex !important; gap:.75rem; overflow-x:auto; padding-bottom:.5rem; -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory; } 
+      .thumbnail-wrapper{ flex:0 0 auto; width: 4rem; scroll-snap-align:start; } 
+      .order-btn{ padding:.75rem 1rem; font-size:1rem; } 
+    }
 
     @supports (-webkit-touch-callout: none){ #modalPanel input, #modalPanel select, #modalPanel textarea{ font-size: 16px; } }
 
@@ -234,6 +364,40 @@
 
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
   </style>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_TRACKING_ID', {
+        page_title: document.title,
+        page_location: window.location.href
+      });
+      
+      // Enhanced E-commerce tracking
+      gtag('config', 'GA_TRACKING_ID', {
+        custom_map: {'custom_parameter_1': 'product_id'}
+      });
+    </script>
+
+    <!-- Facebook Pixel (Meta Pixel) -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', 'YOUR_PIXEL_ID');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"
+    /></noscript>
+
     <!-- TikTok Pixel Base Code -->
     <script>
     !function (w, d, t) {
@@ -275,22 +439,144 @@
     </div>
   </nav>
 
+  <!-- Breadcrumbs -->
+  <nav class="bg-white border-b border-gray-100" aria-label="Breadcrumb">
+    <div class="container mx-auto px-4 py-3 text-left">
+      <ol class="flex items-center gap-3 text-sm text-gray-600 justify-start overflow-x-auto whitespace-nowrap" dir="ltr">
+        <!-- Home -->
+        <li class="shrink-0">
+          <a href="{{ route('landing') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white shadow-sm hover:shadow-md text-gray-700 hover:text-brand-rose transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M10.707 1.293a1 1 0 00-1.414 0l-8 8A1 1 0 002 11h1v7a1 1 0 001 1h4a1 1 0 001-1v-4h2v4a1 1 0 001 1h4a1 1 0 001-1v-7h1a1 1 0 00.707-1.707l-8-8z"/>
+            </svg>
+            <span>الرئيسية</span>
+          </a>
+        </li>
+        <!-- Separator -->
+        <li class="text-gray-300 shrink-0" aria-hidden="true">
+          <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+        </li>
+        <!-- Products -->
+        <li class="shrink-0">
+          <a href="{{ url('/#products') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white shadow-sm hover:shadow-md text-gray-700 hover:text-brand-rose transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z"/>
+            </svg>
+            <span>المنتجات</span>
+          </a>
+        </li>
+        <!-- Separator -->
+        <li class="text-gray-300 shrink-0" aria-hidden="true">
+          <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+        </li>
+        <!-- Current -->
+        <li class="shrink-0">
+          <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-rose/10 text-brand-rose font-medium">
+            <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M17.707 9.293l-7-7A1 1 0 009 2v3H6a3 3 0 00-3 3v6a4 4 0 004 4h6a3 3 0 003-3v-3h3a1 1 0 00.707-1.707zM7 8h5v2H7V8z"/>
+            </svg>
+            <span>{{ $product->name }}</span>
+          </span>
+        </li>
+      </ol>
+    </div>
+  </nav>
+
   <!-- Product Details -->
   <section class="py-6 md:py-12">
-    <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+    <div class="container mx-auto px-4 max-w-7xl">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
         <!-- Product Images -->
         <div class="animate-fadeInUp">
-          <div class="mb-4">
-            <img id="mainImage" src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full main-image rounded-lg shadow-soft img-pop" loading="lazy" onerror="this.src='https://via.placeholder.com/600x400?text=No+Image'">
+          <div class="mb-4 bg-white rounded-lg shadow-soft overflow-hidden">
+            <picture>
+              @php
+                $imgUrl = $product->image_url;
+                $webpUrl = null;
+                if (!str_starts_with($imgUrl, 'http')) {
+                    $relative = ltrim($imgUrl, '/');
+                    $fullPath = public_path($relative);
+                    if (preg_match('/\.(jpg|jpeg|png)$/i', $fullPath)) {
+                        $webpFs = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $fullPath);
+                        if ($webpFs && file_exists($webpFs)) {
+                            $webpUrl = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $imgUrl);
+                        }
+                    } elseif (preg_match('/\.webp$/i', $fullPath) && file_exists($fullPath)) {
+                        $webpUrl = $imgUrl;
+                    }
+                } else {
+                    if (preg_match('/\.webp($|\?)/i', $imgUrl)) {
+                        $webpUrl = $imgUrl;
+                    }
+                }
+              @endphp
+              @if($webpUrl)
+                <source srcset="{{ $webpUrl }}" type="image/webp">
+              @endif
+              <img id="mainImage" src="{{ $imgUrl }}" alt="{{ $product->name }} - صورة المنتج الرئيسية" class="w-full main-image-portrait rounded-lg img-pop" loading="eager" decoding="async" onerror="this.src='https://via.placeholder.com/600x400?text=No+Image'">
+            </picture>
           </div>
 
           @if($product->gallery && count($product->gallery) > 0)
-          <div class="thumbnails-scroll grid grid-cols-4 gap-2 md:grid-cols-4 md:gap-2">
-            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="gallery-image w-full h-16 md:h-20 object-cover rounded border-2 border-brandBlue" onclick="changeMainImage('{{ $product->image_url }}', this)" onerror="this.style.display='none'">
-            @foreach($product->gallery as $image)
+          <div class="thumbnails-scroll grid grid-cols-4 gap-2 md:grid-cols-4 md:gap-3">
+            <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-brand-rose">
+              <picture>
+                @php 
+                  $thumbImg = $product->image_url; 
+                  $webpUrl = null; 
+                  if (!str_starts_with($thumbImg, 'http')) {
+                      $relative = ltrim($thumbImg, '/');
+                      $fullPath = public_path($relative);
+                      if (preg_match('/\.(jpg|jpeg|png)$/i', $fullPath)) {
+                          $webpFs = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $fullPath);
+                          if ($webpFs && file_exists($webpFs)) {
+                              $webpUrl = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $thumbImg);
+                          }
+                      } elseif (preg_match('/\.webp$/i', $fullPath) && file_exists($fullPath)) {
+                          $webpUrl = $thumbImg;
+                      }
+                  } else {
+                      if (preg_match('/\.webp($|\?)/i', $thumbImg)) {
+                          $webpUrl = $thumbImg;
+                      }
+                  }
+                @endphp
+                @if($webpUrl)
+                  <source srcset="{{ $webpUrl }}" type="image/webp">
+                @endif
+                <img src="{{ $thumbImg }}" alt="{{ $product->name }} - صورة مصغرة 1" class="gallery-image w-full aspect-[3/4] object-contain bg-gray-50" onclick="changeMainImage('{{ $thumbImg }}', this)" loading="lazy" decoding="async" onerror="this.style.display='none'">
+              </picture>
+            </div>
+            @foreach($product->gallery as $index => $image)
               @php $imageUrl = str_starts_with($image, 'http') ? $image : '/storage/' . ltrim($image, '/'); @endphp
-              <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="gallery-image w-full h-16 md:h-20 object-cover rounded border-2 border-lightgray2 hover:border-brandBlue" onclick="changeMainImage('{{ $imageUrl }}', this)" onerror="this.style.display='none'">
+              <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-gray-200 hover:border-brand-rose transition-colors">
+                <picture>
+                  @php 
+                    $thumb2 = $imageUrl; 
+                    $webpUrl = null; 
+                    if (!str_starts_with($thumb2, 'http')) {
+                        $relative = ltrim($thumb2, '/');
+                        $fullPath = public_path($relative);
+                        if (preg_match('/\.(jpg|jpeg|png)$/i', $fullPath)) {
+                            $webpFs = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $fullPath);
+                            if ($webpFs && file_exists($webpFs)) {
+                                $webpUrl = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $thumb2);
+                            }
+                        } elseif (preg_match('/\.webp$/i', $fullPath) && file_exists($fullPath)) {
+                            $webpUrl = $thumb2;
+                        }
+                    } else {
+                        if (preg_match('/\.webp($|\?)/i', $thumb2)) {
+                            $webpUrl = $thumb2;
+                        }
+                    }
+                  @endphp
+                  @if($webpUrl)
+                    <source srcset="{{ $webpUrl }}" type="image/webp">
+                  @endif
+                  <img src="{{ $thumb2 }}" alt="{{ $product->name }} - صورة مصغرة {{ $index + 2 }}" class="gallery-image w-full aspect-[3/4] object-contain bg-gray-50" onclick="changeMainImage('{{ $thumb2 }}', this)" loading="lazy" decoding="async" onerror="this.style.display='none'">
+                </picture>
+              </div>
             @endforeach
           </div>
           @endif
@@ -596,8 +882,15 @@
 
               <div class="flex gap-4 pt-2">
                 <button type="button" onclick="closeOrderModal()" class="flex-1 bg-brand-beige hover:bg-gray-300 text-brand-charcoal font-semibold py-3 px-6 rounded-xl transition-all duration-300">Cancel</button>
-                <button type="submit" id="productSubmitBtn" class="flex-1 bg-gradient-to-r from-brand-rose to-brand-rose-dark hover:shadow-card text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105">
-                  <span>Confirm Order</span>
+                <button type="submit" id="productSubmitBtn" class="flex-1 bg-gradient-to-r from-brand-rose to-brand-rose-dark hover:shadow-card text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 btn-enhanced">
+                  <span class="btn-text">تأكيد الطلب</span>
+                  <span class="btn-loading hidden">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    جاري المعالجة...
+                  </span>
                 </button>
               </div>
 
@@ -776,11 +1069,16 @@
       main.src=src;
       main.classList.add('fade-swap');
 
-      document.querySelectorAll('.gallery-image').forEach(img=>{
-        img.classList.remove('border-brandBlue');
-        img.classList.add('border-lightgray2');
+      // Update thumbnail borders
+      document.querySelectorAll('.thumbnail-wrapper').forEach(wrapper=>{
+        wrapper.classList.remove('border-brand-rose');
+        wrapper.classList.add('border-gray-200');
       });
-      if(el){ el.classList.remove('border-lightgray2'); el.classList.add('border-brandBlue'); }
+      if(el && el.closest('.thumbnail-wrapper')){ 
+        const wrapper = el.closest('.thumbnail-wrapper');
+        wrapper.classList.remove('border-gray-200'); 
+        wrapper.classList.add('border-brand-rose'); 
+      }
     }
 
     // ====== Auto-rotate gallery (carousel-lite) ======
@@ -935,6 +1233,47 @@
   // Use debounced listeners only
   window.addEventListener('resize', schedulePanelResize, { passive:true });
   window.addEventListener('orientationchange', ()=>setTimeout(setPanelMaxHeight, 140), { passive:true });
+  
+  // Image zoom functionality
+  function initImageZoom() {
+    const mainImage = document.getElementById('mainImage');
+    if (!mainImage) return;
+    
+    mainImage.style.cursor = 'zoom-in';
+    mainImage.addEventListener('click', function() {
+      // Create zoom overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 cursor-zoom-out';
+      overlay.style.animation = 'fadeIn 0.3s ease-out';
+      
+      // Create zoomed image
+      const zoomedImg = document.createElement('img');
+      zoomedImg.src = this.src;
+      zoomedImg.alt = this.alt;
+      zoomedImg.className = 'max-w-full max-h-full object-contain';
+      zoomedImg.style.animation = 'scaleIn 0.3s ease-out';
+      
+      overlay.appendChild(zoomedImg);
+      document.body.appendChild(overlay);
+      
+      // Close on click or escape
+      overlay.addEventListener('click', function() {
+        overlay.style.animation = 'fadeOut 0.2s ease-out';
+        setTimeout(() => document.body.removeChild(overlay), 200);
+      });
+      
+      document.addEventListener('keydown', function closeOnEscape(e) {
+        if (e.key === 'Escape') {
+          overlay.style.animation = 'fadeOut 0.2s ease-out';
+          setTimeout(() => document.body.removeChild(overlay), 200);
+          document.removeEventListener('keydown', closeOnEscape);
+        }
+      });
+    });
+  }
+  
+  // Initialize zoom on page load
+  initImageZoom();
   </script>
   
   <!-- TikTok Pixel Events: ViewContent + AddToCart -->

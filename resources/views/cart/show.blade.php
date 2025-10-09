@@ -160,17 +160,32 @@
     </div>
 
     @if(empty($cart))
-      <!-- Empty Cart -->
+      <!-- Enhanced Empty Cart State -->
       <div class="text-center py-20 animate-fadeInUp">
-        <div class="text-9xl mb-8 animate-pulseSoft">🛒</div>
-        <h2 class="font-display text-4xl font-bold text-brand-charcoal mb-4">Your Cart is Empty</h2>
-        <p class="text-brand-slate mb-10 text-xl">Start adding amazing products to your cart</p>
-        <a href="{{ route('landing') }}" class="btn-primary inline-flex items-center gap-3 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-card hover:shadow-soft transition-all duration-300 transform hover:scale-105">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-          </svg>
-          <span>Browse Products</span>
-        </a>
+        <div class="relative mb-8">
+          <div class="text-9xl animate-pulseSoft opacity-20">🛒</div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-24 h-24 bg-gradient-to-br from-brand-rose-light to-brand-rose rounded-full flex items-center justify-center animate-scaleIn" style="animation-delay: 0.3s;">
+              <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <h2 class="font-display text-4xl font-bold text-brand-charcoal mb-4 animate-fadeInUp" style="animation-delay: 0.2s;">سلتك فارغة</h2>
+        <p class="text-brand-slate mb-10 text-xl animate-fadeInUp" style="animation-delay: 0.4s;">ابدأ بإضافة منتجات رائعة إلى سلتك</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fadeInUp" style="animation-delay: 0.6s;">
+          <a href="{{ route('landing') }}" class="btn-primary btn-enhanced inline-flex items-center gap-3 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-card hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            <span>تصفح المنتجات</span>
+          </a>
+          <div class="text-sm text-brand-slate flex items-center gap-2">
+            <span class="w-2 h-2 bg-brand-gold rounded-full animate-pulse"></span>
+            <span>شحن مجاني للطلبات</span>
+          </div>
+        </div>
       </div>
     @else
       <div class="grid lg:grid-cols-3 gap-8">
