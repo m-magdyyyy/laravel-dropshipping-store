@@ -835,7 +835,7 @@
                 <input type="text" id="customer_name" name="customer_name" required autocomplete="name" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="Enter your full name">
               </div>
 
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 gap-4">
                 <div>
                   <label for="governorate" class="block text-sm font-medium text-brand-charcoal mb-2">Governorate</label>
                   <select id="governorate" name="governorate" required class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all">
@@ -868,10 +868,6 @@
                     <option value="Ismailia">Ismailia</option>
                     <option value="Suez">Suez</option>
                   </select>
-                </div>
-                <div>
-                  <label for="apartment" class="block text-sm font-medium text-brand-charcoal mb-2">Apartment (Optional)</label>
-                  <input id="apartment" name="apartment" type="text" autocomplete="address-line2" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="Floor 3, Apt 8">
                 </div>
               </div>
 
