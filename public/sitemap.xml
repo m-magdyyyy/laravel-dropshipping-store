@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    
+    <!-- Homepage -->
+    <url>
+        <loc>{{ url('/') }}</loc>
+        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- Cart Page -->
+    <url>
+        <loc>{{ url('/cart') }}</loc>
+        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Products -->
+    @php
+        $products = App\Models\Product::where('is_active', true)->get();
+    @endphp
+    @foreach($products as $product)
+    <url>
+        <loc>{{ url('/product/' . $product->slug) }}</loc>
+        <lastmod>{{ $product->updated_at->toAtomString() }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+        <image:image>
+            <image:loc>{{ $product->image_url }}</image:loc>
+            <image:title>{{ $product->name }}</image:title>
+            <image:caption>{{ $product->description }}</image:caption>
+        </image:image>
+        @if($product->gallery)
+            @foreach($product->gallery as $galleryImage)
+                @php
+                    $imageUrl = str_starts_with($galleryImage, 'http') ? $galleryImage : url('/storage/' . ltrim($galleryImage, '/'));
+                @endphp
+                <image:image>
+                    <image:loc>{{ $imageUrl }}</image:loc>
+                    <image:title>{{ $product->name }} - معرض الصور</image:title>
+                </image:image>
+            @endforeach
+        @endif
+    </url>
+    @endforeach
+    
+</urlset>

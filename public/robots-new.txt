@@ -1,0 +1,22 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /cart/add
+Disallow: /cart/update  
+Disallow: /cart/remove
+Disallow: /orders/store
+Allow: /
+Allow: /product/
+Allow: /cart
+
+Sitemap: {{ url('/sitemap.xml') }}
+
+# SEO optimized robots.txt for Fekra Store
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /

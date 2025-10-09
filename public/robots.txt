@@ -1,2 +1,20 @@
+# Fekra Store - Robots.txt
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin
+Disallow: /cart
+Disallow: /thanks
+
+# Sitemap
+Sitemap: {{ url('/sitemap.xml') }}
+Sitemap: {{ url('/google-feed.xml') }}
+
+# Popular Search Engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

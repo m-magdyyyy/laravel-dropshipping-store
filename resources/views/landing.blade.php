@@ -1,78 +1,239 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>فكره استور - أفضل المنتجات بأسعار لا تُقاوم</title>
-    <meta name="description" content="اكتشف مجموعة مميزة من المنتجات عالية الجودة مع توصيل سريع وآمن لباب منزلك">
+    
+    <!-- Primary Meta Tags -->
+  <title>Fekra Store - Modern Women's Fashion | Modest & Practical Wear</title>
+  <meta name="title" content="Fekra Store - Modern Women's Fashion | Modest & Practical Wear">
+  <meta name="description" content="Shop the latest modest & modern women's fashion: trendy hijab outfits, coordinated casual sets, premium quality, fast delivery, cash on delivery.">
+  <meta name="keywords" content="women fashion, modest outfits, hijab set, casual wear, women's clothing Egypt, coordinated sets, modern hijab, modest fashion, trendy outfits, women's wear, fashion store, Cairo fashion, online shopping Egypt, cash on delivery">
+    <meta name="author" content="Fekra Store">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Arabic">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url('/') }}">
+  <meta property="og:title" content="Fekra Store - Modern Women's Fashion | Modest & Practical Wear">
+  <meta property="og:description" content="Trendy modest hijab outfits, quality casual wear, stylish coordinated sets. Fast delivery & cash on delivery available.">
+    <meta property="og:image" content="{{ asset('images/fekra-logo.png') }}">
+    <meta property="og:locale" content="ar_EG">
+    <meta property="og:site_name" content="Fekra Store">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url('/') }}">
+  <meta name="twitter:title" content="Fekra Store - Modern Women's Fashion | Modest & Practical Wear">
+  <meta name="twitter:description" content="Trendy modest hijab outfits, coordinated sets & premium quality.">
+    <meta name="twitter:image" content="{{ asset('images/fekra-logo.png') }}">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ url('/') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/fekra-logo.png') }}">
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              'cairo': ['Cairo', 'sans-serif'],
+              'sans': ['Inter', 'system-ui', 'sans-serif'],
+              'display': ['Playfair Display', 'serif'],
             },
             colors: {
               brand: {
-                white: '#FFFFFF',
-                light: '#F5F5F5',
-                light2: '#E5E5E5',
-                dark: '#333333',
-                darker: '#2D2D2D',
-                blue: '#2563EB',
-                navy: '#1E3A8A',
-                green: '#10B981',
-                orange: '#F97316',
-                beige: '#FAFAF5'
+                rose: '#FF6B9D',
+                'rose-light': '#FFB8D2',
+                'rose-dark': '#C9184A',
+                cream: '#FFF8F3',
+                beige: '#F5E6D3',
+                charcoal: '#2D3142',
+                slate: '#4F5D75',
+                gold: '#D4AF37',
+                'gold-light': '#F4E4C1',
+                lavender: '#E5D9F2',
+                mint: '#A8DADC',
+                peach: '#FFD6BA',
               }
             },
             animation: {
               'float': 'float 6s ease-in-out infinite',
               'pulse-slow': 'pulse 3s ease-in-out infinite',
               'bounce-slow': 'bounce 2s infinite',
-              'fade-in-up': 'fade-in-up 700ms ease both'
+              'fade-in': 'fadeIn 0.6s ease-out forwards',
+              'fade-in-up': 'fadeInUp 0.7s ease-out forwards',
+              'slide-in-right': 'slideInRight 0.8s ease-out forwards',
+              'scale-in': 'scaleIn 0.5s ease-out forwards',
             },
             keyframes: {
               float: {
                 '0%, 100%': { transform: 'translateY(0px)' },
                 '50%': { transform: 'translateY(-20px)' },
               },
-              'fade-in-up': {
-                '0%': { opacity: 0, transform: 'translateY(24px)' },
-                '100%': { opacity: 1, transform: 'translateY(0)' }
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' }
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(30px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' }
+              },
+              slideInRight: {
+                '0%': { opacity: '0', transform: 'translateX(50px)' },
+                '100%': { opacity: '1', transform: 'translateX(0)' }
+              },
+              scaleIn: {
+                '0%': { opacity: '0', transform: 'scale(0.9)' },
+                '100%': { opacity: '1', transform: 'scale(1)' }
               }
             },
             boxShadow: {
-              'soft': '0 10px 30px rgba(0,0,0,0.06)'
+              'soft': '0 10px 40px rgba(0,0,0,0.08)',
+              'glow': '0 0 30px rgba(255,107,157,0.3)',
+              'card': '0 4px 20px rgba(0,0,0,0.06)',
             },
-            borderRadius: {
-              '2xl': '1.25rem'
-            }
           }
         }
       }
     </script>
 
     <style>
-      body { font-family: 'Cairo', sans-serif; }
-      /* Brand Kufi style (approximation of modern customized kufi) */
-      .font-brand-kufi { font-family: 'Reem Kufi', 'Cairo', sans-serif; font-weight:700; letter-spacing:.5px; }
-      .text-logo-shadow { text-shadow: 0 0 0 currentColor, 0 .5px 0 currentColor; }
-      .glass-effect { backdrop-filter: blur(10px); background: rgba(255,255,255,0.08); }
-      .hover-scale { transition: transform .3s ease; }
-      .hover-scale:hover { transform: scale(1.04); }
-      .product-card { transition: transform .3s ease, box-shadow .3s ease; transform: translateY(0); }
-      .product-card:hover { transform: translateY(-8px); box-shadow: 0 16px 36px rgba(0,0,0,.08); }
-      .tw-cursor { display:inline-block; width:1ch; animation: blink 1s steps(1,end) infinite; }
-      @keyframes blink { 0%,49% {opacity:1} 50%,100% {opacity:0} }
-      @media (prefers-reduced-motion: reduce) { .tw-cursor { animation: none } }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { 
+        font-family: 'Inter', system-ui, sans-serif; 
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* Modern Gradient Background */
+      .gradient-bg {
+        background: linear-gradient(135deg, #FF6B9D 0%, #C9184A 50%, #8B1E3F 100%);
+        position: relative;
+      }
+      
+      .gradient-bg::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(255,107,157,0.2) 0%, transparent 50%);
+        pointer-events: none;
+      }
+      
+      /* Glass Morphism */
+      .glass-effect { 
+        backdrop-filter: blur(20px) saturate(180%);
+        background: rgba(255,255,255,0.75);
+        border: 1px solid rgba(255,255,255,0.3);
+      }
+      
+      .glass-dark {
+        backdrop-filter: blur(20px) saturate(180%);
+        background: rgba(255,107,157,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+      
+      /* Modern Card Hover */
+      .product-card { 
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(0);
+      }
+      .product-card:hover { 
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 20px 60px rgba(255,107,157,0.25);
+      }
+      
+      /* Smooth Hover Effects */
+      .hover-scale { 
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .hover-scale:hover { 
+        transform: scale(1.05);
+      }
+      
+      /* Modern Button */
+      .btn-primary {
+        background: linear-gradient(135deg, #FF6B9D 0%, #C9184A 100%);
+        box-shadow: 0 4px 15px rgba(255,107,157,0.4);
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        box-shadow: 0 6px 25px rgba(255,107,157,0.6);
+        transform: translateY(-2px);
+      }
+      
+      /* Typewriter Cursor */
+      .tw-cursor { 
+        display:inline-block; 
+        width:1ch; 
+        animation: blink 1s steps(1,end) infinite; 
+      }
+      @keyframes blink { 
+        0%,49% {opacity:1} 
+        50%,100% {opacity:0} 
+      }
+      
+      /* Scroll Animations */
+      .scroll-reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease-out;
+      }
+      .scroll-reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      @media (prefers-reduced-motion: reduce) { 
+        *, *::before, *::after { 
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
     </style>
+    
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_TRACKING_ID', {
+        page_title: 'Fekra Store - الصفحة الرئيسية',
+        page_location: window.location.href
+      });
+    </script>
+
+    <!-- Facebook Pixel (Meta Pixel) -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', 'YOUR_PIXEL_ID');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"
+    /></noscript>
+    
     <!-- TikTok Pixel Base Code -->
     <script>
     !function (w, d, t) {
@@ -86,8 +247,92 @@
     </script>
   <!-- Google Site Verification -->
   <meta name="google-site-verification" content="JdThZmvAVdqI96t_f_RCCCPa7V8QgYQhSG2-FdmkHWg" />
+  
+  <!-- Schema.org Structured Data -->
+  @php
+    $orgSchema = [
+      '@context' => 'https://schema.org',
+      '@type' => 'Organization',
+      'name' => 'Fekra Store',
+      'alternateName' => 'فكرة ستور',
+      'url' => url('/'),
+      'logo' => asset('images/fekra-logo.png'),
+      'description' => 'متجر فكرة للأزياء النسائية العصرية والمحتشمة - أزياء راقية وجودة عالية مع التوصيل السريع',
+      'contactPoint' => [
+        '@type' => 'ContactPoint',
+        'telephone' => '+201201297965',
+        'contactType' => 'customer service',
+        'availableLanguage' => ['Arabic', 'English']
+      ],
+      'address' => [
+        '@type' => 'PostalAddress',
+        'addressLocality' => 'Cairo',
+        'addressCountry' => 'EG'
+      ],
+      // Social profiles
+      'sameAs' => [
+        'https://wa.me/201201297965',
+        'https://www.facebook.com/fekrastore',
+        'https://www.instagram.com/fekrastore'
+      ],
+    ];
+
+    $webSiteSchema = [
+      '@context' => 'https://schema.org',
+      '@type' => 'WebSite',
+      'name' => 'Fekra Store',
+      'url' => url('/'),
+      'potentialAction' => [
+        '@type' => 'SearchAction',
+        'target' => url('/').'?search={search_term_string}',
+        'query-input' => 'required name=search_term_string'
+      ]
+    ];
+
+    $itemListSchema = null;
+    if($products->count() > 0){
+      $elements = [];
+      foreach($products as $idx => $p){
+        $elements[] = [
+          '@type' => 'ListItem',
+          'position' => $idx + 1,
+          'item' => [
+            '@type' => 'Product',
+            'name' => $p->name,
+            'image' => $p->image_url,
+            'description' => $p->description,
+            'offers' => [
+              '@type' => 'Offer',
+              'price' => (string)$p->price,
+              'priceCurrency' => 'EGP',
+              'availability' => 'https://schema.org/InStock',
+              'url' => route('product.show', $p->slug)
+            ]
+          ]
+        ];
+      }
+      $itemListSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'ItemList',
+        'itemListElement' => $elements,
+      ];
+    }
+  @endphp
+  <script type="application/ld+json">{!! json_encode($orgSchema, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}</script>
+  @if($itemListSchema)
+    <script type="application/ld+json">{!! json_encode($itemListSchema, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}</script>
+  @endif
 </head>
 <body class="bg-brand-light font-cairo text-brand-darker opacity-0 transition-opacity duration-700">
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/201201297965" target="_blank" class="fixed bottom-6 left-6 z-50 bg-green-500 hover:bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:shadow-glow transition-all hover:scale-110 group" aria-label="Contact us on WhatsApp">
+    <svg class="w-8 h-8 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-ping"></span>
+    <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full"></span>
+  </a>
 
   <!-- Success Message -->
   @if(session('success'))
@@ -115,357 +360,466 @@
   </div>
   @endif
 
-  <!-- Navigation Bar -->
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/85 backdrop-blur-md border-b border-brand-light2 shadow-sm transition-all duration-300">
-    <div class="container mx-auto px-4">
-      <div class="flex justify-between items-center py-3">
+  <!-- Modern Navigation Bar -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 glass-effect shadow-sm transition-all duration-300">
+    <div class="container mx-auto px-6 lg:px-12">
+      <div class="flex justify-between items-center py-4">
         <!-- Logo -->
         <div class="flex items-center gap-3">
-          @if(file_exists(public_path('images/fekra-logo.png')))
-            <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
-              <img src="{{ asset('images/fekra-logo.png') }}" alt="فكره استور" class="h-12 w-auto drop-shadow-sm group-hover:scale-105 transition"/>
-              <span class="text-2xl md:text-3xl font-extrabold font-brand-kufi text-logo-shadow leading-none text-brand-navy group-hover:text-brand-blue transition">فكره استور</span>
-            </a>
-          @else
-            <a href="{{ route('landing') }}" class="text-xl font-extrabold text-brand-navy">فكره استور</a>
-          @endif
+          <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
+            @if(file_exists(public_path('images/fekra-logo.png')))
+              <img src="{{ asset('images/fekra-logo.png') }}" alt="Fekra Store" class="h-10 w-auto drop-shadow-sm group-hover:scale-105 transition"/>
+            @endif
+            <span class="text-2xl lg:text-3xl font-bold font-display bg-gradient-to-r from-brand-rose to-brand-rose-dark bg-clip-text text-transparent group-hover:scale-105 transition">
+              Fekra Store
+            </span>
+          </a>
         </div>
 
         <!-- Links -->
         <div class="hidden md:flex items-center gap-8">
-          <a href="#products" class="text-brand-darker hover:text-brand-blue font-semibold transition">المنتجات</a>
-          <a href="#features" class="text-brand-darker hover:text-brand-blue font-semibold transition">المميزات</a>
-          <a href="#testimonials" class="text-brand-darker hover:text-brand-blue font-semibold transition">آراء العملاء</a>
+          <a href="#products" class="text-brand-charcoal hover:text-brand-rose font-medium transition-colors">Shop</a>
+          <a href="#collections" class="text-brand-charcoal hover:text-brand-rose font-medium transition-colors">Collections</a>
+          <a href="#features" class="text-brand-charcoal hover:text-brand-rose font-medium transition-colors">Features</a>
+          <a href="#testimonials" class="text-brand-charcoal hover:text-brand-rose font-medium transition-colors">Reviews</a>
         </div>
 
-        <!-- Cart -->
+        <!-- Cart & Actions -->
         <div class="flex items-center gap-4">
-          <a href="{{ route('cart.show') }}" class="relative bg-brand-blue hover:bg-blue-700 text-white p-3 rounded-full transition shadow-soft">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
-            </svg>
-            <span id="cart-badge" class="absolute -top-2 -right-2 bg-brand-orange text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[1.5rem] text-center hidden">0</span>
+          <a href="{{ route('cart.show') }}" class="relative group">
+            <div class="bg-gradient-to-r from-brand-rose to-brand-rose-dark p-3 rounded-full transition-all group-hover:shadow-glow">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+              </svg>
+            </div>
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-brand-gold text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[1.25rem] text-center hidden shadow-md">0</span>
           </a>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <section class="relative overflow-hidden min-h-screen flex items-center pt-24 text-white" style="background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);">
-    <!-- Background floating shapes -->
-    <div class="absolute inset-0 opacity-20 pointer-events-none">
-      <div class="absolute top-10 left-10 w-20 h-20 bg-white/20 rounded-full animate-bounce-slow"></div>
-      <div class="absolute top-1/3 right-20 w-16 h-16 bg-white/30 rounded-full animate-float"></div>
-      <div class="absolute bottom-20 left-1/4 w-12 h-12 bg-white/20 rounded-full animate-pulse-slow"></div>
-      <div class="absolute bottom-1/3 right-10 w-24 h-24 bg-white/10 rounded-full animate-float"></div>
+  <!-- Modern Hero Section -->
+  <section class="relative overflow-hidden min-h-screen flex items-center pt-24 gradient-bg">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+      <div class="absolute top-20 left-10 w-32 h-32 bg-white rounded-full blur-3xl animate-float"></div>
+      <div class="absolute top-1/3 right-20 w-40 h-40 bg-brand-gold rounded-full blur-3xl animate-pulse-slow"></div>
+      <div class="absolute bottom-20 left-1/4 w-24 h-24 bg-white rounded-full blur-2xl animate-bounce-slow"></div>
+      <div class="absolute bottom-1/3 right-16 w-36 h-36 bg-brand-rose-light rounded-full blur-3xl animate-float" style="animation-delay: 1s"></div>
     </div>
 
-    <div class="container mx-auto px-4 py-16 relative z-10">
-      <div class="grid lg:grid-cols-2 gap-12 items-center">
-        <div class="text-center lg:text-right animate-fade-in-up">
-          <h1 class="text-5xl lg:text-7xl font-extrabold leading-tight mb-6">
-            أفضل المنتجات بأسعار 
-            <span id="typewriter" class="text-brand-orange"></span><span class="tw-cursor">|</span>
+    <div class="container mx-auto px-6 lg:px-12 py-20 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+        <!-- Hero Content -->
+        <div class="text-center lg:text-left space-y-8">
+          <div class="inline-block glass-dark px-8 py-3 rounded-full text-white text-base font-medium animate-fade-in shadow-lg">
+            ✨ New Collection Available
+          </div>
+          
+          <h1 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-display font-bold leading-tight text-white animate-fade-in-up">
+            Modest Fashion,
+            <span class="block mt-3 bg-gradient-to-r from-brand-gold-light via-brand-gold to-brand-gold-light bg-clip-text text-transparent">
+              Modern Style
+            </span>
           </h1>
-          <p class="text-xl lg:text-2xl mb-10 text-white/90">
-            اكتشف مجموعة مميزة من المنتجات عالية الجودة مع توصيل سريع وآمن لباب منزلك
+          
+          <p class="text-lg md:text-xl lg:text-2xl text-white/95 max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-fade-in-up font-light" style="animation-delay: 0.1s">
+            Trendy hijab outfits & casual wear for modern women. Comfortable sets, stylish coordinates, and colorful designs.
           </p>
 
-          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <a href="#products" class="bg-brand-blue hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full text-lg transition shadow-soft hover:shadow-lg">
-              🛍️ تسوق الآن
+          <!-- CTA Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center animate-fade-in-up pt-2" style="animation-delay: 0.2s">
+            <a href="#products" class="btn-primary text-white font-bold py-4 px-10 rounded-full text-lg inline-flex items-center justify-center gap-3 hover-scale shadow-2xl">
+              <span>Shop Now</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
             </a>
-            <a href="#features" class="glass-effect border border-white/30 text-white font-bold py-4 px-8 rounded-full text-lg transition hover:bg-white hover:text-brand-darker">
-              ✨ اعرف المزيد
+            <a href="#collections" class="glass-dark text-white font-bold py-4 px-10 rounded-full text-lg hover:bg-white/30 transition-all inline-flex items-center justify-center gap-3 shadow-xl">
+              <span>Explore Collections</span>
             </a>
           </div>
 
-          <!-- Trust Indicators -->
-          <div class="mt-12 flex flex-wrap justify-center lg:justify-start gap-3 text-sm">
-            <div class="flex items-center bg-white/10 px-4 py-2 rounded-full">
-              <span class="ml-2">✅</span><span>توصيل مجاني</span>
+          <!-- Trust Badges -->
+          <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-8 animate-fade-in-up" style="animation-delay: 0.3s">
+            <div class="glass-dark px-5 py-3 rounded-xl text-white flex items-center gap-2 shadow-lg hover:scale-105 transition-transform">
+              <span class="text-2xl">🚚</span>
+              <span class="font-semibold">Fast Delivery</span>
             </div>
-            <div class="flex items-center bg-white/10 px-4 py-2 rounded-full">
-              <span class="ml-2">🚚</span><span>شحن سريع</span>
+            <div class="glass-dark px-5 py-3 rounded-xl text-white flex items-center gap-2 shadow-lg hover:scale-105 transition-transform">
+              <span class="text-2xl">✨</span>
+              <span class="font-semibold">Premium Quality</span>
             </div>
-            <div class="flex items-center bg-white/10 px-4 py-2 rounded-full">
-              <span class="ml-2">💯</span><span>ضمان الجودة</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="text-center lg:text-left">
-          <div class="relative animate-fade-in-up" style="animation-delay:120ms">
-            <figure class="group bg-white/12 rounded-3xl p-4 sm:p-6 lg:p-8 backdrop-blur-xl border border-white/20 animate-float shadow-soft overflow-hidden max-w-xl mx-auto">
-              <img
-                src="https://www.heropay.eu/blog-images/553938487/vendre-shopify-hero.webp"
-                alt="واجهة متجر إلكتروني احترافية تعرض منتجات مميزة"
-                loading="lazy"
-                class="w-full h-auto rounded-2xl object-cover ring-1 ring-white/30 shadow-xl group-hover:scale-[1.02] transition duration-500"/>
-              <figcaption class="sr-only">صورة عرض توضيحي لمتجر إلكتروني</figcaption>
-              <!-- Sub badges -->
-              <div class="absolute top-2 left-2 flex gap-2 opacity-0 group-hover:opacity-100 transition">
-                <span class="bg-brand-blue/80 text-white text-xs font-bold px-2 py-1 rounded-full shadow">متجر آمن</span>
-                <span class="bg-brand-green/80 text-white text-xs font-bold px-2 py-1 rounded-full shadow">دفع موثوق</span>
-              </div>
-            </figure>
-            <div class="absolute -top-4 -right-4 bg-brand-orange text-white px-4 py-2 rounded-full font-bold text-sm animate-bounce shadow-soft">
-              خصم 50%
-            </div>
-            <div class="absolute -bottom-4 -left-4 bg-brand-green text-white px-4 py-2 rounded-full font-bold text-sm animate-pulse shadow-soft">
-            توصيل مجاني 
+            <div class="glass-dark px-5 py-3 rounded-xl text-white flex items-center gap-2 shadow-lg hover:scale-105 transition-transform">
+              <span class="text-2xl">💝</span>
+              <span class="font-semibold">Gift Wrapping</span>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Scroll Indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-      <div class="w-6 h-10 border-2 border-white/80 rounded-full flex justify-center">
-        <div class="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
-      </div>
-    </div>
-  </section>
+        <!-- Hero Image (fixed visibility & local source with fallback) -->
+        <div class="relative animate-fade-in-up" style="animation-delay:0.4s">
+          <div class="relative rounded-3xl overflow-hidden shadow-2xl group">
+            <picture>
+              {{-- Use existing hero image path; optional webp if added later --}}
+              @if(file_exists(public_path('images/hero/fashion-model.webp')))
+                <source srcset="{{ asset('images/hero/fashion-model.webp') }}" type="image/webp">
+              @endif
+              @php $heroImg = file_exists(public_path('images/hero/fashion-model.jpg')) ? 'images/hero/fashion-model.jpg' : (file_exists(public_path('images/hero/fashion-model.png')) ? 'images/hero/fashion-model.png' : null); @endphp
+              <img 
+                src="{{ $heroImg ? asset($heroImg) : 'https://images.unsplash.com/photo-1520970014086-2208d157c9e2?auto=format&fit=crop&w=900&q=70' }}" 
+                alt="Modest Fashion Hero" 
+                class="w-full h-full object-cover aspect-[2/3] md:aspect-[3/4] lg:aspect-[4/5]" 
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1520970014086-2208d157c9e2?auto=format&fit=crop&w=900&q=70';">
+            </picture>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
 
-  <!-- Features Section -->
-  <section id="features" class="py-20 bg-brand-beige">
-    <div class="container mx-auto px-4">
-      <div class="text-center mb-14">
-        <h2 class="text-4xl lg:text-5xl font-extrabold text-brand-darker mb-4">لماذا تختارنا؟</h2>
-        <p class="text-lg text-brand-dark/80 max-w-3xl mx-auto">نحن نقدم أفضل تجربة تسوق عبر الإنترنت مع ضمان الجودة والأسعار التنافسية</p>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="text-center p-8 rounded-2xl bg-white hover-scale shadow-soft animate-fade-in-up">
-          <div class="text-6xl mb-4 animate-float">⚡</div>
-          <h3 class="text-2xl font-bold mb-2 text-brand-navy">توصيل مجاني </h3>
-          <p class="text-brand-darker/80 leading-relaxed">توصيل خلال 1-3 أيام عمل لجميع المحافظات مع إمكانية التتبع المباشر للشحنة</p>
-        </div>
-        <div class="text-center p-8 rounded-2xl bg-white hover-scale shadow-soft animate-fade-in-up" style="animation-delay:120ms">
-          <div class="text-6xl mb-4 animate-float">💯</div>
-          <h3 class="text-2xl font-bold mb-2 text-brand-navy">جودة مضمونة</h3>
-          <p class="text-brand-darker/80 leading-relaxed">منتجات أصلية 100% بأعلى معايير الجودة مع ضمان الاستبدال والإرجاع</p>
-        </div>
-        <div class="text-center p-8 rounded-2xl bg-white hover-scale shadow-soft animate-fade-in-up" style="animation-delay:240ms">
-          <div class="text-6xl mb-4 animate-float">🔒</div>
-          <h3 class="text-2xl font-bold mb-2 text-brand-navy">الدفع عند الاستلام
-
-          </h3>
-          <p class="text-brand-darker/80 leading-relaxed">الدفع عند الاستلام أو بالطرق الآمنة مع حماية كاملة لبياناتك</p>
+            <!-- Floating Badges -->
+            <div class="absolute top-4 left-4 glass-dark px-5 py-3 rounded-2xl shadow-xl backdrop-blur-md">
+              <div class="text-white text-sm leading-tight"><span class="block text-xl font-bold">500+</span>Customers</div>
+            </div>
+            <div class="absolute top-4 right-4 glass-dark px-5 py-3 rounded-2xl shadow-xl backdrop-blur-md">
+              <div class="text-white text-sm leading-tight"><span class="block text-xl font-bold">⭐ 4.9</span>Rating</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Products Section -->
-  <section id="products" class="py-20 bg-brand-light">
-    <div class="container mx-auto px-4">
-      <div class="text-center mb-14">
-        <h2 class="text-4xl lg:text-5xl font-extrabold text-brand-darker mb-4">منتجاتنا المميزة</h2>
-        <p class="text-lg text-brand-dark/80 max-w-3xl mx-auto">تشكيلة منتقاة بعناية من أفضل المنتجات بأسعار تنافسية وجودة عالية</p>
+  <section id="products" class="py-24 bg-gradient-to-b from-white to-brand-cream">
+    <div class="container mx-auto px-6 lg:px-12">
+      <div class="text-center mb-16 scroll-reveal">
+        <div class="inline-block bg-brand-rose/10 px-6 py-2 rounded-full text-brand-rose font-semibold mb-4">
+          المنتجات المميزة
+        </div>
+        <h2 class="text-4xl lg:text-6xl font-display font-bold text-brand-charcoal mb-4">
+          الأكثر رواجاً الآن
+        </h2>
+        <p class="text-lg text-brand-slate max-w-2xl mx-auto">
+          مجموعة مختارة بعناية من أفضل المنتجات العصرية بأسعار تنافسية. 
+          <a href="#products" class="text-brand-rose hover:underline font-medium">اكتشف المزيد</a>
+        </p>
       </div>
 
       @if($products->count() > 0)
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           @foreach($products as $product)
-          <div class="product-card bg-white rounded-2xl shadow-soft overflow-hidden animate-fade-in-up">
-            <div class="relative h-64 overflow-hidden">
-              <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/400x400?text=No+Image'">
-
-              @if($product->discount_percentage > 0)
-              <div class="absolute top-4 right-4">
-                <span class="bg-brand-orange text-white px-3 py-1 rounded-full text-sm font-bold animate-pulse">
-                  خصم {{ $product->discount_percentage }}%
-                </span>
-              </div>
-              @endif
-
-              <!-- Quick View Overlay -->
-              <div class="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <a href="{{ route('product.show', $product->slug) }}" class="bg-white text-brand-darker px-6 py-3 rounded-full font-bold hover:bg-brand-light transition">
-                  عرض التفاصيل
-                </a>
-              </div>
-            </div>
-
-            <div class="p-6">
-              <h3 class="text-xl font-extrabold mb-2 text-brand-darker leading-tight">{{ $product->name }}</h3>
-              <!-- Consistent star rating based on product ID (4.0-5.0) -->
+          <div class="group relative overflow-hidden rounded-3xl shadow-card hover:shadow-glow transition-all duration-500 scroll-reveal" data-product-id="{{ $product->id }}">
+            <!-- Background Image with Overlay -->
+            <div class="relative aspect-[3/4] overflow-hidden bg-white">
               @php
-                $seed = $product->id * 37; // Use product ID for consistency
-                $randomRating = (($seed % 11) + 40) / 10; // Generates 4.0-5.0
-                $fullStars = floor($randomRating);
-                $hasHalfStar = ($randomRating - $fullStars) >= 0.5;
+                $allImages = [];
+                // Add main image first
+                if ($product->image_url) {
+                    $allImages[] = $product->image_url;
+                }
+                // Add gallery images if available
+                if ($product->gallery && is_array($product->gallery)) {
+                    foreach ($product->gallery as $galleryImg) {
+                        if (!empty($galleryImg)) {
+                            // Check if it's a full URL or storage path
+                            $imgUrl = str_starts_with($galleryImg, 'http') ? $galleryImg : '/storage/' . ltrim($galleryImg, '/');
+                            if (!in_array($imgUrl, $allImages)) {
+                                $allImages[] = $imgUrl;
+                            }
+                        }
+                    }
+                }
+                $hasMultipleImages = count($allImages) > 1;
               @endphp
-              <div class="flex items-center gap-2 mb-3">
-                <span class="flex text-yellow-400 text-lg">
-                  @for($i=0; $i<$fullStars; $i++)
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" class="w-4 h-4 inline"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.174 9.397c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.97z"/></svg>
-                  @endfor
-                  @if($hasHalfStar)
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" class="w-4 h-4 inline"><defs><linearGradient id="half-{{ $product->id }}"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="#e5e7eb"/></linearGradient></defs><path fill="url(#half-{{ $product->id }})" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.174 9.397c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.97z"/></svg>
-                  @endif
-                  @for($i=0; $i<(5-$fullStars-($hasHalfStar?1:0)); $i++)
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="#e5e7eb" viewBox="0 0 20 20" class="w-4 h-4 inline"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.174 9.397c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.97z"/></svg>
-                  @endfor
-                </span>
-                <span class="text-xs text-gray-600">{{ $randomRating }}</span>
+              
+              <!-- Image Carousel Container -->
+              <div class="product-carousel relative w-full h-full" data-carousel-id="carousel-{{ $product->id }}">
+                @foreach($allImages as $index => $imageUrl)
+                  <picture class="carousel-image absolute inset-0 w-full h-full transition-opacity duration-500 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}" data-index="{{ $index }}">
+                    @php
+                      $webpUrl = null;
+                      $imgUrl = $imageUrl;
+                      // If it's a local path (starts with /) check if a matching .webp exists
+                      if (!str_starts_with($imgUrl, 'http')) {
+                          $relative = ltrim($imgUrl, '/'); // e.g. storage/products/img.jpg
+                          $fullPath = public_path($relative);
+                          if (preg_match('/\.(jpg|jpeg|png)$/i', $fullPath)) {
+                              $webpFs = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $fullPath);
+                              if ($webpFs && file_exists($webpFs)) {
+                                  $webpUrl = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $imgUrl);
+                              }
+                          } elseif (preg_match('/\.webp$/i', $fullPath) && file_exists($fullPath)) {
+                              $webpUrl = $imgUrl; // already webp
+                          }
+                      } else {
+                          // Remote URL: only use if it's already webp
+                          if (preg_match('/\.webp($|\?)/i', $imgUrl)) {
+                              $webpUrl = $imgUrl;
+                          }
+                      }
+                    @endphp
+                    @if($webpUrl)
+                      <source srcset="{{ $webpUrl }}" type="image/webp">
+                    @endif
+                    <img 
+                      src="{{ $imgUrl }}" 
+                      alt="{{ $product->name }} - صورة المنتج {{ $index + 1 }}" 
+                      class="w-full h-full object-contain" 
+                      loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                      decoding="async"
+                      onerror="this.src='https://via.placeholder.com/400x600?text=No+Image'">
+                  </picture>
+                @endforeach
               </div>
-              <p class="text-brand-darker/70 mb-4 leading-relaxed">{{ Str::limit($product->description, 100) }}</p>
+              
+              <!-- Dark overlay for text readability -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:from-black/90 transition-all duration-300 pointer-events-none"></div>
 
-              <div class="flex justify-between items-center mb-4">
-                <span class="text-2xl font-extrabold text-brand-blue">{{ $product->formatted_price }}</span>
-                @if($product->original_price && $product->original_price > $product->price)
-                  <span class="text-lg text-brand-darker/50 line-through">{{ $product->formatted_original_price }}</span>
-                @endif
-              </div>
-
-              <!-- Product Features Preview -->
-              @if($product->features)
-              <div class="mb-4">
-                @php
-                  $features = explode("\n", $product->features);
-                  $topFeatures = array_slice($features, 0, 2);
-                @endphp
-                @foreach($topFeatures as $feature)
-                  @if(trim($feature))
-                    <div class="flex items-center text-sm text-brand-darker/80 mb-1">
-                      <span class="text-brand-green ml-2">✓</span>
-                      <span>{{ trim($feature) }}</span>
-                    </div>
-                  @endif
+              <!-- Carousel Navigation Dots -->
+              @if($hasMultipleImages)
+              <div class="absolute top-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                @foreach($allImages as $index => $imageUrl)
+                  <button 
+                    onclick="goToSlide('carousel-{{ $product->id }}', {{ $index }})"
+                    class="carousel-dot w-2 h-2 rounded-full transition-all {{ $index === 0 ? 'bg-white w-6' : 'bg-white/50' }}"
+                    data-carousel-id="carousel-{{ $product->id }}"
+                    data-index="{{ $index }}"
+                    aria-label="Go to image {{ $index + 1 }}">
+                  </button>
                 @endforeach
               </div>
               @endif
 
-              <div class="flex gap-2">
-                <!-- Add to Cart Button (Green) -->
-                <button onclick="addToCart({{ $product->id }})" class="flex-1 bg-brand-green hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl transition shadow-soft hover:shadow-lg">
-                  🛒 أضف للسلة
-                </button>
-                <!-- Buy Now Button (Blue) -->
-                <a href="{{ route('product.show', $product->slug) }}" class="flex-1 bg-brand-blue hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl text-center transition shadow-soft hover:shadow-lg">
-                  اطلب الآن
-                </a>
+              <!-- Discount Badge -->
+              @if($product->discount_percentage > 0)
+              <div class="absolute top-6 right-6 z-20">
+                <span class="bg-gradient-to-r from-brand-rose to-brand-rose-dark text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                  -{{ $product->discount_percentage }}%
+                </span>
+              </div>
+              @endif
+
+              <!-- Content Overlay -->
+              <div class="absolute inset-0 p-6 flex flex-col justify-end z-10">
+                <!-- Rating -->
+                @php
+                  $seed = $product->id * 37;
+                  $randomRating = (($seed % 11) + 40) / 10;
+                  $fullStars = floor($randomRating);
+                  $hasHalfStar = ($randomRating - $fullStars) >= 0.5;
+                @endphp
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="flex text-yellow-400">
+                    @for($i=0; $i<$fullStars; $i++)
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.174 9.397c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.97z"/></svg>
+                    @endfor
+                    @if($hasHalfStar)
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" class="w-4 h-4"><defs><linearGradient id="half-{{ $product->id }}"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="#666"/></linearGradient></defs><path fill="url(#half-{{ $product->id }})" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.174 9.397c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.97z"/></svg>
+                    @endif
+                  </span>
+                  <span class="text-sm text-white/90 font-semibold">{{ $randomRating }}</span>
+                </div>
+
+                <!-- Price -->
+                <div class="flex items-baseline gap-3 mb-4">
+                  <span class="text-3xl font-bold text-white">{{ $product->formatted_price }}</span>
+                  @if($product->original_price && $product->original_price > $product->price)
+                    <span class="text-lg text-white/60 line-through">{{ $product->formatted_original_price }}</span>
+                  @endif
+                </div>
+
+                <!-- Action Buttons - Always Visible -->
+                <div class="flex gap-3 transition-all duration-300">
+                  <button onclick="addToCart({{ $product->id }})" class="flex-1 bg-white/90 hover:bg-white text-brand-charcoal font-bold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <span>Add to Cart</span>
+                  </button>
+                  <a href="{{ route('product.show', $product->slug) }}" class="flex-1 btn-primary text-white font-bold py-3 px-4 rounded-xl text-center flex items-center justify-center gap-2 shadow-lg">
+                    <span>Buy Now</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
           @endforeach
         </div>
       @else
-        <div class="text-center py-16">
-          <div class="text-8xl mb-6 animate-bounce">📦</div>
-          <h3 class="text-3xl font-extrabold text-brand-darker mb-3">قريباً منتجات جديدة!</h3>
-          <p class="text-lg text-brand-darker/70 mb-8">نعمل على إضافة منتجات مميزة لك</p>
-          <a href="#" class="bg-brand-blue hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition">اشترك للحصول على التحديثات</a>
+        <div class="text-center py-20 scroll-reveal">
+          <div class="text-8xl mb-6 animate-bounce">✨</div>
+          <h3 class="text-4xl font-display font-bold text-brand-charcoal mb-4">New Arrivals Coming Soon!</h3>
+          <p class="text-lg text-brand-slate mb-8">We're working on adding amazing products just for you</p>
+          <a href="#" class="btn-primary text-white font-semibold py-4 px-8 rounded-full inline-flex items-center gap-2">
+            <span>Subscribe for Updates</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+          </a>
         </div>
       @endif
     </div>
   </section>
 
   <!-- Testimonials Section -->
-  <section id="testimonials" class="py-20 bg-brand-beige">
-    <div class="container mx-auto px-4">
-      <div class="text-center mb-14">
-        <h2 class="text-4xl lg:text-5xl font-extrabold text-brand-darker mb-4">آراء عملاؤنا</h2>
-        <p class="text-lg text-brand-dark/80 max-w-3xl mx-auto">ثقة العملاء أهم حاجة — بعض المراجعات الحقيقية من عملاء اشتروا واستلموا منتجاتهم</p>
+  <section id="testimonials" class="py-24 bg-white">
+    <div class="container mx-auto px-6 lg:px-12">
+      <div class="text-center mb-16 scroll-reveal">
+        <div class="inline-block bg-brand-rose/10 px-6 py-2 rounded-full text-brand-rose font-semibold mb-4">
+          Customer Reviews
+        </div>
+        <h2 class="text-4xl lg:text-6xl font-display font-bold text-brand-charcoal mb-4">
+          What Our Customers Say
+        </h2>
+        <p class="text-lg text-brand-slate max-w-2xl mx-auto">
+          Real reviews from our amazing customers who love shopping with us
+        </p>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-6">
-        <!-- Card 1 -->
-        <div class="bg-white rounded-2xl p-8 shadow-soft hover-scale">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="w-12 h-12 rounded-full bg-brand-light2 flex items-center justify-center text-brand-navy font-bold">م</div>
-            <div>
-              <p class="font-bold text-brand-darker leading-tight">محمد. أ</p>
-              <p class="text-sm text-brand-darker/60">القاهرة</p>
-            </div>
-          </div>
-          <div class="flex items-center text-xl mb-3" aria-label="5 من 5">⭐️⭐️⭐️⭐️⭐️</div>
-          <p class="text-brand-darker/80 leading-relaxed">تجربة ممتازة! المنتج وصل بسرعة وبجودة عالية جدًا. التعامل محترم وخدمة العملاء سريعة في الرد.</p>
-        </div>
+      @php
+        // Centralized testimonials data with variable ratings
+        $reviews = [
+          [
+            'initial' => 'S',
+            'name' => 'Sarah A.',
+            'city' => 'Cairo',
+            'avatar_gradient' => 'from-brand-rose to-brand-rose-dark',
+            'rating' => 5,
+            'text' => 'Absolutely love my purchase! The quality is amazing and delivery was super fast. Will definitely order again!',
+          ],
+          [
+            'initial' => 'N',
+            'name' => 'Nora M.',
+            'city' => 'Alexandria',
+            'avatar_gradient' => 'from-brand-gold to-brand-gold-light',
+            'rating' => 4,
+            'text' => 'Great prices and excellent customer service. The packaging was beautiful too. Highly recommended!',
+          ],
+          [
+            'initial' => 'L',
+            'name' => 'Layla K.',
+            'city' => 'Giza',
+            'avatar_gradient' => 'from-brand-mint to-brand-charcoal',
+            'rating' => 4,
+            'text' => "I've ordered twice and both times exceeded my expectations. Quality and service are top-notch!",
+          ],
+        ];
+      @endphp
 
-        <!-- Card 2 -->
-        <div class="bg-white rounded-2xl p-8 shadow-soft hover-scale">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="w-12 h-12 rounded-full bg-brand-light2 flex items-center justify-center text-brand-navy font-bold">ن</div>
-            <div>
-              <p class="font-bold text-brand-darker leading-tight">نادين. س</p>
-              <p class="text-sm text-brand-darker/60">الإسكندرية</p>
+      <div class="grid md:grid-cols-3 gap-8">
+        @foreach ($reviews as $index => $review)
+          <div class="bg-gradient-to-br from-brand-cream to-white rounded-3xl p-8 border border-brand-beige hover:shadow-card transition-all duration-500 scroll-reveal" @if($index) style="animation-delay: {{ number_format($index * 0.1, 1) }}s" @endif>
+            <div class="flex items-center gap-4 mb-6">
+              <div class="w-16 h-16 rounded-full bg-gradient-to-br {{ $review['avatar_gradient'] }} flex items-center justify-center text-white font-bold text-xl shadow-soft">
+                {{ $review['initial'] }}
+              </div>
+              <div>
+                <p class="font-bold text-brand-charcoal text-lg">{{ $review['name'] }}</p>
+                <p class="text-sm text-brand-slate">{{ $review['city'] }}</p>
+              </div>
             </div>
-          </div>
-          <div class="flex items-center text-xl mb-3" aria-label="4 من 5">⭐️⭐️⭐️⭐️☆</div>
-          <p class="text-brand-darker/80 leading-relaxed">الأسعار حلوة جدًا مقارنة بالسوق، والتغليف كان ممتاز. أكيد هكرر الطلب.</p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="bg-white rounded-2xl p-8 shadow-soft hover-scale">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="w-12 h-12 rounded-full bg-brand-light2 flex items-center justify-center text-brand-navy font-bold">أ</div>
-            <div>
-              <p class="font-bold text-brand-darker leading-tight">أحمد. ك</p>
-              <p class="text-sm text-brand-darker/60">طنطا</p>
+            <div class="flex items-center gap-1 text-xl mb-4">
+              @for ($i = 1; $i <= 5; $i++)
+                <span class="{{ $i <= $review['rating'] ? 'text-yellow-400' : 'text-gray-300' }}">⭐</span>
+              @endfor
             </div>
+            <p class="text-brand-slate leading-relaxed">"{{ $review['text'] }}"</p>
           </div>
-          <div class="flex items-center text-xl mb-3" aria-label="5 من 5">⭐️⭐️⭐️⭐️⭐️</div>
-          <p class="text-brand-darker/80 leading-relaxed">طلبت مرتين لحد دلوقتي وكل مرة الالتزام في المواعيد والجودة عاليين جدًا. شكراً ليكم.</p>
-        </div>
+        @endforeach
       </div>
 
-      <div class="text-center mt-12">
-        <a href="#products" class="inline-block bg-white text-brand-darker font-bold py-3 px-8 rounded-full shadow-soft hover:shadow-lg transition border border-brand-light2">
-          اكتشف المنتجات الآن
+      <div class="text-center mt-12 scroll-reveal">
+        <a href="#products" class="btn-primary text-white font-semibold py-4 px-10 rounded-full inline-flex items-center gap-2">
+          <span>Start Shopping</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-brand-darker text-brand-light pt-14 pb-10">
-    <div class="container mx-auto px-4">
-      <div class="grid md:grid-cols-4 gap-10">
-        <div class="md:col-span-2 animate-fade-in-up">
-          @if(file_exists(public_path('images/fekra-logo.png')))
-            <div class="flex items-center gap-3 mb-4">
-              <img src="{{ asset('images/fekra-logo.png') }}" alt="فكره استور" class="h-16 w-auto"/>
-              <h3 class="text-3xl md:text-4xl font-extrabold font-brand-kufi text-logo-shadow leading-tight">فكره استور</h3>
-            </div>
-          @else
-            <h3 class="text-2xl font-extrabold mb-4">فكره استور</h3>
-          @endif
-          <p class="text-brand-light/80 leading-relaxed">نقدم منتجات مختارة بعناية بأسعار تنافسية وخدمة عملاء سريعة. رؤيتنا هي تجربة تسوق بسيطة، آمنة، وموثوقة.</p>
+  <!-- Modern Footer -->
+  <footer class="bg-gradient-to-br from-brand-charcoal via-brand-slate to-brand-charcoal text-white pt-20 pb-10">
+    <div class="container mx-auto px-6 lg:px-12">
+      <div class="grid md:grid-cols-4 gap-12 mb-12">
+        <!-- Brand Column -->
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-3 mb-6">
+            @if(file_exists(public_path('images/fekra-logo.png')))
+              <img src="{{ asset('images/fekra-logo.png') }}" alt="Fekra Store" class="h-14 w-auto"/>
+            @endif
+            <h3 class="text-3xl lg:text-4xl font-bold font-display bg-gradient-to-r from-brand-rose-light to-brand-gold-light bg-clip-text text-transparent">
+              Fekra Store
+            </h3>
+          </div>
+          <p class="text-white/70 leading-relaxed mb-6 max-w-md">
+            Your destination for modern women's fashion. Quality products, competitive prices, and exceptional service.
+          </p>
+          <div class="flex gap-3">
+            <a href="https://www.tiktok.com/@fekra__store" class="w-12 h-12 bg-white/10 hover:bg-brand-rose rounded-full flex items-center justify-center transition-all hover:scale-110" aria-label="TikTok">
+              <span class="text-xl">📱</span>
+            </a>
+            <a href="#" class="w-12 h-12 bg-white/10 hover:bg-brand-rose rounded-full flex items-center justify-center transition-all hover:scale-110" aria-label="Instagram">
+              <span class="text-xl">📷</span>
+            </a>
+            <a href="#" class="w-12 h-12 bg-white/10 hover:bg-brand-rose rounded-full flex items-center justify-center transition-all hover:scale-110" aria-label="Facebook">
+              <span class="text-xl">👥</span>
+            </a>
+          </div>
         </div>
 
-        <div class="animate-fade-in-up" style="animation-delay:120ms">
-          <h4 class="text-lg font-bold mb-4 text-white">روابط سريعة</h4>
-          <ul class="space-y-2 text-brand-light/80">
-            <li><a href="#products" class="hover:text-white transition">المنتجات</a></li>
-            <li><a href="#features" class="hover:text-white transition">المميزات</a></li>
-            <li><a href="#testimonials" class="hover:text-white transition">آراء العملاء</a></li>
-            <li><a href="{{ route('cart.show') }}" class="hover:text-white transition">السلة</a></li>
+        <!-- Quick Links -->
+        <div>
+          <h4 class="text-lg font-bold mb-6 text-white">Quick Links</h4>
+          <ul class="space-y-3 text-white/70">
+            <li><a href="#products" class="hover:text-brand-rose transition-colors hover:translate-x-1 inline-block">Shop</a></li>
+            <li><a href="#collections" class="hover:text-brand-rose transition-colors hover:translate-x-1 inline-block">Collections</a></li>
+            <li><a href="#features" class="hover:text-brand-rose transition-colors hover:translate-x-1 inline-block">Features</a></li>
+            <li><a href="#testimonials" class="hover:text-brand-rose transition-colors hover:translate-x-1 inline-block">Reviews</a></li>
+            <li><a href="{{ route('cart.show') }}" class="hover:text-brand-rose transition-colors hover:translate-x-1 inline-block">Cart</a></li>
           </ul>
         </div>
 
-        <div class="animate-fade-in-up" style="animation-delay:240ms">
-          <h4 class="text-lg font-bold mb-4 text-white">تواصل معنا</h4>
-          <ul class="space-y-2 text-brand-light/80">
-            
-            <li>📍 القاهرة، مصر</li>
-            <li class="flex gap-2 pt-2">
-              <a href="https://www.tiktok.com/@fekra__store?_t=ZS-8zbjerbuBxY&_r=1" class="bg-brand-green hover:bg-emerald-600 p-2 rounded-full" aria-label="تيك توك">📱</a>
-              
+        <!-- Contact -->
+        <div>
+          <h4 class="text-lg font-bold mb-6 text-white">Contact Us</h4>
+          <ul class="space-y-3 text-white/70">
+            <li class="flex items-center gap-2">
+              <span class="text-brand-rose">📍</span>
+              <span>Cairo, Egypt</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-brand-rose">📞</span>
+              <a href="tel:01201297965" class="hover:text-brand-rose transition-colors">01201297965</a>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-brand-rose">💬</span>
+              <a href="https://wa.me/201201297965" target="_blank" class="hover:text-brand-rose transition-colors">WhatsApp</a>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-brand-rose">🚚</span>
+              <span>Fast Delivery</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-brand-rose">🔒</span>
+              <span>Secure Payment</span>
             </li>
           </ul>
         </div>
       </div>
 
-      <div class="border-t border-white/10 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between text-brand-light/70 gap-3">
-        <p>&copy; 2025 فكره استور. جميع الحقوق محفوظة.</p>
-        <div class="flex items-center gap-3 text-sm">
-          <span class="bg-white/10 px-3 py-1 rounded-full">سياسة الخصوصية</span>
-          <span class="bg-white/10 px-3 py-1 rounded-full">الشروط والأحكام</span>
+      <!-- Bottom Bar -->
+      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-white/60 text-sm">
+          &copy; 2025 <span class="text-brand-rose font-semibold">Fekra Store</span>. All rights reserved.
+        </p>
+        <div class="flex items-center gap-4 text-sm">
+          <a href="#" class="text-white/60 hover:text-brand-rose transition-colors">Privacy Policy</a>
+          <span class="text-white/30">•</span>
+          <a href="#" class="text-white/60 hover:text-brand-rose transition-colors">Terms & Conditions</a>
         </div>
       </div>
     </div>
@@ -580,55 +934,118 @@
       setTimeout(() => { msg.style.transform = 'translateX(100%)'; setTimeout(() => container.remove(), 300); }, 3000);
     }
 
-    // Navbar scroll effect (transparent on scroll down)
+    // Product Image Carousel
+    const carouselState = {};
+    
+    function goToSlide(carouselId, index) {
+      const carousel = document.querySelector(`[data-carousel-id="${carouselId}"]`);
+      if (!carousel) return;
+      
+      const images = carousel.querySelectorAll('.carousel-image');
+      const dots = document.querySelectorAll(`[data-carousel-id="${carouselId}"].carousel-dot`);
+      
+      // Hide all images
+      images.forEach(img => img.classList.remove('opacity-100'));
+      images.forEach(img => img.classList.add('opacity-0'));
+      
+      // Show selected image
+      if (images[index]) {
+        images[index].classList.remove('opacity-0');
+        images[index].classList.add('opacity-100');
+      }
+      
+      // Update dots
+      dots.forEach(dot => {
+        dot.classList.remove('w-6', 'bg-white');
+        dot.classList.add('w-2', 'bg-white/50');
+      });
+      if (dots[index]) {
+        dots[index].classList.remove('w-2', 'bg-white/50');
+        dots[index].classList.add('w-6', 'bg-white');
+      }
+      
+      // Update state
+      carouselState[carouselId] = index;
+    }
+    
+    function nextSlide(carouselId) {
+      const carousel = document.querySelector(`[data-carousel-id="${carouselId}"]`);
+      if (!carousel) return;
+      
+      const images = carousel.querySelectorAll('.carousel-image');
+      const currentIndex = carouselState[carouselId] || 0;
+      const nextIndex = (currentIndex + 1) % images.length;
+      goToSlide(carouselId, nextIndex);
+    }
+    
+    // Auto-rotate carousels
+    function initCarousels() {
+      document.querySelectorAll('.product-carousel').forEach(carousel => {
+        const carouselId = carousel.getAttribute('data-carousel-id');
+        const images = carousel.querySelectorAll('.carousel-image');
+        
+        if (images.length > 1) {
+          carouselState[carouselId] = 0;
+          
+          // Auto-rotate every 3 seconds
+          setInterval(() => {
+            nextSlide(carouselId);
+          }, 3000);
+        }
+      });
+    }
+
+    // Modern Navbar Scroll Effect
+    let lastScroll = 0;
     window.addEventListener('scroll', () => {
       const navbar = document.getElementById('navbar');
-      if (window.scrollY > 10) {
-        // اجعله شفاف عند النزول
-        navbar.classList.add('bg-transparent', 'backdrop-blur-0', 'border-transparent');
-        navbar.classList.remove('bg-white/85', 'backdrop-blur-md', 'border-brand-light2', 'shadow-sm');
+      const currentScroll = window.scrollY;
+      
+      if (currentScroll > 100) {
+        navbar.classList.add('shadow-lg');
       } else {
-        // يرجع للوضع الأصلي أعلى الصفحة
-        navbar.classList.add('bg-white/85', 'backdrop-blur-md', 'border-brand-light2', 'shadow-sm');
-        navbar.classList.remove('bg-transparent', 'backdrop-blur-0', 'border-transparent');
+        navbar.classList.remove('shadow-lg');
       }
+      
+      lastScroll = currentScroll;
+    });
+
+    // Scroll Reveal Animation
+    const scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          scrollObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.scroll-reveal').forEach(el => {
+        scrollObserver.observe(el);
+      });
+      
+      // Initialize carousels
+      initCarousels();
     });
   </script>
   
-  <!-- Page & Hero Typewriter Animations -->
+  <!-- Page Fade-in & Smooth Animations -->
   <script>
-    // Ensure page fade-in
-    document.addEventListener('DOMContentLoaded', () => {
-      document.body.classList.remove('opacity-0');
+    // Ensure smooth page load
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '1';
     });
 
-    // Typewriter effect for hero headline
-    (function(){
-      const el = () => document.getElementById('typewriter');
-      const phrases = ['لا تُقاوم', 'بتوصيل سريع', 'وجودة مضمونة'];
-      const typeDelay = 90;
-      const holdDelay = 1200;
-      const eraseDelay = 50;
-      let i = 0, j = 0, typing = true;
-
-      function tick(){
-        const node = el();
-        if (!node) return;
-        const current = phrases[i];
-        if (typing) {
-          node.textContent = current.slice(0, j+1);
-          j++;
-          if (j === current.length) { typing = false; setTimeout(tick, holdDelay); return; }
-          setTimeout(tick, typeDelay);
-        } else {
-          node.textContent = current.slice(0, j-1);
-          j--;
-          if (j === 0) { typing = true; i = (i + 1) % phrases.length; }
-          setTimeout(tick, eraseDelay);
-        }
-      }
-      document.addEventListener('DOMContentLoaded', () => setTimeout(tick, 400));
-    })();
+    // Modern fade-in on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.body.classList.remove('opacity-0');
+      }, 100);
+    });
   </script>
 </body>
 </html>
