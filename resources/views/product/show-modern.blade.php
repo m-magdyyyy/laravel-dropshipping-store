@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
+<he    body { 
+      font-family: 'Cairo', system-ui, sans-serif; 
+      background: linear-gradient(135deg, #FFF8F3 0%, #FFFFFF 100%);
+      color: #2D3142;
+      -webkit-font-smoothing: antialiased;
+    } charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <title>{{ $product->meta_title ?: $product->name }} - Fekra Store</title>
@@ -46,9 +50,14 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { 
       font-family: 'Cairo', system-ui, sans-serif; 
-      background: linear-gradient(135deg, #FFF8F3 0%, #FFFFFF 100%);
+      background: linear-gradient(135deg, #FF6B9D 0%, #C9184A 50%, #4c1d54 100%);
       color: #2D3142;
       -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #FF6B9D 0%, #C9184A 50%, #4c1d54 100%);
     }
 
     /* Modern Glassmorphism Navbar */
@@ -227,26 +236,31 @@
   
   <!-- Modern Navbar -->
   <nav class="navbar">
-    <div class="container mx-auto px-6 py-4">
+    <div class="container mx-auto px-6 py-3">
       <div class="flex justify-between items-center">
-        <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
-          <div class="w-12 h-12 rounded-full p-2 shadow-lg backdrop-blur-sm border-2 border-purple-600/40 flex items-center justify-center transition-all duration-300" style="background: linear-gradient(135deg, #4c1d54 0%, #6b2c7a 100%);">
-            <img src="{{ asset('images/fekra-new-logo.png') }}" alt="Fekra Store" class="w-8 h-8 object-contain transition group-hover:scale-110"/>
-          </div>
-          <span class="text-xl font-bold font-display bg-gradient-to-r from-brand-rose to-brand-rose-dark bg-clip-text text-transparent">
-            Fekra Store
-          </span>
-        </a>
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+          <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
+            <div class="w-14 h-14 rounded-full p-2 shadow-xl backdrop-blur-sm border-2 border-purple-600/40 flex items-center justify-center group-hover:shadow-2xl transition-all duration-300" style="background: linear-gradient(135deg, #4c1d54 0%, #6b2c7a 100%);">
+              <img src="{{ asset('images/fekra-new-logo.png') }}" alt="Fekra Store" class="w-10 h-10 object-contain drop-shadow-sm group-hover:scale-110 transition-transform duration-300"/>
+            </div>
+            <span class="text-xl lg:text-2xl font-bold font-display bg-gradient-to-r from-brand-rose to-brand-rose-dark bg-clip-text text-transparent group-hover:scale-105 transition">
+              Fekra Store
+            </span>
+          </a>
+        </div>
 
         <div class="flex items-center gap-4">
           <a href="{{ route('landing') }}" class="text-brand-charcoal hover:text-brand-rose transition font-semibold">
             الرئيسية
           </a>
-          <a href="{{ route('cart.show') }}" class="relative p-3 bg-gradient-to-r from-brand-rose to-brand-rose-dark text-white rounded-full hover:shadow-lg transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-            </svg>
-            <span id="cart-badge" class="absolute -top-1 -left-1 bg-brand-gold text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md hidden">0</span>
+          <a href="{{ route('cart.show') }}" class="relative group">
+            <div class="bg-gradient-to-r from-brand-rose to-brand-rose-dark p-2.5 rounded-full transition-all group-hover:shadow-lg">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+              </svg>
+            </div>
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-brand-gold text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[1rem] text-center hidden shadow-md">0</span>
           </a>
         </div>
       </div>
