@@ -619,19 +619,7 @@
                 <span class="bg-gradient-to-r from-brand-rose to-brand-rose-dark text-white px-3 py-1.5 rounded-full text-sm md:text-base font-bold shadow-lg">-{{ $product->discount_percentage }}%</span>
               @endif
             </div>
-            <!-- Urgency message -->
-            <div class="space-y-2 bg-gradient-to-r from-brand-cream to-brand-beige p-4 rounded-2xl border border-brand-beige mb-4">
-              <p class="text-brand-rose-dark font-bold text-sm md:text-base flex items-center gap-2">
-                <span class="text-xl">🚚</span> Free Shipping - Limited Time Offer!
-              </p>
-              <!-- Stock counter -->
-              <p class="text-orange-600 font-semibold text-sm md:text-base flex items-center gap-2">
-                <span class="text-lg">⚡</span> Only {{ $product->stock ?? 7 }} left at this price!
-              </p>
-              <p class="text-brand-mint font-semibold text-sm md:text-base flex items-center gap-2">
-                <span class="text-lg">✓</span> In Stock - Fast Delivery
-              </p>
-            </div>
+
           </div>
 
           <div class="mb-8 bg-white p-6 rounded-3xl shadow-soft">
