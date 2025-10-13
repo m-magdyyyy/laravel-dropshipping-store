@@ -20,7 +20,7 @@
     <meta property="og:url" content="{{ url('/') }}">
   <meta property="og:title" content="Fekra Store - Modern Women's Fashion | Modest & Practical Wear">
   <meta property="og:description" content="Trendy modest hijab outfits, quality casual wear, stylish coordinated sets. Fast delivery & cash on delivery available.">
-    <meta property="og:image" content="{{ asset('images/fekra-logo.png') }}">
+    <meta property="og:image" content="{{ file_exists(public_path('images/fekra-new-logo.png')) ? asset('images/fekra-new-logo.png') : asset('images/fekra-logo.png') }}">
     <meta property="og:locale" content="ar_EG">
     <meta property="og:site_name" content="Fekra Store">
     
@@ -29,14 +29,14 @@
     <meta name="twitter:url" content="{{ url('/') }}">
   <meta name="twitter:title" content="Fekra Store - Modern Women's Fashion | Modest & Practical Wear">
   <meta name="twitter:description" content="Trendy modest hijab outfits, coordinated sets & premium quality.">
-    <meta name="twitter:image" content="{{ asset('images/fekra-logo.png') }}">
+    <meta name="twitter:image" content="{{ file_exists(public_path('images/fekra-new-logo.png')) ? asset('images/fekra-new-logo.png') : asset('images/fekra-logo.png') }}">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url('/') }}">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/fekra-logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ file_exists(public_path('images/fekra-new-logo.png')) ? asset('images/fekra-new-logo.png') : asset('images/fekra-logo.png') }}">
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -256,7 +256,7 @@
       'name' => 'Fekra Store',
       'alternateName' => 'فكرة ستور',
       'url' => url('/'),
-      'logo' => asset('images/fekra-logo.png'),
+      'logo' => file_exists(public_path('images/fekra-new-logo.png')) ? asset('images/fekra-new-logo.png') : asset('images/fekra-logo.png'),
       'description' => 'متجر فكرة للأزياء النسائية العصرية والمحتشمة - أزياء راقية وجودة عالية مع التوصيل السريع',
       'contactPoint' => [
         '@type' => 'ContactPoint',
@@ -363,14 +363,14 @@
   <!-- Modern Navigation Bar -->
   <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 glass-effect shadow-sm transition-all duration-300">
     <div class="container mx-auto px-6 lg:px-12">
-      <div class="flex justify-between items-center py-4">
+      <div class="flex justify-between items-center py-3">
         <!-- Logo -->
         <div class="flex items-center gap-3">
           <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
-            @if(file_exists(public_path('images/fekra-logo.png')))
-              <img src="{{ asset('images/fekra-logo.png') }}" alt="Fekra Store" class="h-10 w-auto drop-shadow-sm group-hover:scale-105 transition"/>
-            @endif
-            <span class="text-2xl lg:text-3xl font-bold font-display bg-gradient-to-r from-brand-rose to-brand-rose-dark bg-clip-text text-transparent group-hover:scale-105 transition">
+            <div class="w-14 h-14 rounded-full p-2 shadow-xl backdrop-blur-sm border-2 border-purple-600/40 flex items-center justify-center group-hover:shadow-2xl transition-all duration-300" style="background: linear-gradient(135deg, #4c1d54 0%, #6b2c7a 100%);">
+              <img src="{{ asset('images/fekra-new-logo.png') }}" alt="Fekra Store" class="w-10 h-10 object-contain drop-shadow-sm group-hover:scale-110 transition-transform duration-300"/>
+            </div>
+            <span class="text-xl lg:text-2xl font-bold font-display text-white drop-shadow-lg group-hover:scale-105 transition">
               Fekra Store
             </span>
           </a>
@@ -385,14 +385,14 @@
         </div>
 
         <!-- Cart & Actions -->
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
           <a href="{{ route('cart.show') }}" class="relative group">
-            <div class="bg-gradient-to-r from-brand-rose to-brand-rose-dark p-3 rounded-full transition-all group-hover:shadow-glow">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-gradient-to-r from-brand-rose to-brand-rose-dark p-2.5 rounded-full transition-all group-hover:shadow-glow">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
               </svg>
             </div>
-            <span id="cart-badge" class="absolute -top-1 -right-1 bg-brand-gold text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[1.25rem] text-center hidden shadow-md">0</span>
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-brand-gold text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[1rem] text-center hidden shadow-md">0</span>
           </a>
         </div>
       </div>
@@ -733,10 +733,10 @@
       <div class="grid md:grid-cols-4 gap-12 mb-12">
         <!-- Brand Column -->
         <div class="md:col-span-2">
-          <div class="flex items-center gap-3 mb-6">
-            @if(file_exists(public_path('images/fekra-logo.png')))
-              <img src="{{ asset('images/fekra-logo.png') }}" alt="Fekra Store" class="h-14 w-auto"/>
-            @endif
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 rounded-full p-3 backdrop-blur-sm border-2 border-purple-600/30 flex items-center justify-center" style="background: linear-gradient(135deg, #4c1d54 0%, #6b2c7a 100%);">
+              <img src="{{ asset('images/fekra-new-logo.png') }}" alt="Fekra Store" class="w-12 h-12 object-contain drop-shadow-lg"/>
+            </div>
             <h3 class="text-3xl lg:text-4xl font-bold font-display bg-gradient-to-r from-brand-rose-light to-brand-gold-light bg-clip-text text-transparent">
               Fekra Store
             </h3>

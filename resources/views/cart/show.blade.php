@@ -2,7 +2,10 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, i          <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
+          <div class="bg-amber-900/90 p-3 rounded-lg shadow-lg backdrop-blur-sm border border-amber-800/50">
+            <img src="{{ asset('images/fekra-new-logo.png') }}" alt="Fekra Store" class="h-14 w-auto drop-shadow-md group-hover:scale-105 transition-transform duration-300"/>
+          </div>al-scale=1.0" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <title>Shopping Cart - Fekra Store</title>
   <meta name="description" content="Review your selected products and complete your purchase" />

@@ -230,8 +230,10 @@
     <div class="container mx-auto px-6 py-4">
       <div class="flex justify-between items-center">
         <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
-          <img src="{{ asset('images/fekra-logo.png') }}" alt="Fekra Store" class="h-12 w-auto transition group-hover:scale-110"/>
-          <span class="text-2xl font-bold font-display bg-gradient-to-r from-brand-rose to-brand-rose-dark bg-clip-text text-transparent">
+          <div class="w-12 h-12 rounded-full p-2 shadow-lg backdrop-blur-sm border-2 border-purple-600/40 flex items-center justify-center transition-all duration-300" style="background: linear-gradient(135deg, #4c1d54 0%, #6b2c7a 100%);">
+            <img src="{{ asset('images/fekra-new-logo.png') }}" alt="Fekra Store" class="w-8 h-8 object-contain transition group-hover:scale-110"/>
+          </div>
+          <span class="text-xl font-bold font-display bg-gradient-to-r from-brand-rose to-brand-rose-dark bg-clip-text text-transparent">
             Fekra Store
           </span>
         </a>

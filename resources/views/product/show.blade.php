@@ -419,7 +419,9 @@
       <div class="flex justify-between items-center">
         <!-- Logo + Brand -->
         <a href="{{ route('landing') }}" class="flex items-center gap-3 group hover:opacity-95 transition-all">
-          <img src="{{ asset('images/fekra-logo.png') }}" alt="Fekra Store" class="h-10 w-auto drop-shadow-sm group-hover:scale-105 transition"/>
+          <div class="bg-amber-900/80 p-3 rounded-lg shadow-lg backdrop-blur-sm border border-amber-800/40">
+            <img src="{{ asset('images/fekra-new-logo.png') }}" alt="Fekra Store" class="h-14 w-auto drop-shadow-md group-hover:scale-105 transition"/>
+          </div>
           <span class="text-2xl lg:text-3xl font-bold font-display bg-gradient-to-r from-white to-brand-gold-light bg-clip-text text-transparent group-hover:scale-105 transition">
             Fekra Store
           </span>
