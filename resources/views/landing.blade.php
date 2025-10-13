@@ -441,21 +441,7 @@
             </a>
           </div>
 
-          <!-- Trust Badges -->
-          <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-8 animate-fade-in-up" style="animation-delay: 0.3s">
-            <div class="glass-dark px-5 py-3 rounded-xl text-white flex items-center gap-2 shadow-lg hover:scale-105 transition-transform">
-              <span class="text-2xl">🚚</span>
-              <span class="font-semibold">Fast Delivery</span>
-            </div>
-            <div class="glass-dark px-5 py-3 rounded-xl text-white flex items-center gap-2 shadow-lg hover:scale-105 transition-transform">
-              <span class="text-2xl">✨</span>
-              <span class="font-semibold">Premium Quality</span>
-            </div>
-            <div class="glass-dark px-5 py-3 rounded-xl text-white flex items-center gap-2 shadow-lg hover:scale-105 transition-transform">
-              <span class="text-2xl">💝</span>
-              <span class="font-semibold">Gift Wrapping</span>
-            </div>
-          </div>
+
         </div>
 
         <!-- Hero Image (fixed visibility & local source with fallback) -->
