@@ -9,15 +9,21 @@ sleep 2
 
 echo "Starting Laravel server with maximum upload limits..."
 
-# Start PHP server with inline settings - THIS IS THE ONLY WAY THAT WORKS
-php -d upload_max_filesize=100M \
-    -d post_max_size=100M \
-    -d memory_limit=1G \
-    -d max_execution_time=600 \
-    -d max_input_time=600 \
-    -d max_file_uploads=20 \
-    -d file_uploads=On \
-    -S 127.0.0.1:8000 -t public &
+# Start PHP server with custom php.ini file
+if [ -f "php.ini" ]; then
+    php -c php.ini -S 127.0.0.1:8000 -t public &
+    echo "✓ Using custom php.ini configuration"
+else
+    # Fallback to inline settings if php.ini doesn't exist
+    php -d upload_max_filesize=100M \
+        -d post_max_size=100M \
+        -d memory_limit=1G \
+        -d max_execution_time=600 \
+        -d max_input_time=600 \
+        -d max_file_uploads=20 \
+        -d file_uploads=On \
+        -S 127.0.0.1:8000 -t public &
+fi
 
 echo "✓ PHP server started on http://127.0.0.1:8000"
 echo "✓ Upload limit: 100MB"

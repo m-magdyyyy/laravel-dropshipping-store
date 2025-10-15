@@ -1,0 +1,29 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect all requests to public folder
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Deny access to sensitive files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to configuration files
+<FilesMatch "\.(env|json|config\.js|md|gitignore|gitattributes|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to composer and vendor files
+<IfModule mod_alias.c>
+    RedirectMatch 403 /\.git
+    RedirectMatch 403 /\.env
+    RedirectMatch 403 /composer\.
+    RedirectMatch 403 /vendor/
+</IfModule>

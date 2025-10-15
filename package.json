@@ -4,7 +4,7 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-                "dev": "vite & php -c uploads.ini artisan serve"
+        "dev": "vite & php -c php.ini artisan serve"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",

@@ -29,6 +29,9 @@ uploads.ini
 public/phpinfo.php
 public/fix-upload.php
 
+# Keep php.ini (needed for upload settings)
+!php.ini
+
 # Cache and temp files
 storage/framework/cache/data/*
 storage/framework/sessions/*

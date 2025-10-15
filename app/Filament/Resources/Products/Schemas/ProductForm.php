@@ -72,9 +72,10 @@ class ProductForm
                     ->preserveFilenames()
                     ->openable()
                     ->downloadable()
-                    ->maxSize(102400) // 100MB in KB
+                    ->maxSize(51200) // 50MB in KB
                     ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'])
                     ->deleteUploadedFileUsing(fn (string $file) => Storage::disk('public')->delete($file))
+                    ->helperText('الحد الأقصى لحجم الملف: 50 ميجابايت')
                     ->columnSpanFull(),
 
                 FileUpload::make('gallery')
@@ -90,9 +91,10 @@ class ProductForm
                     ->preserveFilenames()
                     ->openable()
                     ->downloadable()
-                    ->maxSize(102400) // 100MB in KB
+                    ->maxSize(51200) // 50MB in KB
                     ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'])
                     ->deleteUploadedFileUsing(fn (string $file) => Storage::disk('public')->delete($file))
+                    ->helperText('الحد الأقصى: 5 صور، كل صورة حتى 50 ميجابايت')
                     ->columnSpanFull(),
 
                 Toggle::make('is_active')
