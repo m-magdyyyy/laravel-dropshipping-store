@@ -45,7 +45,10 @@ echo ""
 
 # Detect PHP version for Apache
 print_step "Step 1: Detecting PHP version..."
-if [ -d "/etc/php/8.3/apache2" ]; then
+if [ -d "/etc/php/8.4/apache2" ]; then
+    PHP_VERSION="8.4"
+    print_success "Found PHP 8.4 for Apache"
+elif [ -d "/etc/php/8.3/apache2" ]; then
     PHP_VERSION="8.3"
     print_success "Found PHP 8.3 for Apache"
 elif [ -d "/etc/php/8.2/apache2" ]; then
@@ -56,6 +59,8 @@ elif [ -d "/etc/php/8.1/apache2" ]; then
     print_success "Found PHP 8.1 for Apache"
 else
     print_error "Could not find PHP for Apache"
+    print_info "Available PHP versions:"
+    ls -d /etc/php/*/apache2 2>/dev/null || echo "No PHP for Apache found"
     exit 1
 fi
 echo ""
