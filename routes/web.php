@@ -14,6 +14,26 @@ Route::post('/order', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/thanks', [OrderController::class, 'thanks'])->name('thanks');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 
+// Local debug route to inspect upload limits and Livewire temp upload config
+if (app()->environment('local')) {
+    Route::get('/_debug/upload', function () {
+        return response()->json([
+            'php' => [
+                'version' => PHP_VERSION,
+                'upload_max_filesize' => ini_get('upload_max_filesize'),
+                'post_max_size' => ini_get('post_max_size'),
+                'memory_limit' => ini_get('memory_limit'),
+                'file_uploads' => ini_get('file_uploads'),
+            ],
+            'livewire' => config('livewire.temporary_file_upload'),
+            'filesystems' => [
+                'default' => config('filesystems.default'),
+                'public_url' => config('filesystems.disks.public.url'),
+            ],
+        ]);
+    });
+}
+
 // Cart routes
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'show'])->name('cart.show');

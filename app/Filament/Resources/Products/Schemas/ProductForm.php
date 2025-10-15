@@ -69,11 +69,11 @@ class ProductForm
                     ->removeUploadedFileButtonPosition('right')
                     ->uploadButtonPosition('left')
                     ->uploadProgressIndicatorPosition('left')
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
-                    ->maxSize(2048)
                     ->preserveFilenames()
                     ->openable()
                     ->downloadable()
+                    ->maxSize(102400) // 100MB in KB
+                    ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'])
                     ->deleteUploadedFileUsing(fn (string $file) => Storage::disk('public')->delete($file))
                     ->columnSpanFull(),
 
@@ -86,12 +86,12 @@ class ProductForm
                     ->visibility('public')
                     ->reorderable()
                     ->appendFiles()
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
-                    ->maxSize(2048)
                     ->maxFiles(5)
                     ->preserveFilenames()
                     ->openable()
                     ->downloadable()
+                    ->maxSize(102400) // 100MB in KB
+                    ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'])
                     ->deleteUploadedFileUsing(fn (string $file) => Storage::disk('public')->delete($file))
                     ->columnSpanFull(),
 
