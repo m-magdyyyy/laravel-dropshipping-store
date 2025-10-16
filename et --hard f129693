@@ -1,0 +1,41 @@
+[33mc64415b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m 🚀 Prepare for deployment: Fix file upload limits and clean unnecessary files
+[33mf129693[m Remove promotional urgency box (Free Shipping, Limited Time Offer, Stock Counter) from product page
+[33mbb27419[m Update social media links: Replace Facebook and Instagram with TikTok only and fix TikTok icon
+[33m26cfd01[m Fix product page logo to match homepage design - circular purple gradient logo
+[33m8dac2ca[m Update logo design: Add new circular logo with purple gradient background and optimize navbar size
+[33mb2985d3[m Remove unnecessary trust badges (Fast Delivery, Premium Quality, Gift Wrapping) from hero section
+[33m6f80274[m Remove apartment field from order modal and make governorate full width
+[33mc050c56[m Merge pull request #3 from m-magdyyyy/feature/women-fashion-store
+[33m30b1feb[m Landing: make testimonials ratings varied (dynamic stars); Product page: consistent per-product rating calc; minor UI cleanup
+[33m2b44eb9[m Refactor landing, show, and thank you pages for improved layout and user experience; enhance responsiveness and styling.
+[33m47a6bc3[m feat: add Google Shopping XML feed generator
+[33m2e24175[m chore: update view files for consistency and maintainability
+[33m5d1e68a[m إضافة قسم Trust Badges في صفحة المنتج وتحسين النصوص
+[33m6bda64e[m feat: make star ratings consistent per product (4.0-5.0 range) based on product ID instead of random generation
+[33m9a9f253[m remove: customer reviews section from product page
+[33m6aa96ca[m feat(ux): reorder action buttons - place 'اطلب الآن' before 'أضف للسلة' to prioritize direct purchase
+[33m358fddc[m fix(analytics): ensure CompletePayment value is always numeric; remove duplicate closing html tag
+[33mf085924[m chore(analytics): add TikTok Pixel base code to all primary Blade heads; add ViewContent/AddToCart/CompletePayment tracking
+[33mb4e5c69[m feat: add admin user creation command and enhance image display in product views
+[33md108ba9[m fix(images): make storage URL relative, enable add/remove images, and default sort_order=0; delete files on removal
+[33m45a5150[m Added new product features
+[33m8e2902a[m Merge pull request #2 from m-magdyyyy/add-cart
+[33m2dcc7fd[m Make governorate required; enforce in forms and views; stabilize order modal cursor and resize handling
+[33m0b0f121[m[33m ([m[1;31morigin/add-cart[m[33m)[m feat: add Filament multi-order creation page (admin)
+[33m040f520[m chore: add AdminSeeder and register it in DatabaseSeeder
+[33m994175c[m Implement code changes to enhance functionality and improve performance
+[33mf1f02bc[m Update README and views to reflect store name change to "فكره استور"; clean up unused code and improve consistency.
+[33m421e649[m Add local commit and push scripts for view changes with cache clearing
+[33m36eb7c4[m رفع اسم المتجر إلى فكره استور وتحسين الاستجابة
+[33me99169a[m Refactor product order form and thank you page for improved layout and user experience; enhance responsiveness and styling.
+[33m18ec71e[m دمج التغييرات وحل التضارب - الاحتفاظ بإصلاحات الصور المحلية
+[33m346fae4[m[33m ([m[1;31morigin/new-branch[m[33m)[m Add image_url field to products; update Product model and views to utilize new field
+[33m6cfe8f6[m Refactor order handling and validation in OrderController; enhance image URL handling in Product model; update landing page and product show view for improved user experience
+[33m69e43ad[m Fix heading declaration in KpiOverview and SalesChart widgets; disable LatestOrders widget temporarily
+[33m1b901c9[m Add professional dashboard widgets: KPI, Sales chart, Latest orders; register in AdminPanelProvider
+[33m33d2d1e[m Prefer APP_URL for building absolute image URLs, fallback to request host
+[33m9abc1b0[m Normalize image URLs to current request host including port for Filament ImageColumn
+[33m217e03e[m Use request host to build absolute image URLs for Filament ImageColumn
+[33m5889ba7[m Return relative storage path from Product::image_url to avoid cross-port asset issues in admin
+[33mcf4c1ab[m 🔧 Fix and optimize image system
+[33m19d967b[m Initial commit: Laravel Dropshipping Store with Filament Admin Panel

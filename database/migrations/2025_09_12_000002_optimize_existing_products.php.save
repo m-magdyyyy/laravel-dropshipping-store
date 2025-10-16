@@ -1,0 +1,9 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use App\Jobs\OptimizeProductImages; // <-- Add this line
+
+// ... the rest of the file
+use App\Jobs\OptimizeProductImages;
