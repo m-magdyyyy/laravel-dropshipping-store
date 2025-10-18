@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\OptimizeProductImages;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -20,6 +21,7 @@ class Product extends Model
         'original_price',
         'image',
         'image_url',
+        'thumbnail_path',
         'gallery',
         'is_active',
         'sort_order',
@@ -48,6 +50,20 @@ class Product extends Model
         static::updating(function ($product) {
             if ($product->isDirty('name') && empty($product->getOriginal('slug'))) {
                 $product->slug = Str::slug($product->name);
+            }
+        });
+
+        // Dispatch optimization job when image is created or updated
+        static::created(function ($product) {
+            if ($product->image) {
+                OptimizeProductImages::dispatch($product->id);
+            }
+        });
+
+        static::updated(function ($product) {
+            // Only optimize if image changed
+            if ($product->isDirty('image') && $product->image) {
+                OptimizeProductImages::dispatch($product->id);
             }
         });
     }
@@ -100,6 +116,24 @@ class Product extends Model
 
         // Default placeholder if no image
         return 'https://via.placeholder.com/400x400?text=No+Image';
+    }
+
+    // Get thumbnail URL
+    public function getThumbUrlAttribute()
+    {
+        // If we have thumbnail_path, use it
+        if ($this->thumbnail_path) {
+            // Check if it's already a full URL (http/https)
+            if (str_starts_with($this->thumbnail_path, 'http')) {
+                return $this->thumbnail_path;
+            }
+            
+            // If it's a local file path, create storage URL
+            return '/storage/' . ltrim($this->thumbnail_path, '/');
+        }
+
+        // Fallback to main image if no thumbnail
+        return $this->image_url;
     }
 
     // Relationship with orders
