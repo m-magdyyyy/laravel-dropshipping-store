@@ -25,8 +25,20 @@ class OptimizeProductImages implements ShouldQueue
 
     public function handle(): void
     {
+        // زيادة حد الذاكرة مؤقتاً لهذه المهمة فقط (لمعالجة الصور الكبيرة)
+        ini_set('memory_limit', '512M');
+        
+        Log::info('OptimizeProductImages: Starting optimization', [
+            'product_id' => $this->productId,
+            'memory_limit' => ini_get('memory_limit'),
+            'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2) . 'MB',
+        ]);
+
         $product = Product::find($this->productId);
         if (!$product) {
+            Log::warning('OptimizeProductImages: Product not found', [
+                'product_id' => $this->productId,
+            ]);
             return;
         }
 
@@ -67,10 +79,16 @@ class OptimizeProductImages implements ShouldQueue
                         ])->saveQuietly();
                     }
                 } catch (\Throwable $e) {
-                    Log::warning('OptimizeProductImages: remote main image download failed', [
+                    Log::error('OptimizeProductImages: remote main image download failed', [
                         'product_id' => $product->id,
                         'url' => $product->image,
-                        'error' => $e->getMessage(),
+                        'error_message' => $e->getMessage(),
+                        'error_code' => $e->getCode(),
+                        'error_file' => $e->getFile(),
+                        'error_line' => $e->getLine(),
+                        'error_trace' => $e->getTraceAsString(),
+                        'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2) . 'MB',
+                        'memory_peak' => round(memory_get_peak_usage(true) / 1024 / 1024, 2) . 'MB',
                     ]);
                 }
             } else {
@@ -107,9 +125,16 @@ class OptimizeProductImages implements ShouldQueue
                             'thumbnail_path' => $thumbPath,
                         ])->saveQuietly();
                     } catch (\Throwable $e) {
-                        Log::warning('OptimizeProductImages main image failed', [
+                        Log::error('OptimizeProductImages: main image processing failed', [
                             'product_id' => $product->id,
-                            'error' => $e->getMessage(),
+                            'image_path' => $path,
+                            'error_message' => $e->getMessage(),
+                            'error_code' => $e->getCode(),
+                            'error_file' => $e->getFile(),
+                            'error_line' => $e->getLine(),
+                            'error_trace' => $e->getTraceAsString(),
+                            'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2) . 'MB',
+                            'memory_peak' => round(memory_get_peak_usage(true) / 1024 / 1024, 2) . 'MB',
                         ]);
                     }
                 }
@@ -155,15 +180,26 @@ class OptimizeProductImages implements ShouldQueue
                     }
                     $newGallery[] = $newPath;
                 } catch (\Throwable $e) {
-                    Log::warning('OptimizeProductImages gallery failed', [
+                    Log::error('OptimizeProductImages: gallery image processing failed', [
                         'product_id' => $product->id,
-                        'file' => $gPath,
-                        'error' => $e->getMessage(),
+                        'gallery_file' => $gPath ?? 'unknown',
+                        'error_message' => $e->getMessage(),
+                        'error_code' => $e->getCode(),
+                        'error_file' => $e->getFile(),
+                        'error_line' => $e->getLine(),
+                        'error_trace' => $e->getTraceAsString(),
+                        'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2) . 'MB',
+                        'memory_peak' => round(memory_get_peak_usage(true) / 1024 / 1024, 2) . 'MB',
                     ]);
                     $newGallery[] = $gPath; // keep original on failure
                 }
             }
             $product->forceFill(['gallery' => $newGallery])->saveQuietly();
         }
+
+        Log::info('OptimizeProductImages: Completed successfully', [
+            'product_id' => $product->id,
+            'memory_peak' => round(memory_get_peak_usage(true) / 1024 / 1024, 2) . 'MB',
+        ]);
     }
 }
