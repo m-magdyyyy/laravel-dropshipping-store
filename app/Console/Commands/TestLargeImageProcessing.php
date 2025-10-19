@@ -17,41 +17,28 @@ class TestLargeImageProcessing extends Command
     {
         $this->info('🧪 بدء اختبار معالجة الصور الكبيرة...');
 
-        // إنشاء صورة PNG حقيقية كبيرة
-        $width = 2000;
-        $height = 1500;
-        $image = imagecreatetruecolor($width, $height);
-        
-        // إضافة ألوان عشوائية لجعل الصورة أكبر
-        for ($i = 0; $i < 500; $i++) {
-            $color = imagecolorallocate($image, rand(0, 255), rand(0, 255), rand(0, 255));
-            imagefilledrectangle($image, rand(0, $width), rand(0, $height), rand(0, $width), rand(0, $height), $color);
-        }
-        
-        // حفظ في buffer بدون ضغط
-        ob_start();
-        imagepng($image, null, 0); // 0 = no compression
-        $largeImageData = ob_get_clean();
-        imagedestroy($image);
+        // إنشاء صورة وهمية كبيرة (محاكاة 15MB)
+        $baseImage = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==');
+        $largeImageData = str_repeat($baseImage, 200000); // ~15MB
 
         $originalSize = strlen($largeImageData);
-        $this->info('📏 حجم الصورة: ' . round($originalSize / 1024 / 1024, 2) . ' MB');
+        $this->info('📏 حجم الصورة المحاكاة: ' . round($originalSize / 1024 / 1024, 2) . ' MB');
 
         try {
-            // رفع الملف إلى local storage
-            $filename = 'test-images/test-large-' . Str::random(8) . '.png';
-            Storage::disk('public')->put($filename, $largeImageData);
+            // رفع الملف إلى S3 raw
+            $filename = 'test-large-' . Str::random(8) . '.jpg';
+            Storage::disk('s3_raw')->put($filename, $largeImageData);
 
-            $this->info('💾 تم حفظ الملف في storage/app/public');
+            $this->info('☁️ تم رفع الملف الكبير إلى S3 Raw');
 
             // إنشاء سجل في Curator
             $media = Media::create([
-                'name' => 'Test Large Image',
+                'name' => 'Test Large Image (15MB+)',
                 'path' => $filename,
-                'disk' => 'public',
+                'disk' => 's3_raw',
                 'size' => $originalSize,
                 'type' => 'image',
-                'ext' => 'png',
+                'ext' => 'jpg',
             ]);
 
             $this->info('🗄️ تم إنشاء سجل في قاعدة البيانات');
@@ -80,7 +67,7 @@ class TestLargeImageProcessing extends Command
             $compressionRatio = round((1 - $finalSize / $originalSize) * 100, 2);
             $this->info('نسبة الضغط: ' . $compressionRatio . '%');
 
-            if (Storage::disk('public')->exists($media->path)) {
+            if (Storage::disk('s3_processed')->exists($media->path)) {
                 $this->info('✅ تمت المعالجة بنجاح!');
                 $this->info('💾 توفير في المساحة: ' . round(($originalSize - $finalSize) / 1024 / 1024, 2) . ' MB');
             } else {

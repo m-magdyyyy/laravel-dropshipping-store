@@ -8,7 +8,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use Awcodes\Curator\Models\Media;
 
 class ProcessImageImmediately implements ShouldQueue
@@ -22,10 +23,10 @@ class ProcessImageImmediately implements ShouldQueue
 
     public function handle(): void
     {
-        // زيادة الذاكرة قليلاً للصور الكبيرة (128MB)
+        // تقليل استهلاك الذاكرة للسيرفرات الصغيرة
         ini_set('memory_limit', '128M');
 
-        Log::info('ProcessImageImmediately: Starting ultra-light processing', ['media_id' => $this->mediaId]);
+        Log::info('ProcessImageImmediately: Starting immediate processing', ['media_id' => $this->mediaId]);
 
         $media = Media::find($this->mediaId);
         if (!$media) {
@@ -40,82 +41,69 @@ class ProcessImageImmediately implements ShouldQueue
         }
 
         try {
-            // قراءة الصورة من local storage
-            Log::info('ProcessImageImmediately: Reading from local storage', ['path' => $media->path]);
-            
-            $imageContent = Storage::disk($media->disk)->get($media->path);
-            Log::info('ProcessImageImmediately: Content loaded', [
-                'size' => strlen($imageContent ?? 'null'),
-                'is_string' => is_string($imageContent),
-            ]);
+            // قراءة الصورة من S3 raw
+            Log::info('ProcessImageImmediately: Reading from S3 raw', ['path' => $media->path]);
+            $imageContent = Storage::disk('s3_raw')->get($media->path);
+            Log::info('ProcessImageImmediately: Content loaded', ['size' => strlen($imageContent ?? 'null')]);
 
-            if (!$imageContent || strlen($imageContent) < 100) {
-                throw new \Exception('Failed to read image content or content too small: ' . strlen($imageContent ?? 'null') . ' bytes');
+            if (!$imageContent) {
+                throw new \Exception('Failed to read image content from S3 raw');
             }
 
             $originalSize = strlen($imageContent);
             Log::info('ProcessImageImmediately: Original size', ['size' => $originalSize]);
 
-            // معالجة فورية لجميع الصور (حتى الصغيرة) لتوفير المساحة
-            Log::info('ProcessImageImmediately: Processing all images for maximum compression');
+            // إذا كان حجم الصورة كبير (> 5MB)، قم بمعالجتها فوراً
+            if ($originalSize > 5 * 1024 * 1024) { // 5MB
+                Log::info('ProcessImageImmediately: Large image detected, processing immediately');
 
-            // إنشاء صورة باستخدام Intervention Image v2
-            $img = Image::make($imageContent);
+                // إنشاء ImageManager بسيط للسيرفرات الصغيرة
+                $manager = new ImageManager();
 
-            // تصغير أكثر عدوانية للضغط الأقصى
-            $originalWidth = $img->width();
+                // معالجة بسيطة وسريعة للسيرفرات الصغيرة
+                $img = $manager->make($imageContent);
 
-            if ($originalWidth > 1200) {
-                // صور كبيرة جداً - تصغير جداً (600px بدلاً من 800px)
-                $img->widen(600);
-            } elseif ($originalWidth > 800) {
-                // صور متوسطة - تصغير أكثر
-                $img->widen(500);
-            } elseif ($originalWidth > 400) {
-                // صور صغيرة - تصغير معقول
-                $img->widen(350);
+                // تصغير بسيط فقط (800px بدلاً من 1200px)
+                if ($img->width() > 800) {
+                    $img->widen(800);
+                }
+
+                // تحويل إلى PNG بدلاً من WebP (أسرع وأخف على السيرفر)
+                $processedImage = (string) $img->encode('png', 85);
+
+                Log::info('ProcessImageImmediately: Image processed', [
+                    'original_size' => $originalSize,
+                    'processed_size' => strlen($processedImage),
+                    'compression_ratio' => round((1 - strlen($processedImage) / $originalSize) * 100, 2) . '%'
+                ]);
+            } else {
+                // الصور الصغيرة انقلها كما هي
+                $processedImage = $imageContent;
+                Log::info('ProcessImageImmediately: Small image, moving as-is');
             }
-            // الصور الصغيرة جداً تبقى كما هي
 
-            // تحويل إلى JPEG مع ضغط أقوى (60% جودة للضغط الأقصى)
-            $processedImage = (string) $img->encode('jpg', 60);
-
-            if (!$processedImage) {
-                throw new \Exception('Failed to encode image to JPEG');
-            }
-
-            // إعداد اسم الملف الجديد
-            $newFilename = $media->id . '.jpg';
+            // إنشاء اسم ملف جديد
+            $newFilename = $media->id . '.png';
             $processedPath = 'processed/' . $newFilename;
 
-            // تنظيف الذاكرة
-            $img->destroy();
-            unset($img);
-            unset($imageContent);
-
-            Log::info('ProcessImageImmediately: About to save to storage', [
-                'processed_path' => $processedPath,
-                'processed_size' => strlen($processedImage)
-            ]);
-
-            // حفظ الصورة المعالجة في نفس الـ disk
-            Storage::disk($media->disk)->put($processedPath, $processedImage);
-
-            // حذف الملف الأصلي
-            Storage::disk($media->disk)->delete($media->path);
+            // حفظ الصورة المعالجة في S3 processed
+            Storage::disk('s3_processed')->put($processedPath, $processedImage);
 
             // تحديث بيانات الوسيط
             $media->update([
                 'path' => $processedPath,
+                'disk' => 's3_processed',
                 'size' => strlen($processedImage),
-                'ext' => 'jpg',
+                'ext' => 'png',
             ]);
+
+            // حذف الملف الأصلي من raw bucket
+            Storage::disk('s3_raw')->delete($media->path);
 
             Log::info('ProcessImageImmediately: Successfully processed', [
                 'media_id' => $this->mediaId,
                 'original_size' => $originalSize,
                 'final_size' => strlen($processedImage),
-                'space_saved' => round(($originalSize - strlen($processedImage)) / 1024 / 1024, 2) . 'MB',
                 'compression_ratio' => round((1 - strlen($processedImage) / $originalSize) * 100, 2) . '%'
             ]);
 
@@ -127,24 +115,20 @@ class ProcessImageImmediately implements ShouldQueue
                 'line' => $e->getLine()
             ]);
 
-            // في حالة فشل المعالجة، احتفظ بالملف الأصلي
+            // في حالة فشل المعالجة، انقل الملف كما هو إلى processed
             try {
-                $rawImageContent = Storage::disk($media->disk)->get($media->path);
-                
-                if (!$rawImageContent) {
-                    throw new \Exception('Cannot read original file for fallback');
-                }
-                
+                $imageContent = Storage::disk('s3_raw')->get($media->path);
                 $originalFilename = $media->id . '_original.' . $media->ext;
                 $originalPath = 'originals/' . $originalFilename;
 
-                Storage::disk($media->disk)->put($originalPath, $rawImageContent);
+                Storage::disk('s3_processed')->put($originalPath, $imageContent);
 
                 $media->update([
                     'path' => $originalPath,
+                    'disk' => 's3_processed',
                 ]);
 
-                Storage::disk($media->disk)->delete($media->path);
+                Storage::disk('s3_raw')->delete($media->path);
 
                 Log::info('ProcessImageImmediately: Fallback - moved original file', [
                     'media_id' => $this->mediaId,
