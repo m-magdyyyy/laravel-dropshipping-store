@@ -8,12 +8,10 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
-use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 
 class ProductForm
 {
@@ -60,7 +58,7 @@ class ProductForm
                     ->helperText('السعر قبل الخصم (اختياري)')
                     ->columnSpan(1),
                 
-                CuratorPicker::make('image')
+                FileUpload::make('image')
                     ->label('صورة المنتج')
                     ->directory('products')
                     ->disk('public')
@@ -71,7 +69,7 @@ class ProductForm
                     ->helperText('الحد الأقصى لحجم الملف: 50 ميجابايت')
                     ->columnSpanFull(),
 
-                CuratorPicker::make('gallery')
+                FileUpload::make('gallery')
                     ->label('معرض الصور')
                     ->multiple()
                     ->directory('products/gallery')
