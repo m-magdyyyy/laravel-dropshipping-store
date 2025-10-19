@@ -77,7 +77,6 @@ class ProductForm
                     ->directory('products/gallery')
                     ->disk('public')
                     ->visibility('public')
-                    ->maxFiles(5)
                     ->preserveFilenames()
                     ->maxSize(51200) // 50MB in KB
                     ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'])
