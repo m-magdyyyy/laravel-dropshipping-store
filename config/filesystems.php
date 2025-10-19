@@ -62,6 +62,28 @@ return [
             'report' => false,
         ],
 
+        's3_raw' => [
+            'driver' => 's3',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_RAW_UPLOADS_BUCKET'),
+            'throw' => false,
+            'report' => false,
+        ],
+
+        's3_processed' => [
+            'driver' => 's3',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_PROCESSED_IMAGES_BUCKET'),
+            'url' => 'https://' . env('AWS_PROCESSED_IMAGES_BUCKET') . '.s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
 
     /*
