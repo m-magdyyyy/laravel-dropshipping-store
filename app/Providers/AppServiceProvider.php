@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Awcodes\Curator\Models\Media;
+use App\Observers\MediaObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // تسجيل Media Observer لمعالجة الصور فوراً
+        Media::observe(MediaObserver::class);
+
         // حل مشكلة رفع الملفات الكبيرة - يجب أن يكون في أول السطر
         @ini_set('upload_max_filesize', '100M');
         @ini_set('post_max_size', '100M');
