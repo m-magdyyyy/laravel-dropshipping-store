@@ -44,3 +44,6 @@ storage/app/public/livewire-tmp/*
 !storage/framework/sessions/.gitignore
 !storage/framework/views/.gitignore
 !storage/logs/.gitignore
+storage/logs/*
+storage/app/public/products/*
+storage/app/public/products/gallery/*
