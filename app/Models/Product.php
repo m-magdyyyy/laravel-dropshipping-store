@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Jobs\OptimizeProductImages;
+use Awcodes\Curator\Models\Media;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -34,6 +35,7 @@ class Product extends Model
         'original_price' => 'decimal:2',
         'is_active' => 'boolean',
         'gallery' => 'array',
+        'image' => 'integer',
     ];
 
     // Auto-generate slug from name
@@ -54,6 +56,8 @@ class Product extends Model
         });
 
         // Dispatch optimization job when image is created or updated
+        // Note: Disabled since we're now using CuratorPicker which handles media management
+        /*
         static::created(function ($product) {
             if ($product->image) {
                 OptimizeProductImages::dispatch($product->id);
@@ -66,6 +70,7 @@ class Product extends Model
                 OptimizeProductImages::dispatch($product->id);
             }
         });
+        */
     }
 
     // Scope for active products
@@ -103,15 +108,9 @@ class Product extends Model
             return $this->attributes['image_url'];
         }
         
-        // If we have a local uploaded image, use it
-        if ($this->image) {
-            // Check if it's already a full URL (http/https)
-            if (str_starts_with($this->image, 'http')) {
-                return $this->image;
-            }
-            
-            // If it's a local file path, create storage URL
-            return '/storage/' . ltrim($this->image, '/');
+        // If we have a media relationship, use it
+        if ($this->imageMedia) {
+            return $this->imageMedia->url;
         }
 
         // Default placeholder if no image
@@ -140,5 +139,17 @@ class Product extends Model
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    // Relationship with main image media
+    public function imageMedia()
+    {
+        return $this->belongsTo(Media::class, 'image');
+    }
+
+    // Relationship with gallery media
+    public function galleryMedia()
+    {
+        return $this->belongsToMany(Media::class, 'product_gallery', 'product_id', 'media_id');
     }
 }

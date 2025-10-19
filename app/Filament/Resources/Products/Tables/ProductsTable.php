@@ -21,10 +21,9 @@ class ProductsTable
             ->columns([
                 ImageColumn::make('thumbnail_path')
                     ->label('الصورة')
-                    ->disk('public')
                     ->size(60)
                     ->square()
-                    ->getStateUsing(fn ($record) => $record->thumbnail_path ?: $record->image)
+                    ->getStateUsing(fn ($record) => $record->thumb_url)
                     ->defaultImageUrl('https://via.placeholder.com/60x60?text=No+Image'),
                 
                 TextColumn::make('name')
