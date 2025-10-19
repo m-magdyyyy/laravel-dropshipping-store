@@ -9,7 +9,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 use Awcodes\Curator\Models\Media;
 
 class ProcessImageImmediately implements ShouldQueue
@@ -41,35 +40,35 @@ class ProcessImageImmediately implements ShouldQueue
         }
 
         try {
-            // قراءة الصورة من S3 raw
-            Log::info('ProcessImageImmediately: Reading from S3 raw', ['path' => $media->path]);
-            $imageContent = Storage::disk('s3_raw')->get($media->path);
-            Log::info('ProcessImageImmediately: Content loaded', ['size' => strlen($imageContent ?? 'null')]);
-
+            // قراءة الصورة من القرص المحلي
+            Log::info('ProcessImageImmediately: Reading from local disk', ['path' => $media->path, 'disk' => $media->disk]);
+            $imageContent = Storage::disk($media->disk)->get($media->path);
+            
             if (!$imageContent) {
-                throw new \Exception('Failed to read image content from S3 raw');
+                throw new \Exception('Failed to read image content');
             }
 
             $originalSize = strlen($imageContent);
             Log::info('ProcessImageImmediately: Original size', ['size' => $originalSize]);
 
-            // إذا كان حجم الصورة كبير (> 5MB)، قم بمعالجتها فوراً
+            // إذا كان حجم الصورة كبير (> 5MB)، قم بمعالجتها بشكل أكثر تحديدًا
             if ($originalSize > 5 * 1024 * 1024) { // 5MB
-                Log::info('ProcessImageImmediately: Large image detected, processing immediately');
+                Log::info('ProcessImageImmediately: Large image detected, processing aggressively');
 
-                // إنشاء ImageManager بسيط للسيرفرات الصغيرة
+                // إنشاء ImageManager للتعامل مع الصورة (استخدام صيغة Intervention v2)
                 $manager = new ImageManager();
 
-                // معالجة بسيطة وسريعة للسيرفرات الصغيرة
+                // معالجة الصورة
                 $img = $manager->make($imageContent);
 
-                // تصغير بسيط فقط (800px بدلاً من 1200px)
-                if ($img->width() > 800) {
-                    $img->widen(800);
-                }
+                // تصغير الصورة إلى عرض أقل (600px للصور الكبيرة)
+                $targetWidth = $img->width() > 1000 ? 600 : 300;
+                $img->resize($targetWidth, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
 
-                // تحويل إلى PNG بدلاً من WebP (أسرع وأخف على السيرفر)
-                $processedImage = (string) $img->encode('png', 85);
+                // تحويل إلى JPEG مع جودة أقل (60%)
+                $processedImage = (string) $img->encode('jpg', 60);
 
                 Log::info('ProcessImageImmediately: Image processed', [
                     'original_size' => $originalSize,
@@ -77,28 +76,36 @@ class ProcessImageImmediately implements ShouldQueue
                     'compression_ratio' => round((1 - strlen($processedImage) / $originalSize) * 100, 2) . '%'
                 ]);
             } else {
-                // الصور الصغيرة انقلها كما هي
-                $processedImage = $imageContent;
-                Log::info('ProcessImageImmediately: Small image, moving as-is');
+                // الصور الصغيرة نسبياً تحتاج معالجة أقل
+                $manager = new ImageManager();
+                $img = $manager->make($imageContent);
+                
+                // تصغير متوسط (800px)
+                if ($img->width() > 800) {
+                    $img->resize(800, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                }
+                
+                // جودة متوسطة (80%)
+                $processedImage = (string) $img->encode('jpg', 80);
+                Log::info('ProcessImageImmediately: Small image processed with moderate settings');
             }
 
             // إنشاء اسم ملف جديد
-            $newFilename = $media->id . '.png';
+            $newFilename = $media->id . '.jpg';
             $processedPath = 'processed/' . $newFilename;
 
-            // حفظ الصورة المعالجة في S3 processed
-            Storage::disk('s3_processed')->put($processedPath, $processedImage);
+            // حفظ الصورة المعالجة في القرص المحلي (مجلد public)
+            Storage::disk('public')->put($processedPath, $processedImage);
 
             // تحديث بيانات الوسيط
             $media->update([
                 'path' => $processedPath,
-                'disk' => 's3_processed',
+                'disk' => 'public',
                 'size' => strlen($processedImage),
-                'ext' => 'png',
+                'ext' => 'jpg',
             ]);
-
-            // حذف الملف الأصلي من raw bucket
-            Storage::disk('s3_raw')->delete($media->path);
 
             Log::info('ProcessImageImmediately: Successfully processed', [
                 'media_id' => $this->mediaId,
@@ -114,33 +121,6 @@ class ProcessImageImmediately implements ShouldQueue
                 'file' => $e->getFile(),
                 'line' => $e->getLine()
             ]);
-
-            // في حالة فشل المعالجة، انقل الملف كما هو إلى processed
-            try {
-                $imageContent = Storage::disk('s3_raw')->get($media->path);
-                $originalFilename = $media->id . '_original.' . $media->ext;
-                $originalPath = 'originals/' . $originalFilename;
-
-                Storage::disk('s3_processed')->put($originalPath, $imageContent);
-
-                $media->update([
-                    'path' => $originalPath,
-                    'disk' => 's3_processed',
-                ]);
-
-                Storage::disk('s3_raw')->delete($media->path);
-
-                Log::info('ProcessImageImmediately: Fallback - moved original file', [
-                    'media_id' => $this->mediaId,
-                    'path' => $originalPath
-                ]);
-
-            } catch (\Exception $fallbackError) {
-                Log::error('ProcessImageImmediately: Fallback also failed', [
-                    'media_id' => $this->mediaId,
-                    'error' => $fallbackError->getMessage()
-                ]);
-            }
         }
     }
 }
