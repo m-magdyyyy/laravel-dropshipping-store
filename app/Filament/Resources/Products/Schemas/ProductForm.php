@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\ImageManager;
 
+
 class ProductForm
 {
     public static function configure(Schema $schema): Schema
@@ -63,10 +64,9 @@ class ProductForm
                     ->directory('products')
                     ->disk('public')
                     ->visibility('public')
-                    ->preserveFilenames()
-                    ->maxSize(51200) // 50MB in KB
+                    ->maxSize(51200) // 50MB
                     ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'])
-                    ->helperText('الحد الأقصى لحجم الملف: 50 ميجابايت')
+                    ->helperText('سيتم تحويل الصورة إلى WebP تلقائياً لتحسين الأداء')
                     ->columnSpanFull(),
 
                 FileUpload::make('gallery')
@@ -75,10 +75,9 @@ class ProductForm
                     ->directory('products/gallery')
                     ->disk('public')
                     ->visibility('public')
-                    ->preserveFilenames()
-                    ->maxSize(51200) // 50MB in KB
+                    ->maxSize(51200) // 50MB per file
                     ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'])
-                    ->helperText('الحد الأقصى: 5 صور، كل صورة حتى 50 ميجابايت')
+                    ->helperText('سيتم تحويل الصور إلى WebP تلقائياً - يمكن رفع عدة صور')
                     ->columnSpanFull(),
 
                 Toggle::make('is_active')

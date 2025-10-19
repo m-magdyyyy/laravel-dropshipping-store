@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Awcodes\Curator\Models\Media;
 use App\Observers\MediaObserver;
+use App\Models\Product;
+use App\Observers\ProductObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,8 +23,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // تسجيل Media Observer لمعالجة الصور فوراً
+        // تسجيل Media Observer لمعالجة الصور فوراً (للصور من Curator)
         Media::observe(MediaObserver::class);
+
+        // تسجيل Product Observer لمعالجة الصور الجديدة (للصور من FileUpload)
+        Product::observe(ProductObserver::class);
 
         // حل مشكلة رفع الملفات الكبيرة - يجب أن يكون في أول السطر
         @ini_set('upload_max_filesize', '100M');
@@ -31,5 +36,12 @@ class AppServiceProvider extends ServiceProvider
         @ini_set('max_execution_time', 600);
         @ini_set('max_input_time', 600);
         @ini_set('max_file_uploads', 20);
+        
+        // تحسينات الأداء
+        @ini_set('opcache.enable', '1');
+        @ini_set('opcache.memory_consumption', '256');
+        @ini_set('opcache.max_accelerated_files', '20000');
+        @ini_set('opcache.revalidate_freq', '2');
+        @ini_set('opcache.fast_shutdown', '1');
     }
 }

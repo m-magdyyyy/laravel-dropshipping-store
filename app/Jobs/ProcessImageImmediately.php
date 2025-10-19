@@ -40,9 +40,25 @@ class ProcessImageImmediately implements ShouldQueue
         }
 
         try {
-            // قراءة الصورة من القرص المحلي
-            Log::info('ProcessImageImmediately: Reading from local disk', ['path' => $media->path, 'disk' => $media->disk]);
-            $imageContent = Storage::disk($media->disk)->get($media->path);
+            // قراءة الصورة من القرص المحدد في الوسيط
+            Log::info('ProcessImageImmediately: Reading from storage', [
+                'path' => $media->path,
+                'disk' => $media->disk
+            ]);
+            
+            $sourceDisk = $media->disk ?: 'public';
+            
+            // تحقق من وجود الملف في القرص المحدد
+            if (!Storage::disk($sourceDisk)->exists($media->path)) {
+                Log::error('ProcessImageImmediately: File not found', [
+                    'path' => $media->path,
+                    'disk' => $sourceDisk
+                ]);
+                throw new \Exception("Image file not found at path: {$media->path} on disk: {$sourceDisk}");
+            }
+            
+            // قراءة محتوى الصورة
+            $imageContent = Storage::disk($sourceDisk)->get($media->path);
             
             if (!$imageContent) {
                 throw new \Exception('Failed to read image content');
@@ -67,8 +83,8 @@ class ProcessImageImmediately implements ShouldQueue
                     $constraint->aspectRatio();
                 });
 
-                // تحويل إلى JPEG مع جودة أقل (60%)
-                $processedImage = (string) $img->encode('jpg', 60);
+                // تحويل إلى WebP مع جودة جيدة (75%) - WebP أكثر كفاءة من JPEG
+                $processedImage = (string) $img->encode('webp', 75);
 
                 Log::info('ProcessImageImmediately: Image processed', [
                     'original_size' => $originalSize,
@@ -87,24 +103,34 @@ class ProcessImageImmediately implements ShouldQueue
                     });
                 }
                 
-                // جودة متوسطة (80%)
-                $processedImage = (string) $img->encode('jpg', 80);
+                // جودة عالية (85%) مع تنسيق WebP
+                $processedImage = (string) $img->encode('webp', 85);
                 Log::info('ProcessImageImmediately: Small image processed with moderate settings');
             }
 
-            // إنشاء اسم ملف جديد
-            $newFilename = $media->id . '.jpg';
-            $processedPath = 'processed/' . $newFilename;
+            // إنشاء مسار جديد للصورة المعالجة بتنسيق WebP
+            $pathInfo = pathinfo($media->path);
+            $processedPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_optimized.webp';
+            
+            // تأكد من وجود المجلد
+            $directory = dirname($processedPath);
+            if ($directory && $directory !== '.' && !Storage::disk('public')->exists($directory)) {
+                Storage::disk('public')->makeDirectory($directory);
+            }
 
-            // حفظ الصورة المعالجة في القرص المحلي (مجلد public)
-            Storage::disk('public')->put($processedPath, $processedImage);
+            // حفظ الصورة المعالجة في public storage
+            $saved = Storage::disk('public')->put($processedPath, $processedImage);
+            
+            if (!$saved) {
+                throw new \Exception('Failed to save processed image to storage');
+            }
 
             // تحديث بيانات الوسيط
             $media->update([
                 'path' => $processedPath,
                 'disk' => 'public',
                 'size' => strlen($processedImage),
-                'ext' => 'jpg',
+                'ext' => 'webp',
             ]);
 
             Log::info('ProcessImageImmediately: Successfully processed', [

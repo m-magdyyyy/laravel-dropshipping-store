@@ -35,7 +35,7 @@ class Product extends Model
         'original_price' => 'decimal:2',
         'is_active' => 'boolean',
         'gallery' => 'array',
-        'image' => 'integer',
+        'image' => 'string', // تغيير من integer إلى string لحفظ مسار الملف
     ];
 
     // Auto-generate slug from name
@@ -108,7 +108,12 @@ class Product extends Model
             return $this->attributes['image_url'];
         }
         
-        // If we have a media relationship, use it
+        // If we have an image path (new method), use it
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+        
+        // If we have a media relationship, use it (old method)
         if ($this->imageMedia) {
             return $this->imageMedia->url;
         }
@@ -128,7 +133,7 @@ class Product extends Model
             }
             
             // If it's a local file path, create storage URL
-            return '/storage/' . ltrim($this->thumbnail_path, '/');
+            return asset('storage/' . ltrim($this->thumbnail_path, '/'));
         }
 
         // Fallback to main image if no thumbnail
