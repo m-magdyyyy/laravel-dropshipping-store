@@ -65,7 +65,7 @@ class ProductForm
                     ->directory('products')
                     ->disk('public')
                     ->visibility('public')
-                    ->imagePreviewHeight('250')
+                    // Removed imagePreviewHeight as it doesn't exist in Curator v3.7.7
                     ->loadingIndicatorPosition('left')
                     ->panelAspectRatio('2:1')
                     ->panelLayout('integrated')
