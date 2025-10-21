@@ -521,7 +521,7 @@
 
           @if($product->gallery && count($product->gallery) > 0)
           <div class="thumbnails-scroll grid grid-cols-4 gap-2 md:grid-cols-4 md:gap-3">
-            <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-brand-rose">
+            <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-brand-rose cursor-pointer" data-image="{{ $product->image_url }}">
               <picture>
                 @php 
                   $thumbImg = $product->image_url; 
@@ -546,12 +546,12 @@
                 @if($webpUrl)
                   <source srcset="{{ $webpUrl }}" type="image/webp">
                 @endif
-                <img src="{{ $thumbImg }}" alt="{{ $product->name }} - صورة مصغرة 1" class="gallery-image w-full aspect-[3/4] object-contain bg-gray-50" onclick="changeMainImage('{{ $thumbImg }}', this)" loading="lazy" decoding="async" onerror="this.style.display='none'">
+                <img src="{{ $thumbImg }}" alt="{{ $product->name }} - صورة مصغرة 1" class="gallery-image w-full aspect-[3/4] object-contain bg-gray-50" loading="lazy" decoding="async" onerror="this.style.display='none'">
               </picture>
             </div>
             @foreach($product->gallery as $index => $image)
               @php $imageUrl = str_starts_with($image, 'http') ? $image : '/storage/' . ltrim($image, '/'); @endphp
-              <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-gray-200 hover:border-brand-rose transition-colors">
+              <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-gray-200 hover:border-brand-rose transition-colors cursor-pointer" data-image="{{ $imageUrl }}">
                 <picture>
                   @php 
                     $thumb2 = $imageUrl; 
@@ -576,7 +576,7 @@
                   @if($webpUrl)
                     <source srcset="{{ $webpUrl }}" type="image/webp">
                   @endif
-                  <img src="{{ $thumb2 }}" alt="{{ $product->name }} - صورة مصغرة {{ $index + 2 }}" class="gallery-image w-full aspect-[3/4] object-contain bg-gray-50" onclick="changeMainImage('{{ $thumb2 }}', this)" loading="lazy" decoding="async" onerror="this.style.display='none'">
+                  <img src="{{ $thumb2 }}" alt="{{ $product->name }} - صورة مصغرة {{ $index + 2 }}" class="gallery-image w-full aspect-[3/4] object-contain bg-gray-50" loading="lazy" decoding="async" onerror="this.style.display='none'">
                 </picture>
               </div>
             @endforeach
@@ -1048,10 +1048,30 @@
 
     function changeMainImage(src, el){
       const main=document.getElementById('mainImage');
-      if (!main) return;
+      if (!main) {
+        console.error('Main image element not found!');
+        return;
+      }
+      
+      // Remove animation class
       main.classList.remove('fade-swap');
       void main.offsetWidth; // reflow to restart animation
-      main.src=src;
+      
+      // Check if there's a WebP version available
+      const webpSrc = src.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+      
+      // Update the picture element if it exists
+      const pictureEl = main.closest('picture');
+      if (pictureEl) {
+        const sourceEl = pictureEl.querySelector('source');
+        if (sourceEl && webpSrc !== src) {
+          // Try to set WebP source
+          sourceEl.srcset = webpSrc;
+        }
+      }
+      
+      // Update main image src
+      main.src = src;
       main.classList.add('fade-swap');
 
       // Update thumbnail borders
@@ -1104,13 +1124,24 @@
       mainImgEl.addEventListener('focusin', () => autoPaused = true);
       mainImgEl.addEventListener('focusout', () => autoPaused = false);
     }
-    // Clicking a thumbnail sets the index accordingly
+    // Clicking a thumbnail sets the index accordingly and changes main image
     document.addEventListener('click', (e) => {
-      const t = e.target.closest('.thumbnails-scroll img');
-      if (!t) return;
-      const srcs = getGallerySources();
-      const i = srcs.indexOf(t.getAttribute('src'));
-      if (i >= 0) autoIdx = i;
+      // Check if click is on thumbnail wrapper or image inside it
+      const wrapper = e.target.closest('.thumbnail-wrapper');
+      if (wrapper) {
+        const imageUrl = wrapper.getAttribute('data-image');
+        const img = wrapper.querySelector('img');
+        if (imageUrl && img) {
+          changeMainImage(imageUrl, img);
+          stopAutoRotate(); // Stop auto-rotation when user clicks
+          
+          // Update autoIdx for consistency
+          const srcs = getGallerySources();
+          const i = srcs.indexOf(imageUrl);
+          if (i >= 0) autoIdx = i;
+        }
+        return;
+      }
     });
     // Pause when tab hidden
     document.addEventListener('visibilitychange', () => { autoPaused = document.hidden; });
