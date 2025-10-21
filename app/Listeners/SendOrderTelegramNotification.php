@@ -6,35 +6,16 @@ namespace App\Listeners;
 
 use App\Events\OrderPlaced;
 use App\Notifications\NewOrderTelegram;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
-class SendOrderTelegramNotification implements ShouldQueue
+class SendOrderTelegramNotification
 {
-    use InteractsWithQueue;
-
-    /**
-     * The name of the queue the job should be sent to.
-     *
-     * @var string|null
-     */
-    public $queue = 'high';
-
-    /**
-     * The number of times the job may be attempted.
-     *
-     * @var int
-     */
-    public $tries = 3;
-
-    /**
-     * The number of seconds to wait before retrying the job.
-     *
-     * @var int
-     */
-    public $backoff = 60;
+    // Removed ShouldQueue to send notifications immediately
+    // This fixes:
+    // 1. Delay in sending notifications
+    // 2. Duplicate notifications
+    // 3. Queue worker dependency
 
     /**
      * Create the event listener.
@@ -49,6 +30,15 @@ class SendOrderTelegramNotification implements ShouldQueue
     public function handle(OrderPlaced $event): void
     {
         $order = $event->order;
+
+        // Prevent duplicate notifications using cache lock
+        $cacheKey = "telegram_notification_sent_{$order->id}";
+        if (cache()->has($cacheKey)) {
+            Log::info('Telegram notification already sent for this order, skipping duplicate', [
+                'order_id' => $order->id
+            ]);
+            return;
+        }
 
         // Get Telegram chat IDs from config
         $chatIds = explode(',', config('services.telegram.recipients', ''));
@@ -108,18 +98,16 @@ class SendOrderTelegramNotification implements ShouldQueue
             Log::error('All Telegram notifications failed', [
                 'order_id' => $order->id
             ]);
+        } else if ($successCount > 0) {
+            // Mark notification as sent to prevent duplicates (cache for 24 hours)
+            cache()->put($cacheKey, true, now()->addDay());
+            
+            Log::info('Notification marked as sent', [
+                'order_id' => $order->id,
+                'cache_key' => $cacheKey
+            ]);
         }
     }
 
-    /**
-     * Handle a job failure.
-     */
-    public function failed(OrderPlaced $event, \Throwable $exception): void
-    {
-        Log::error('Telegram notification listener failed', [
-            'order_id' => $event->order->id,
-            'error' => $exception->getMessage(),
-            'trace' => $exception->getTraceAsString()
-        ]);
-    }
+
 }
