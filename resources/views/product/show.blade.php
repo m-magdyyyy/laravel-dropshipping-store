@@ -1047,6 +1047,25 @@
       updateTotalPrice();
     }
 
+    const thumbnailWrappers = [];
+
+    function cacheThumbnailData(){
+      thumbnailWrappers.length = 0;
+      document.querySelectorAll('.thumbnail-wrapper').forEach((wrapper, idx) => {
+        if (!wrapper) return;
+        const img = wrapper.querySelector('img');
+        const dataSrc = wrapper.getAttribute('data-image') || img?.getAttribute('src') || '';
+        wrapper.dataset.image = dataSrc;
+        wrapper.dataset.index = String(idx);
+        thumbnailWrappers.push(wrapper);
+        if (wrapper.classList.contains('border-brand-rose')) {
+          autoIdx = idx;
+        }
+      });
+    }
+
+    window.cacheThumbnailData = cacheThumbnailData;
+
     function changeMainImage(src, el){
       const main=document.getElementById('mainImage');
       if (!main) {
@@ -1080,8 +1099,15 @@
         wrapper.classList.remove('border-brand-rose');
         wrapper.classList.add('border-gray-200');
       });
-      if(el && el.closest('.thumbnail-wrapper')){ 
-        const wrapper = el.closest('.thumbnail-wrapper');
+      let wrapper = null;
+      if (el) {
+        if (typeof el.closest === 'function') {
+          wrapper = el.closest('.thumbnail-wrapper');
+        } else if (el.classList && el.classList.contains('thumbnail-wrapper')) {
+          wrapper = el;
+        }
+      }
+      if(wrapper){ 
         wrapper.classList.remove('border-gray-200'); 
         wrapper.classList.add('border-brand-rose'); 
       }
@@ -1095,22 +1121,22 @@
         evt.stopPropagation();
       }
       if (!wrapper) return;
-      const imageUrl = wrapper.getAttribute('data-image');
+      if (!wrapper.dataset || !wrapper.dataset.image) cacheThumbnailData();
+      const imageUrl = wrapper.dataset.image || wrapper.getAttribute('data-image');
       const img = wrapper.querySelector('img');
       if (!(imageUrl && img)) return;
       console.debug('Gallery thumbnail activated', imageUrl);
       changeMainImage(imageUrl, img);
       stopAutoRotate();
-      const srcs = getGallerySources();
-      const i = srcs.indexOf(imageUrl);
-      if (i >= 0) autoIdx = i;
+      const idx = parseInt(wrapper.dataset.index ?? '-1', 10);
+      if (!Number.isNaN(idx) && idx >= 0) autoIdx = idx;
     }
 
     window.handleThumbnailClick = handleThumbnailClick;
 
     function initThumbnailListeners(){
-      const wrappers = document.querySelectorAll('.thumbnail-wrapper');
-      wrappers.forEach(wrapper => {
+      cacheThumbnailData();
+      thumbnailWrappers.forEach(wrapper => {
         if (!wrapper) return;
         if (!wrapper.getAttribute('role')) wrapper.setAttribute('role', 'button');
         if (!wrapper.getAttribute('tabindex')) wrapper.setAttribute('tabindex', '0');
@@ -1132,11 +1158,10 @@
     let autoPaused = false;
 
     function getGallerySources(){
-      const thumbs = Array.from(document.querySelectorAll('.thumbnails-scroll img'));
-      const srcs = thumbs.map(t => t.getAttribute('src')).filter(Boolean);
-      const mainSrc = document.getElementById('mainImage')?.getAttribute('src');
-      if (mainSrc && !srcs.includes(mainSrc)) srcs.unshift(mainSrc);
-      return srcs;
+      if (!thumbnailWrappers.length) cacheThumbnailData();
+      return thumbnailWrappers
+        .map(wrapper => wrapper.dataset.image || wrapper.getAttribute('data-image'))
+        .filter(Boolean);
     }
 
     function startAutoRotate(){
@@ -1148,9 +1173,11 @@
         const srcs = getGallerySources();
         if (srcs.length <= 1) return;
         autoIdx = (autoIdx + 1) % srcs.length;
-        const thumbs = Array.from(document.querySelectorAll('.thumbnails-scroll img'));
-        const match = thumbs.find(t => t.getAttribute('src') === srcs[autoIdx]);
-        changeMainImage(srcs[autoIdx], match);
+        const targetWrapper = thumbnailWrappers[autoIdx];
+        const src = srcs[autoIdx];
+        if (src) {
+          changeMainImage(src, targetWrapper || null);
+        }
       }, 3500);
     }
 
