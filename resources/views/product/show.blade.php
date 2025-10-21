@@ -1086,6 +1086,8 @@
       }
     }
 
+    window.changeMainImage = changeMainImage;
+
     function handleThumbnailClick(wrapper, evt){
       if (evt) {
         evt.preventDefault();
@@ -1095,12 +1097,15 @@
       const imageUrl = wrapper.getAttribute('data-image');
       const img = wrapper.querySelector('img');
       if (!(imageUrl && img)) return;
+      console.debug('Gallery thumbnail activated', imageUrl);
       changeMainImage(imageUrl, img);
       stopAutoRotate();
       const srcs = getGallerySources();
       const i = srcs.indexOf(imageUrl);
       if (i >= 0) autoIdx = i;
     }
+
+    window.handleThumbnailClick = handleThumbnailClick;
 
     // ====== Auto-rotate gallery (carousel-lite) ======
     let autoTimer = null;
