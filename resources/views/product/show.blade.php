@@ -337,6 +337,30 @@
       .thumbnails-scroll{ display:flex !important; gap:.75rem; overflow-x:auto; padding-bottom:.5rem; -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory; } 
       .thumbnail-wrapper{ flex:0 0 auto; width: 4rem; scroll-snap-align:start; } 
       .order-btn{ padding:.75rem 1rem; font-size:1rem; } 
+      
+      /* Gallery navigation arrows for mobile */
+      #prevImageBtn,
+      #nextImageBtn {
+        opacity: 0.8 !important;
+        padding: 0.5rem !important;
+      }
+      
+      .group:hover #prevImageBtn,
+      .group:hover #nextImageBtn {
+        opacity: 1 !important;
+      }
+    }
+
+    /* Gallery navigation arrows */
+    .group:hover #prevImageBtn,
+    .group:hover #nextImageBtn {
+      opacity: 1;
+    }
+    
+    #prevImageBtn:hover,
+    #nextImageBtn:hover {
+      background-color: rgba(255, 255, 255, 1);
+      transform: translateY(-50%) scale(1.1);
     }
 
     @supports (-webkit-touch-callout: none){ #modalPanel input, #modalPanel select, #modalPanel textarea{ font-size: 16px; } }
@@ -490,7 +514,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
         <!-- Product Images -->
         <div class="animate-fadeInUp">
-          <div class="mb-4 bg-white rounded-lg shadow-soft overflow-hidden">
+          <div class="mb-4 bg-white rounded-lg shadow-soft overflow-hidden relative group">
             <picture>
               @php
                 $imgUrl = $product->image_url;
@@ -503,7 +527,7 @@
                         if ($webpFs && file_exists($webpFs)) {
                             $webpUrl = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $imgUrl);
                         }
-                    } elseif (preg_match('/\.webp$/i', $fullPath) && file_exists($fullPath)) {
+          } elseif (preg_match('/\.webp$/i', $fullPath) && file_exists($fullPath)) {
                         $webpUrl = $imgUrl;
                     }
                 } else {
@@ -517,6 +541,20 @@
               @endif
               <img id="mainImage" src="{{ $imgUrl }}" alt="{{ $product->name }} - صورة المنتج الرئيسية" class="w-full main-image-portrait rounded-lg img-pop" loading="eager" decoding="async" onerror="this.src='https://via.placeholder.com/600x400?text=No+Image'">
             </picture>
+
+            <!-- Navigation Arrows -->
+            @if($product->gallery && count($product->gallery) > 0)
+            <button id="prevImageBtn" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-brand-charcoal p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+            <button id="nextImageBtn" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-brand-charcoal p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+            @endif
           </div>
 
           @if($product->gallery && count($product->gallery) > 0)
@@ -985,6 +1023,68 @@
       initThumbnailListeners();
       startAutoRotate();
       setupScrollIn();
+      
+      // Initialize navigation arrows
+      const prevBtn = document.getElementById('prevImageBtn');
+      const nextBtn = document.getElementById('nextImageBtn');
+      
+      if (prevBtn) {
+        prevBtn.addEventListener('click', goToPrevImage);
+        prevBtn.addEventListener('touchstart', goToPrevImage, {passive: true});
+      }
+      
+      if (nextBtn) {
+        nextBtn.addEventListener('click', goToNextImage);
+        nextBtn.addEventListener('touchstart', goToNextImage, {passive: true});
+      }
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'textarea') return;
+        
+        if (e.key === 'ArrowLeft' || e.keyCode === 37) {
+          e.preventDefault();
+          goToPrevImage();
+        } else if (e.key === 'ArrowRight' || e.keyCode === 39) {
+          e.preventDefault();
+          goToNextImage();
+        }
+      });
+      
+      // Touch/Swipe support for mobile
+      let touchStartX = 0;
+      let touchEndX = 0;
+      
+      const mainImageContainer = document.querySelector('.main-image-container');
+      const mainImage = document.getElementById('mainImage');
+      
+      if (mainImage && mainImage.parentElement) {
+        const container = mainImage.parentElement.parentElement; // The div with relative class
+        
+        container.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+        
+        container.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          handleSwipeGesture();
+        }, {passive: true});
+        
+        function handleSwipeGesture() {
+          const swipeDistance = touchEndX - touchStartX;
+          const minSwipeDistance = 50; // Minimum distance for a swipe
+          
+          if (Math.abs(swipeDistance) > minSwipeDistance) {
+            if (swipeDistance > 0) {
+              // Swipe right - go to previous image
+              goToPrevImage();
+            } else {
+              // Swipe left - go to next image
+              goToNextImage();
+            }
+          }
+        }
+      }
     });
 
     /* Dynamic modal height */
@@ -1151,6 +1251,38 @@
     }
 
     window.initThumbnailListeners = initThumbnailListeners;
+
+    // ====== Navigation arrows for gallery ======
+    function goToPrevImage(){
+      if (!thumbnailWrappers.length) cacheThumbnailData();
+      if (thumbnailWrappers.length <= 1) return;
+      
+      autoIdx = autoIdx <= 0 ? thumbnailWrappers.length - 1 : autoIdx - 1;
+      const wrapper = thumbnailWrappers[autoIdx];
+      const imageUrl = wrapper?.dataset.image || wrapper?.getAttribute('data-image');
+      
+      if (imageUrl) {
+        changeMainImage(imageUrl, wrapper);
+        stopAutoRotate(); // Stop auto-rotation when user navigates manually
+      }
+    }
+
+    function goToNextImage(){
+      if (!thumbnailWrappers.length) cacheThumbnailData();
+      if (thumbnailWrappers.length <= 1) return;
+      
+      autoIdx = autoIdx >= thumbnailWrappers.length - 1 ? 0 : autoIdx + 1;
+      const wrapper = thumbnailWrappers[autoIdx];
+      const imageUrl = wrapper?.dataset.image || wrapper?.getAttribute('data-image');
+      
+      if (imageUrl) {
+        changeMainImage(imageUrl, wrapper);
+        stopAutoRotate(); // Stop auto-rotation when user navigates manually
+      }
+    }
+
+    window.goToPrevImage = goToPrevImage;
+    window.goToNextImage = goToNextImage;
 
     // ====== Auto-rotate gallery (carousel-lite) ======
     let autoTimer = null;

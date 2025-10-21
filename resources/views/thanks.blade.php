@@ -189,6 +189,16 @@
                 </div>
             </div>
             
+            <!-- Auto Redirect Counter -->
+            <div class="mb-6 p-4 bg-gradient-to-r from-brand-rose-light to-brand-gold-light rounded-2xl border-2 border-brand-rose">
+                <p class="text-brand-charcoal font-semibold text-lg mb-2">
+                    سيتم توجيهك للصفحة الرئيسية تلقائياً بعد <span id="countdown" class="font-display text-2xl font-bold text-brand-rose">10</span> ثانية
+                </p>
+                <div class="w-full bg-white/50 rounded-full h-3 overflow-hidden">
+                    <div id="progressBar" class="h-full bg-gradient-to-r from-brand-rose to-brand-gold transition-all duration-1000 ease-linear" style="width: 100%"></div>
+                </div>
+            </div>
+
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4">
                 <a href="{{ route('landing') }}" 
@@ -196,16 +206,43 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>
-                    Back to Home
+                    العودة للصفحة الرئيسية الآن
                 </a>
                 <a href="{{ route('landing') }}#products" 
                    class="flex-1 bg-brand-gold hover:bg-amber-500 hover:shadow-card text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-soft flex items-center justify-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                     </svg>
-                    Shop More
+                    تسوق المزيد
                 </a>
             </div>
+            
+            <script>
+                // Auto redirect countdown
+                let secondsLeft = 10;
+                const countdownEl = document.getElementById('countdown');
+                const progressBar = document.getElementById('progressBar');
+                
+                const timer = setInterval(() => {
+                    secondsLeft--;
+                    countdownEl.textContent = secondsLeft;
+                    progressBar.style.width = (secondsLeft / 10 * 100) + '%';
+                    
+                    if (secondsLeft <= 0) {
+                        clearInterval(timer);
+                        window.location.href = "{{ route('landing') }}";
+                    }
+                }, 1000);
+                
+                // Allow user to cancel redirect by clicking anywhere
+                let redirectCancelled = false;
+                document.addEventListener('click', (e) => {
+                    if (!redirectCancelled && e.target.tagName === 'A') {
+                        redirectCancelled = true;
+                        clearInterval(timer);
+                    }
+                });
+            </script>
         </div>
     </div>
 </body>
