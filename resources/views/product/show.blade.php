@@ -521,7 +521,7 @@
 
           @if($product->gallery && count($product->gallery) > 0)
           <div class="thumbnails-scroll grid grid-cols-4 gap-2 md:grid-cols-4 md:gap-3">
-            <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-brand-rose cursor-pointer" data-image="{{ $product->image_url }}" onclick="handleThumbnailClick(this, event)">
+            <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-brand-rose cursor-pointer" data-image="{{ $product->image_url }}">
               <picture>
                 @php 
                   $thumbImg = $product->image_url; 
@@ -551,7 +551,7 @@
             </div>
             @foreach($product->gallery as $index => $image)
               @php $imageUrl = str_starts_with($image, 'http') ? $image : '/storage/' . ltrim($image, '/'); @endphp
-              <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-gray-200 hover:border-brand-rose transition-colors cursor-pointer" data-image="{{ $imageUrl }}" onclick="handleThumbnailClick(this, event)">
+              <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-gray-200 hover:border-brand-rose transition-colors cursor-pointer" data-image="{{ $imageUrl }}">
                 <picture>
                   @php 
                     $thumb2 = $imageUrl; 
@@ -982,6 +982,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       updateCartCount();
       renderQtyBadge();
+      initThumbnailListeners();
       startAutoRotate();
       setupScrollIn();
     });
@@ -1106,6 +1107,24 @@
     }
 
     window.handleThumbnailClick = handleThumbnailClick;
+
+    function initThumbnailListeners(){
+      const wrappers = document.querySelectorAll('.thumbnail-wrapper');
+      wrappers.forEach(wrapper => {
+        if (!wrapper) return;
+        if (!wrapper.getAttribute('role')) wrapper.setAttribute('role', 'button');
+        if (!wrapper.getAttribute('tabindex')) wrapper.setAttribute('tabindex', '0');
+        wrapper.addEventListener('click', evt => handleThumbnailClick(wrapper, evt));
+        wrapper.addEventListener('keydown', evt => {
+          const key = evt.key || evt.keyCode;
+          if (key === 'Enter' || key === ' ' || key === 'Spacebar' || key === 13 || key === 32) {
+            handleThumbnailClick(wrapper, evt);
+          }
+        });
+      });
+    }
+
+    window.initThumbnailListeners = initThumbnailListeners;
 
     // ====== Auto-rotate gallery (carousel-lite) ======
     let autoTimer = null;
