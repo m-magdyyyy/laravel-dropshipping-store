@@ -31,6 +31,7 @@ class ProductForm
                     ->maxLength(255)
                     ->unique(ignoreRecord: true)
                     ->helperText('سيتم إنشاؤه تلقائياً من اسم المنتج إذا تُرك فارغاً')
+                    ->dehydrateStateUsing(fn ($state) => $state ?: null)
                     ->columnSpan(1),
                 
                 Textarea::make('description')

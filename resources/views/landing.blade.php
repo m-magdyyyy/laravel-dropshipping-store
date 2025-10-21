@@ -40,8 +40,6 @@
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
@@ -208,7 +206,7 @@
     </style>
     
     <!-- Google Analytics 4 -->
-    <script async defer src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -220,7 +218,7 @@
     </script>
 
     <!-- Facebook Pixel (Meta Pixel) -->
-    <script defer>
+    <script>
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -237,7 +235,7 @@
     /></noscript>
     
     <!-- TikTok Pixel Base Code -->
-    <script defer>
+    <script>
     !function (w, d, t) {
       w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
     var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
@@ -324,7 +322,7 @@
     <script type="application/ld+json">{!! json_encode($itemListSchema, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}</script>
   @endif
 </head>
-<body class="bg-brand-light font-cairo text-brand-darker" style="opacity: 1;">
+<body class="bg-brand-light font-cairo text-brand-darker opacity-0 transition-opacity duration-700">
 
   <!-- Floating WhatsApp Button -->
   <a href="https://wa.me/201201297965" target="_blank" class="fixed bottom-6 left-6 z-50 bg-green-500 hover:bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:shadow-glow transition-all hover:scale-110 group" aria-label="Contact us on WhatsApp">
@@ -455,10 +453,10 @@
               @endif
               @php $heroImg = file_exists(public_path('images/hero/fashion-model.jpg')) ? 'images/hero/fashion-model.jpg' : (file_exists(public_path('images/hero/fashion-model.png')) ? 'images/hero/fashion-model.png' : null); @endphp
               <img 
-                src="{{ $heroImg ? asset($heroImg) : 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'900\' height=\'1200\' viewBox=\'0 0 900 1200\'%3E%3Crect fill=\'%23f0f0f0\' width=\'900\' height=\'1200\'/%3E%3Ctext fill=\'%23999\' font-family=\'Arial\' font-size=\'24\' x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dominant-baseline=\'middle\'>Hero Image%3C/text%3E%3C/svg%3E' }}" 
+                src="{{ $heroImg ? asset($heroImg) : 'https://images.unsplash.com/photo-1520970014086-2208d157c9e2?auto=format&fit=crop&w=900&q=70' }}" 
                 alt="Modest Fashion Hero" 
                 class="w-full h-full object-cover aspect-[2/3] md:aspect-[3/4] lg:aspect-[4/5]" 
-                onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'900\' height=\'1200\' viewBox=\'0 0 900 1200\'%3E%3Crect fill=\'%23f0f0f0\' width=\'900\' height=\'1200\'/%3E%3Ctext fill=\'%23999\' font-family=\'Arial\' font-size=\'24\' x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dominant-baseline=\'middle\'>Hero Image%3C/text%3E%3C/svg%3E'">
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1520970014086-2208d157c9e2?auto=format&fit=crop&w=900&q=70';">
             </picture>
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
 
@@ -553,7 +551,7 @@
                       class="w-full h-full object-contain" 
                       loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
                       decoding="async"
-                      onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'600\' viewBox=\'0 0 400 600\'%3E%3Crect fill=\'%23f0f0f0\' width=\'400\' height=\'600\'/%3E%3Ctext fill=\'%23999\' font-family=\'Arial\' font-size=\'18\' x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dominant-baseline=\'middle\'>صورة غير متاحة%3C/text%3E%3C/svg%3E'">
+                      onerror="this.src='https://via.placeholder.com/400x600?text=No+Image'">
                   </picture>
                 @endforeach
               </div>

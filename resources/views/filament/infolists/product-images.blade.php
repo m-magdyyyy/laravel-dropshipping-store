@@ -43,7 +43,22 @@
     @endif
     
     {{-- إظهار الصور من media relationships أيضاً للمنتجات القديمة --}}
-    @if($record->imageMedia)
+    @php
+        $hasImageMedia = false;
+        $hasGalleryMedia = false;
+        try {
+            $hasImageMedia = $record->imageMedia && $record->imageMedia->exists();
+        } catch (\Exception $e) {
+            // Media table doesn't exist, skip
+        }
+        try {
+            $hasGalleryMedia = $record->galleryMedia && $record->galleryMedia->count() > 0;
+        } catch (\Exception $e) {
+            // Media table doesn't exist, skip
+        }
+    @endphp
+    
+    @if($hasImageMedia)
         <div class="mb-6">
             <h4 class="font-medium mb-3 text-gray-700">الصورة الرئيسية (Media):</h4>
             <div class="relative inline-block">
@@ -58,7 +73,7 @@
         </div>
     @endif
     
-    @if($record->galleryMedia && $record->galleryMedia->count() > 0)
+    @if($hasGalleryMedia)
         <div>
             <h4 class="font-medium mb-3 text-gray-700">معرض الصور القديم ({{ $record->galleryMedia->count() }} صورة):</h4>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -78,7 +93,7 @@
     @endif
     
     @if(!$record->image && (!$record->gallery || !is_array($record->gallery) || count($record->gallery) === 0) && 
-        !$record->imageMedia && (!$record->galleryMedia || $record->galleryMedia->count() === 0))
+        !$hasImageMedia && !$hasGalleryMedia)
         <div class="text-center text-gray-500 py-8">
             <div class="text-4xl mb-2">📷</div>
             <p>لا توجد صور لهذا المنتج</p>

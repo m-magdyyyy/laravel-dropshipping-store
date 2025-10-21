@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event;
 use Awcodes\Curator\Models\Media;
 use App\Observers\MediaObserver;
 use App\Models\Product;
 use App\Observers\ProductObserver;
+use App\Events\OrderPlaced;
+use App\Listeners\SendOrderTelegramNotification;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +26,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // تسجيل Event Listeners
+        Event::listen(
+            OrderPlaced::class,
+            SendOrderTelegramNotification::class
+        );
+
         // تسجيل Media Observer لمعالجة الصور فوراً (للصور من Curator)
         Media::observe(MediaObserver::class);
 

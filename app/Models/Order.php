@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\OrderPlaced;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -38,6 +39,19 @@ class Order extends Model
             self::STATUS_DELIVERED => 'تم التسليم',
             self::STATUS_CANCELLED => 'ملغي',
         ];
+    }
+
+    /**
+     * Bootstrap the model and its events.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($order) {
+            // Dispatch OrderPlaced event when a new order is created
+            OrderPlaced::dispatch($order);
+        });
     }
 
     public function getStatusLabelAttribute()

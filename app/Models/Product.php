@@ -38,6 +38,43 @@ class Product extends Model
         'image' => 'string', // تغيير من integer إلى string لحفظ مسار الملف
     ];
 
+    /**
+     * Generate a unique slug for the product
+     */
+    protected static function generateSlug($name, $id = null)
+    {
+        // Try to generate slug from name
+        $slug = Str::slug($name);
+        
+        // If slug is empty (Arabic text), use transliteration or generate from ID
+        if (empty($slug)) {
+            // Use a combination of transliterated text and timestamp
+            $slug = 'product-' . time();
+        }
+        
+        // Ensure uniqueness
+        $originalSlug = $slug;
+        $count = 1;
+        
+        while (true) {
+            $query = static::where('slug', $slug);
+            
+            // Exclude current product if updating
+            if ($id) {
+                $query->where('id', '!=', $id);
+            }
+            
+            if (!$query->exists()) {
+                break;
+            }
+            
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+        
+        return $slug;
+    }
+
     // Auto-generate slug from name
     protected static function boot()
     {
@@ -45,13 +82,14 @@ class Product extends Model
         
         static::creating(function ($product) {
             if (empty($product->slug)) {
-                $product->slug = Str::slug($product->name);
+                $product->slug = static::generateSlug($product->name);
             }
         });
         
         static::updating(function ($product) {
-            if ($product->isDirty('name') && empty($product->getOriginal('slug'))) {
-                $product->slug = Str::slug($product->name);
+            // Always regenerate slug if it's empty or null
+            if (empty($product->slug)) {
+                $product->slug = static::generateSlug($product->name, $product->id);
             }
         });
 

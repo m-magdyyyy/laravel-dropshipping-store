@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'telegram' => [
+        'token' => env('TELEGRAM_BOT_TOKEN'),
+        'recipients' => env('TELEGRAM_RECIPIENTS'),
+    ],
+
+    'telegram-bot-api' => [
+        'token' => env('TELEGRAM_BOT_TOKEN'),
+    ],
+
 ];
