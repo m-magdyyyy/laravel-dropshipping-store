@@ -515,32 +515,13 @@
         <!-- Product Images -->
         <div class="animate-fadeInUp">
           <div class="mb-4 bg-white rounded-lg shadow-soft overflow-hidden relative group">
-            <picture>
-              @php
-                $imgUrl = $product->image_url;
-                $webpUrl = null;
-                if (!str_starts_with($imgUrl, 'http')) {
-                    $relative = ltrim($imgUrl, '/');
-                    $fullPath = public_path($relative);
-                    if (preg_match('/\.(jpg|jpeg|png)$/i', $fullPath)) {
-                        $webpFs = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $fullPath);
-                        if ($webpFs && file_exists($webpFs)) {
-                            $webpUrl = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $imgUrl);
-                        }
-          } elseif (preg_match('/\.webp$/i', $fullPath) && file_exists($fullPath)) {
-                        $webpUrl = $imgUrl;
-                    }
-                } else {
-                    if (preg_match('/\.webp($|\?)/i', $imgUrl)) {
-                        $webpUrl = $imgUrl;
-                    }
-                }
-              @endphp
-              @if($webpUrl)
-                <source srcset="{{ $webpUrl }}" type="image/webp">
-              @endif
-              <img id="mainImage" src="{{ $imgUrl }}" alt="{{ $product->name }} - صورة المنتج الرئيسية" class="w-full main-image-portrait rounded-lg img-pop" loading="eager" decoding="async" onerror="this.src='https://via.placeholder.com/600x400?text=No+Image'">
-            </picture>
+            <img id="mainImage" 
+                 src="{{ $product->image_url }}" 
+                 alt="{{ $product->name }} - صورة المنتج الرئيسية" 
+                 class="w-full main-image-portrait rounded-lg img-pop" 
+                 loading="eager" 
+                 decoding="async" 
+                 onerror="this.src='https://via.placeholder.com/600x400?text=No+Image'">
 
             <!-- Navigation Arrows -->
             @if($product->gallery && count($product->gallery) > 0)
@@ -559,7 +540,9 @@
 
           @if($product->gallery && count($product->gallery) > 0)
           <div class="thumbnails-scroll grid grid-cols-4 gap-2 md:grid-cols-4 md:gap-3">
-            <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-brand-rose cursor-pointer" data-image="{{ $product->image_url }}">
+            <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-brand-rose cursor-pointer" 
+                 data-image="{{ $product->image_url }}"
+                 onclick="console.log('Thumbnail 1 clicked!'); changeMainImage('{{ $product->image_url }}', this);">
               <picture>
                 @php 
                   $thumbImg = $product->image_url; 
@@ -589,7 +572,9 @@
             </div>
             @foreach($product->gallery as $index => $image)
               @php $imageUrl = str_starts_with($image, 'http') ? $image : '/storage/' . ltrim($image, '/'); @endphp
-              <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-gray-200 hover:border-brand-rose transition-colors cursor-pointer" data-image="{{ $imageUrl }}">
+              <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-gray-200 hover:border-brand-rose transition-colors cursor-pointer" 
+                   data-image="{{ $imageUrl }}"
+                   onclick="console.log('Thumbnail {{ $index + 2 }} clicked!'); changeMainImage('{{ $imageUrl }}', this);">
                 <picture>
                   @php 
                     $thumb2 = $imageUrl; 
@@ -1018,11 +1003,24 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      console.log('🚀 Page loaded - Initializing gallery...');
       updateCartCount();
       renderQtyBadge();
       initThumbnailListeners();
       startAutoRotate();
       setupScrollIn();
+      
+      // Test: Log main image element
+      const mainImg = document.getElementById('mainImage');
+      console.log('Main image element:', mainImg);
+      console.log('Main image src:', mainImg?.src);
+      
+      // Test: Log all thumbnails
+      const thumbnails = document.querySelectorAll('.thumbnail-wrapper');
+      console.log('Found', thumbnails.length, 'thumbnails');
+      thumbnails.forEach((thumb, idx) => {
+        console.log(`Thumbnail ${idx}:`, thumb.dataset.image || thumb.getAttribute('data-image'));
+      });
       
       // Initialize navigation arrows
       const prevBtn = document.getElementById('prevImageBtn');
@@ -1147,7 +1145,25 @@
       updateTotalPrice();
     }
 
-    const thumbnailWrappers = [];
+  const thumbnailWrappers = [];
+  // Start with first image selected by default
+  let autoIdx = 0;
+  // Placeholder in case an image fails
+  const FALLBACK_IMG = 'https://via.placeholder.com/800x600?text=Image+Unavailable';
+
+  // Normalize image URL to absolute to avoid base href/relative issues
+  function toAbsoluteUrl(url){
+    try{
+      if (!url) return '';
+      // Already absolute (http/https/data)
+      if (/^(?:https?:)?\/\//i.test(url) || url.startsWith('data:')) return url;
+      // Ensure leading slash
+      if (!url.startsWith('/')) url = '/' + url;
+      return new URL(url, window.location.origin).href;
+    } catch(e){
+      return url;
+    }
+  }
 
     function cacheThumbnailData(){
       thumbnailWrappers.length = 0;
@@ -1155,50 +1171,70 @@
         if (!wrapper) return;
         const img = wrapper.querySelector('img');
         const dataSrc = wrapper.getAttribute('data-image') || img?.getAttribute('src') || '';
-        wrapper.dataset.image = dataSrc;
+        // Normalize to absolute to avoid any relative path issues when swapping main image
+        wrapper.dataset.image = toAbsoluteUrl(dataSrc);
         wrapper.dataset.index = String(idx);
         thumbnailWrappers.push(wrapper);
-        if (wrapper.classList.contains('border-brand-rose')) {
-          autoIdx = idx;
-        }
+        if (wrapper.classList.contains('border-brand-rose')) { autoIdx = idx; }
       });
+      // If nothing marked active, ensure first is active
+      if (thumbnailWrappers.length && !document.querySelector('.thumbnail-wrapper.border-brand-rose')) {
+        thumbnailWrappers.forEach(w=>{ w.classList.remove('border-brand-rose'); w.classList.add('border-gray-200'); });
+        const first = thumbnailWrappers[0];
+        first.classList.remove('border-gray-200');
+        first.classList.add('border-brand-rose');
+        autoIdx = 0;
+      }
     }
 
     window.cacheThumbnailData = cacheThumbnailData;
 
     function changeMainImage(src, el){
-      const main=document.getElementById('mainImage');
+      console.log('=== changeMainImage called ===');
+      console.log('Original src:', src);
+      console.log('Element:', el);
+      
+      const main = document.getElementById('mainImage');
       if (!main) {
-        console.error('Main image element not found!');
+        console.error('❌ Main image element not found!');
         return;
       }
       
-      // Remove animation class
+      // Normalize target src
+      const targetSrc = toAbsoluteUrl(src);
+      console.log('Normalized to:', targetSrc);
+      
+      // Add loading state
       main.classList.remove('fade-swap');
-      void main.offsetWidth; // reflow to restart animation
+      main.classList.add('image-loading');
       
-      // Check if there's a WebP version available
-      const webpSrc = src.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-      
-      // Update the picture element if it exists
-      const pictureEl = main.closest('picture');
-      if (pictureEl) {
-        const sourceEl = pictureEl.querySelector('source');
-        if (sourceEl && webpSrc !== src) {
-          // Try to set WebP source
-          sourceEl.srcset = webpSrc;
-        }
-      }
-      
-      // Update main image src
-      main.src = src;
-      main.classList.add('fade-swap');
+      // Preload image before swapping to avoid blank screen
+      const preloader = new Image();
+      preloader.onload = function(){
+        console.log('✓ Image preloaded successfully');
+        main.src = targetSrc;
+        main.classList.remove('image-loading');
+        main.classList.add('image-loaded');
+        // Force reflow to restart animation
+        void main.offsetWidth;
+        main.classList.add('fade-swap');
+        console.log('✓ Main image updated to:', targetSrc);
+      };
+      preloader.onerror = function(){
+        console.error('✗ Image failed to load:', targetSrc);
+        main.src = FALLBACK_IMG;
+        main.classList.remove('image-loading');
+        main.classList.add('image-loaded');
+        main.classList.add('fade-swap');
+      };
+      preloader.src = targetSrc;
 
       // Update thumbnail borders
       document.querySelectorAll('.thumbnail-wrapper').forEach(wrapper=>{
         wrapper.classList.remove('border-brand-rose');
         wrapper.classList.add('border-gray-200');
       });
+      
       let wrapper = null;
       if (el) {
         if (typeof el.closest === 'function') {
@@ -1207,10 +1243,24 @@
           wrapper = el;
         }
       }
+      
       if(wrapper){ 
+        console.log('✓ Setting active border on wrapper');
         wrapper.classList.remove('border-gray-200'); 
         wrapper.classList.add('border-brand-rose'); 
+        if (wrapper.dataset && wrapper.dataset.index) {
+          const i = parseInt(wrapper.dataset.index, 10);
+          if (!Number.isNaN(i)) {
+            autoIdx = i;
+            console.log('✓ Updated autoIdx to:', i);
+          }
+        }
       }
+      
+      // Stop auto-rotation when user clicks
+      stopAutoRotate();
+      console.log('✓ Auto-rotation stopped');
+      console.log('=== changeMainImage completed ===');
     }
 
     window.changeMainImage = changeMainImage;
@@ -1222,7 +1272,7 @@
       }
       if (!wrapper) return;
       if (!wrapper.dataset || !wrapper.dataset.image) cacheThumbnailData();
-      const imageUrl = wrapper.dataset.image || wrapper.getAttribute('data-image');
+  const imageUrl = wrapper.dataset.image || wrapper.getAttribute('data-image');
       const img = wrapper.querySelector('img');
       if (!(imageUrl && img)) return;
       console.debug('Gallery thumbnail activated', imageUrl);
@@ -1240,14 +1290,54 @@
         if (!wrapper) return;
         if (!wrapper.getAttribute('role')) wrapper.setAttribute('role', 'button');
         if (!wrapper.getAttribute('tabindex')) wrapper.setAttribute('tabindex', '0');
-        wrapper.addEventListener('click', evt => handleThumbnailClick(wrapper, evt));
-        wrapper.addEventListener('keydown', evt => {
+        
+        // Remove old listeners to avoid duplicates
+        const newWrapper = wrapper.cloneNode(true);
+        wrapper.parentNode.replaceChild(newWrapper, wrapper);
+        
+        // Click handler function
+        const handleClick = function(evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          console.log('Thumbnail clicked!');
+          const imageUrl = this.dataset.image || this.getAttribute('data-image');
+          const img = this.querySelector('img');
+          if (imageUrl && img) {
+            changeMainImage(imageUrl, img);
+            stopAutoRotate();
+            const idx = parseInt(this.dataset.index ?? '-1', 10);
+            if (!Number.isNaN(idx) && idx >= 0) autoIdx = idx;
+          }
+        };
+        
+        // Add click listener
+        newWrapper.addEventListener('click', handleClick);
+        
+        // Add touch listener for mobile (with preventDefault to avoid double-firing)
+        newWrapper.addEventListener('touchend', function(evt) {
+          evt.preventDefault();
+          handleClick.call(this, evt);
+        }, {passive: false});
+        
+        // Add keyboard listener
+        newWrapper.addEventListener('keydown', function(evt) {
           const key = evt.key || evt.keyCode;
           if (key === 'Enter' || key === ' ' || key === 'Spacebar' || key === 13 || key === 32) {
-            handleThumbnailClick(wrapper, evt);
+            evt.preventDefault();
+            const imageUrl = this.dataset.image || this.getAttribute('data-image');
+            const img = this.querySelector('img');
+            if (imageUrl && img) {
+              changeMainImage(imageUrl, img);
+              stopAutoRotate();
+              const idx = parseInt(this.dataset.index ?? '-1', 10);
+              if (!Number.isNaN(idx) && idx >= 0) autoIdx = idx;
+            }
           }
         });
       });
+      
+      // Re-cache after replacing nodes
+      cacheThumbnailData();
     }
 
     window.initThumbnailListeners = initThumbnailListeners;
@@ -1285,8 +1375,7 @@
     window.goToNextImage = goToNextImage;
 
     // ====== Auto-rotate gallery (carousel-lite) ======
-    let autoTimer = null;
-    let autoIdx = 0;
+  let autoTimer = null;
     let autoPaused = false;
 
     function getGallerySources(){
@@ -1323,14 +1412,7 @@
       mainImgEl.addEventListener('focusin', () => autoPaused = true);
       mainImgEl.addEventListener('focusout', () => autoPaused = false);
     }
-    // Clicking a thumbnail sets the index accordingly and changes main image
-    document.addEventListener('click', (e) => {
-      const wrapper = e.target.closest('.thumbnail-wrapper');
-      if (wrapper) {
-        handleThumbnailClick(wrapper);
-        return;
-      }
-    });
+    
     // Pause when tab hidden
     document.addEventListener('visibilitychange', () => { autoPaused = document.hidden; });
 
