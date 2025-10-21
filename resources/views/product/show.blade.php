@@ -521,7 +521,7 @@
 
           @if($product->gallery && count($product->gallery) > 0)
           <div class="thumbnails-scroll grid grid-cols-4 gap-2 md:grid-cols-4 md:gap-3">
-            <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-brand-rose cursor-pointer" data-image="{{ $product->image_url }}">
+            <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-brand-rose cursor-pointer" data-image="{{ $product->image_url }}" onclick="handleThumbnailClick(this, event)">
               <picture>
                 @php 
                   $thumbImg = $product->image_url; 
@@ -551,7 +551,7 @@
             </div>
             @foreach($product->gallery as $index => $image)
               @php $imageUrl = str_starts_with($image, 'http') ? $image : '/storage/' . ltrim($image, '/'); @endphp
-              <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-gray-200 hover:border-brand-rose transition-colors cursor-pointer" data-image="{{ $imageUrl }}">
+              <div class="thumbnail-wrapper bg-white rounded-lg shadow-sm overflow-hidden border-2 border-gray-200 hover:border-brand-rose transition-colors cursor-pointer" data-image="{{ $imageUrl }}" onclick="handleThumbnailClick(this, event)">
                 <picture>
                   @php 
                     $thumb2 = $imageUrl; 
@@ -1086,6 +1086,22 @@
       }
     }
 
+    function handleThumbnailClick(wrapper, evt){
+      if (evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+      }
+      if (!wrapper) return;
+      const imageUrl = wrapper.getAttribute('data-image');
+      const img = wrapper.querySelector('img');
+      if (!(imageUrl && img)) return;
+      changeMainImage(imageUrl, img);
+      stopAutoRotate();
+      const srcs = getGallerySources();
+      const i = srcs.indexOf(imageUrl);
+      if (i >= 0) autoIdx = i;
+    }
+
     // ====== Auto-rotate gallery (carousel-lite) ======
     let autoTimer = null;
     let autoIdx = 0;
@@ -1126,20 +1142,9 @@
     }
     // Clicking a thumbnail sets the index accordingly and changes main image
     document.addEventListener('click', (e) => {
-      // Check if click is on thumbnail wrapper or image inside it
       const wrapper = e.target.closest('.thumbnail-wrapper');
       if (wrapper) {
-        const imageUrl = wrapper.getAttribute('data-image');
-        const img = wrapper.querySelector('img');
-        if (imageUrl && img) {
-          changeMainImage(imageUrl, img);
-          stopAutoRotate(); // Stop auto-rotation when user clicks
-          
-          // Update autoIdx for consistency
-          const srcs = getGallerySources();
-          const i = srcs.indexOf(imageUrl);
-          if (i >= 0) autoIdx = i;
-        }
+        handleThumbnailClick(wrapper);
         return;
       }
     });
