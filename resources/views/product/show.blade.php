@@ -787,7 +787,7 @@
       <!-- Header -->
       <div class="px-8 py-6 border-b border-brand-beige bg-gradient-to-r from-brand-cream to-white">
         <div class="flex items-center justify-between">
-          <h3 class="font-display text-2xl font-bold text-brand-charcoal">Complete Your Order</h3>
+          <h3 class="font-display text-2xl font-bold text-brand-charcoal">Complete Your Order (أكمل طلبك)</h3>
           <button onclick="closeOrderModal()" class="w-10 h-10 rounded-full bg-brand-beige hover:bg-brand-rose hover:text-white transition-all duration-300 flex items-center justify-center">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -812,10 +812,10 @@
             </div>
 
             <div class="p-6 rounded-2xl bg-white border border-brand-beige space-y-3">
-              <div class="flex justify-between items-center text-brand-slate"><span>Price:</span><span class="font-bold text-brand-charcoal">{{ $product->formatted_price }}</span></div>
-              <div class="flex justify-between items-center text-brand-slate"><span>Quantity:</span><span id="modalQuantityDisplay" class="font-bold text-brand-charcoal">1</span></div>
+              <div class="flex justify-between items-center text-brand-slate"><span>Price (السعر):</span><span class="font-bold text-brand-charcoal">{{ $product->formatted_price }}</span></div>
+              <div class="flex justify-between items-center text-brand-slate"><span>Quantity (الكمية):</span><span id="modalQuantityDisplay" class="font-bold text-brand-charcoal">1</span></div>
               <div class="flex justify-between items-center pt-3 border-t border-brand-beige">
-                <span class="text-xl font-bold text-brand-charcoal">Total:</span>
+                <span class="text-xl font-bold text-brand-charcoal">Total (الإجمالي):</span>
                 <span id="totalPrice" class="text-2xl font-extrabold bg-gradient-to-r from-brand-rose to-brand-gold bg-clip-text text-transparent">{{ $product->formatted_price }}</span>
               </div>
             </div>
@@ -829,7 +829,7 @@
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label for="modalQuantity" class="block text-sm font-medium text-brand-charcoal mb-2">Quantity</label>
+                  <label for="modalQuantity" class="block text-sm font-medium text-brand-charcoal mb-2">Quantity (الكمية)</label>
                   <select id="modalQuantity" name="quantity" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all">
                     @for($i = 1; $i <= 10; $i++)
                       <option value="{{ $i }}">{{ $i }}</option>
@@ -837,21 +837,21 @@
                   </select>
                 </div>
                 <div>
-                  <label for="phone" class="block text-sm font-medium text-brand-charcoal mb-2">Phone Number</label>
+                  <label for="phone" class="block text-sm font-medium text-brand-charcoal mb-2">Phone Number (رقم الهاتف)</label>
                   <input type="tel" id="phone" name="customer_phone" required autocomplete="tel" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="01xxxxxxxxx" inputmode="numeric" pattern="01[0-9]{9}">
                 </div>
               </div>
 
               <div>
-                <label for="customer_name" class="block text-sm font-medium text-brand-charcoal mb-2">Full Name</label>
+                <label for="customer_name" class="block text-sm font-medium text-brand-charcoal mb-2">Full Name (الاسم الكامل)</label>
                 <input type="text" id="customer_name" name="customer_name" required autocomplete="name" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="Enter your full name">
               </div>
 
               <div class="grid grid-cols-1 gap-4">
                 <div>
-                  <label for="governorate" class="block text-sm font-medium text-brand-charcoal mb-2">Governorate</label>
+                  <label for="governorate" class="block text-sm font-medium text-brand-charcoal mb-2">Governorate (المحافظة)</label>
                   <select id="governorate" name="governorate" required class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all">
-                    <option value="">Select Governorate</option>
+                    <option value="">Select Governorate (اختر المحافظة)</option>
                     <option value="Cairo">Cairo</option>
                     <option value="Giza">Giza</option>
                     <option value="Alexandria">Alexandria</option>
@@ -884,14 +884,14 @@
               </div>
 
               <div>
-                <label for="address" class="block text-sm font-medium text-brand-charcoal mb-2">Detailed Address</label>
-                <textarea id="address" name="address" required rows="3" autocomplete="street-address" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="City, District, Street, Building No."></textarea>
+                <label for="address" class="block text-sm font-medium text-brand-charcoal mb-2">Detailed Address (العنوان التفصيلي)</label>
+                <textarea id="address" name="address" required rows="3" autocomplete="street-address" class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all" placeholder="City, District, Street, Building No. (المدينة، الحي، الشارع، رقم العمارة)"></textarea>
               </div>
 
               <div class="flex gap-4 pt-2">
-                <button type="button" onclick="closeOrderModal()" class="flex-1 bg-brand-beige hover:bg-gray-300 text-brand-charcoal font-semibold py-3 px-6 rounded-xl transition-all duration-300">Cancel</button>
+                <button type="button" onclick="closeOrderModal()" class="flex-1 bg-brand-beige hover:bg-gray-300 text-brand-charcoal font-semibold py-3 px-6 rounded-xl transition-all duration-300">Cancel (إلغاء)</button>
                 <button type="submit" id="productSubmitBtn" class="flex-1 bg-gradient-to-r from-brand-rose to-brand-rose-dark hover:shadow-card text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 btn-enhanced">
-                  <span class="btn-text">تأكيد الطلب</span>
+                  <span class="btn-text">Confirm Order (تأكيد الطلب)</span>
                   <span class="btn-loading hidden">
                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -905,17 +905,17 @@
               <div id="productSuccessMessage" class="hidden mt-4 p-5 bg-emerald-50 border-2 border-emerald-400 text-emerald-700 rounded-2xl">
                 <h3 class="font-bold mb-2 flex items-center gap-2">
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                  Order Placed Successfully!
+                  Order Placed Successfully! (تم تقديم الطلب بنجاح!)
                 </h3>
-                <p>We'll contact you within 24 hours to confirm your order.</p>
+                <p>We'll contact you within 24 hours to confirm your order. (سنتواصل معك خلال 24 ساعة لتأكيد طلبك.)</p>
               </div>
 
               <div id="productErrorMessage" class="hidden mt-4 p-5 bg-red-50 border-2 border-red-400 text-red-700 rounded-2xl">
                 <h3 class="font-bold mb-2 flex items-center gap-2">
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
-                  Error Occurred!
+                  Error Occurred! (حدث خطأ!)
                 </h3>
-                <p id="productErrorText">Please try again.</p>
+                <p id="productErrorText">Please try again. (يرجى المحاولة مرة أخرى.)</p>
               </div>
             </form>
           </div>
