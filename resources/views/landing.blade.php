@@ -34,9 +34,13 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url('/') }}">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ file_exists(public_path('images/fekra-new-logo.png')) ? asset('images/fekra-new-logo.png') : asset('images/fekra-logo.png') }}">
+  <!-- Favicons (standardized to Fekra logo) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/fekra-new-logo.png?v=2') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/fekra-new-logo.png?v=2') }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/fekra-new-logo.png?v=2') }}">
+  <link rel="shortcut icon" type="image/png" href="{{ asset('images/fekra-new-logo.png?v=2') }}">
+  <!-- Optional: If a .ico exists, some browsers still prefer it -->
+  <link rel="icon" href="{{ asset('favicon.ico?v=2') }}">
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>

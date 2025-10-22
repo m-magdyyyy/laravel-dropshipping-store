@@ -32,6 +32,11 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="{{ route('product.show', $product->slug) }}">
   
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{{ asset('images/fekra-new-logo.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('images/fekra-new-logo.png') }}">
+  <link rel="shortcut icon" type="image/png" href="{{ asset('images/fekra-new-logo.png') }}">
+  
   <!-- Schema.org Product Structured Data (no Blade directives inside JSON) -->
   @php
     $imagesArray = [];
@@ -1585,6 +1590,7 @@
         content_type: 'product',
         content_name: productData.name,
         price: productData.price,
+        value: productData.price,
         currency: 'EGP'
       });
 
@@ -1595,6 +1601,7 @@
           content_type: 'product',
           content_name: productData.name,
           price: productData.price,
+          value: productData.price,
           currency: 'EGP',
           quantity: 1
         });

@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You - Order Confirmed | Fekra Store</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/fekra-new-logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/fekra-new-logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/fekra-new-logo.png') }}">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <script>
@@ -246,6 +252,18 @@
         </div>
     </div>
 </body>
+<script>
+    // Ensure going back from this page redirects to home instead of product page
+    (function(){
+        try {
+            // Push a new state so that the first back goes to this handler
+            history.pushState({ page: 'thanks' }, '', window.location.href);
+            window.addEventListener('popstate', function(){
+                window.location.replace("{{ route('landing') }}");
+            });
+        } catch(e) { /* noop */ }
+    })();
+    </script>
 <!-- TikTok Pixel: CompletePayment (Purchase) -->
 <script>
     (function(){
