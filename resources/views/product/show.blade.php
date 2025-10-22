@@ -852,33 +852,33 @@
                   <label for="governorate" class="block text-sm font-medium text-brand-charcoal mb-2">Governorate (المحافظة)</label>
                   <select id="governorate" name="governorate" required class="w-full px-4 py-3 border border-brand-beige rounded-xl focus:ring-2 focus:ring-brand-rose focus:border-brand-rose transition-all">
                     <option value="">Select Governorate (اختر المحافظة)</option>
-                    <option value="Cairo">Cairo</option>
-                    <option value="Giza">Giza</option>
-                    <option value="Alexandria">Alexandria</option>
-                    <option value="Dakahlia">Dakahlia</option>
-                    <option value="Beheira">Beheira</option>
-                    <option value="Monufia">Monufia</option>
-                    <option value="Gharbia">Gharbia</option>
-                    <option value="Kafr El Sheikh">Kafr El Sheikh</option>
-                    <option value="Sharqia">Sharqia</option>
-                    <option value="Qalyubia">Qalyubia</option>
-                    <option value="Beni Suef">Beni Suef</option>
-                    <option value="Fayoum">Fayoum</option>
-                    <option value="Minya">Minya</option>
-                    <option value="Asyut">Asyut</option>
-                    <option value="Sohag">Sohag</option>
-                    <option value="Qena">Qena</option>
-                    <option value="Luxor">Luxor</option>
-                    <option value="Aswan">Aswan</option>
-                    <option value="Red Sea">Red Sea</option>
-                    <option value="New Valley">New Valley</option>
-                    <option value="Matrouh">Matrouh</option>
-                    <option value="North Sinai">North Sinai</option>
-                    <option value="South Sinai">South Sinai</option>
-                    <option value="Port Said">Port Said</option>
-                    <option value="Damietta">Damietta</option>
-                    <option value="Ismailia">Ismailia</option>
-                    <option value="Suez">Suez</option>
+                    <option value="Cairo">Cairo (القاهرة)</option>
+                    <option value="Giza">Giza (الجيزة)</option>
+                    <option value="Alexandria">Alexandria (الإسكندرية)</option>
+                    <option value="Dakahlia">Dakahlia (الدقهلية)</option>
+                    <option value="Beheira">Beheira (البحيرة)</option>
+                    <option value="Monufia">Monufia (المنوفية)</option>
+                    <option value="Gharbia">Gharbia (الغربية)</option>
+                    <option value="Kafr El Sheikh">Kafr El Sheikh (كفر الشيخ)</option>
+                    <option value="Sharqia">Sharqia (الشرقية)</option>
+                    <option value="Qalyubia">Qalyubia (القليوبية)</option>
+                    <option value="Beni Suef">Beni Suef (بني سويف)</option>
+                    <option value="Fayoum">Fayoum (الفيوم)</option>
+                    <option value="Minya">Minya (المنيا)</option>
+                    <option value="Asyut">Asyut (أسيوط)</option>
+                    <option value="Sohag">Sohag (سوهاج)</option>
+                    <option value="Qena">Qena (قنا)</option>
+                    <option value="Luxor">Luxor (الأقصر)</option>
+                    <option value="Aswan">Aswan (أسوان)</option>
+                    <option value="Red Sea">Red Sea (البحر الأحمر)</option>
+                    <option value="New Valley">New Valley (الوادي الجديد)</option>
+                    <option value="Matrouh">Matrouh (مطروح)</option>
+                    <option value="North Sinai">North Sinai (شمال سيناء)</option>
+                    <option value="South Sinai">South Sinai (جنوب سيناء)</option>
+                    <option value="Port Said">Port Said (بورسعيد)</option>
+                    <option value="Damietta">Damietta (دمياط)</option>
+                    <option value="Ismailia">Ismailia (الإسماعيلية)</option>
+                    <option value="Suez">Suez (السويس)</option>
                   </select>
                 </div>
               </div>
