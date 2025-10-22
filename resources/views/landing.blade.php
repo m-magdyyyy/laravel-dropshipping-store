@@ -482,10 +482,10 @@
     <div class="container mx-auto px-6 lg:px-12">
       <div class="text-center mb-16 scroll-reveal">
         <div class="inline-block bg-brand-rose/10 px-6 py-2 rounded-full text-brand-rose font-semibold mb-4">
-          المنتجات المميزة
+          Top Picks
         </div>
         <h2 class="text-4xl lg:text-6xl font-display font-bold text-brand-charcoal mb-4">
-          الأكثر رواجاً الآن
+          Trending Now
         </h2>
         <p class="text-lg text-brand-slate max-w-2xl mx-auto">
           مجموعة مختارة بعناية من أفضل المنتجات العصرية بأسعار تنافسية. 
