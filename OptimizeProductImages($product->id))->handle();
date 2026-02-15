@@ -1,0 +1,20 @@
+[90m= [39m[34;4mApp\Models\Product[39;24m {#7306
+    [34mid[39m: [35m4[39m,
+    [34mname[39m: "[32mhiyi[39m",
+    [34mslug[39m: "[32mhiyi[39m",
+    [34mdescription[39m: "[32myigopy8hp9iyu[39m",
+    [34mfeatures[39m: "[32mhgiygoig[39m",
+    [34mprice[39m: "[32m33.00[39m",
+    [34moriginal_price[39m: "[32m77.00[39m",
+    [34mimage[39m: "[32mproducts/KNP_4504.jpg[39m",
+    [34mimage_url[39m: [36mnull[39m,
+    [34mthumbnail_path[39m: [36mnull[39m,
+    [34mgallery[39m: "[32m[][39m",
+    [34mis_active[39m: [35m1[39m,
+    [34msort_order[39m: [35m0[39m,
+    [34mmeta_title[39m: [36mnull[39m,
+    [34mmeta_description[39m: [36mnull[39m,
+    [34mcreated_at[39m: "[32m2025-10-16 09:28:18[39m",
+    [34mupdated_at[39m: "[32m2025-10-16 12:25:08[39m",
+  }
+
